@@ -1,0 +1,2 @@
+to stop code running crtl + alt + M
+to run code right click and run code

@@ -45,9 +45,13 @@ class Graph{
                 }
                 return;
             }
+            visited[src] = true;
             node_stack[src] = true;
             for(auto it: adjlist[src]){
-                dfs(it);
+
+                    dfs(it);
+
+
                 if(is_cyclic){
                     return;
                 }
@@ -59,7 +63,7 @@ class Graph{
                 cout<<"CYCLIC"<<endl;
             }
             else{
-                cout<<"no"<<endl;
+                cout<<"NOT CYCLIC"<<endl;
             }
         }
 };

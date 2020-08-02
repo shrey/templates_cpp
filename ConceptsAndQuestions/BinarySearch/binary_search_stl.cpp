@@ -52,6 +52,6 @@ int main(){
     cout<<"Lower Bound: "<<(it-arr)<<endl;
     it = upper_bound(arr,arr+n,key);
     cout<<"Upper Bound: "<<(it-arr-1)<<endl; //returns occurance of first el greater than key, so do -1
-    //can also be used to calculate frequency
-
+    //can also be used to calculate frequency but lower bound gives first el >= key and upper bound gives first el>key
+    //use binary search to check if el is present
 }

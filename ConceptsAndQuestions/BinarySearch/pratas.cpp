@@ -47,8 +47,13 @@ bool is_possible(int a[], int n, int pratas, int time){
             total--;
         }
     }
-    if(total>=pratas) return true;
-    return false;
+    if(total>=pratas) {
+        return true;
+    }
+    else{
+        return false;
+    }
+
 }
 
 int min_time(int a[], int n, int pratas){

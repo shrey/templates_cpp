@@ -24,7 +24,6 @@
 #define F first
 #define S second
 #define umap unordered_map
-#define fo(x,y) for(int i = x; i<y; i++)
 #define fo(n) for(int i = 0; i<n; i++)
 #define fnd(stl, data) find(stl.begin(), stl.end(), data)
 

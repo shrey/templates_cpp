@@ -46,7 +46,7 @@ void merge(int arr[], int s, int m, int e){
     }
     int i = 0, j = 0, k = s;
     while(i<n1 && j<n2){
-        if(left[i]<right[i]){
+        if(left[i]<right[j]){
             arr[k++] = left[i++];
         }
         else{
@@ -78,7 +78,7 @@ void mergeSort(int arr[], int n){
 }
 
 int main(){
-    int arr[] = {5,4,3,2,1};
+    int arr[] = {4,5,3,5,6,7};
     int n = sizeof(arr)/sizeof(int);
     mergeSort(arr,n);
     for(int i = 0; i<n; i++){

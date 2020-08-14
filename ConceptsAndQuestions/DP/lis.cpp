@@ -73,6 +73,7 @@ void lis(int arr[], int n){
 int lis_dp(int arr[], int n){
     int dp[n];
     dp[0] = 1;
+    int result = 0;
     for(int i = 1; i<n; i++){
         dp[i] = 1;
         for(int j = 0; j<i; j++){
@@ -80,8 +81,9 @@ int lis_dp(int arr[], int n){
                 dp[i] = max(dp[i],dp[j]+1);
             }
         }
+        result = max(result,dp[i]);
     }
-    return dp[n-1];
+    return result;
 }
 
 int main(){

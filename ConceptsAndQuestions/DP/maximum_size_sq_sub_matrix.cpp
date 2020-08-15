@@ -1,4 +1,4 @@
-
+//https://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/
 
 //Shrey Dubey
 
@@ -110,3 +110,7 @@ int main(){
         cout<<result<<endl;
 
 }
+
+
+//as all at (i-1,j-1), (i-1,j), (i,j-1) have to be squares for (i,j) to be a square, we do the min of them to ensure
+// it's always a square

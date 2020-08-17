@@ -17,7 +17,8 @@
 #include<iomanip>
 #include<queue>
 #include<stack>
-#include<math.h>
+#include <math.h>
+
 
 
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers

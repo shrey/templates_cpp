@@ -4,7 +4,7 @@
 
 //Contact Me at wshrey09@gmail.com
 
-
+//time complexity:- O(VlogE) V->vertices, E->edges
 
 #include<iostream>
 #include<string>

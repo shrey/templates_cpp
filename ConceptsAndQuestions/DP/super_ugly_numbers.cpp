@@ -34,3 +34,25 @@
 using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
+int main(){
+    int ugly[] = {2, 3,5};
+    int size = sizeof(ugly)/sizeof(int);
+    priority_queue<int,vector<int>,greater<int> > pq;
+    fo(size){
+        pq.push(ugly[i]);
+    }
+    int n = 1000;
+    int count = 1, curr;
+    while(count<n){
+        curr = pq.top();
+        pq.pop();
+        if(curr!=pq.top()){
+            count++;
+            fo(size){
+                pq.push(curr*ugly[i]);
+            }
+        }
+    }
+    cout<<curr<<endl;
+
+}

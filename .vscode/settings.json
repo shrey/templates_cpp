@@ -5,6 +5,7 @@
         "list": "cpp",
         "memory": "cpp",
         "utility": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "ios": "cpp"
     }
 }

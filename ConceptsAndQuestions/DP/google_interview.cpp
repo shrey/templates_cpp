@@ -1,3 +1,7 @@
+// Given a string A consisting of n characters and a string B consisting of m characters,
+//write a function that will return the number of times A must be stated such that B is a substring of the repeated A.
+//If B can never be a substring, return -1.
+
 
 
 //Shrey Dubey
@@ -34,3 +38,11 @@
 using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
+
+int main(){
+    string s1,s2;
+    cin>>s1>>s2;
+    auto it = s1.find(s2);
+
+    cout<<it<<endl;
+}

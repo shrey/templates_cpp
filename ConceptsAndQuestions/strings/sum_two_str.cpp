@@ -35,48 +35,40 @@ using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
 
-string substractString(string s1, string s2){
+int nmb(char ch){
+    return (ch-'0');
+}
+
+string sumStr(string s1, string s2){
     if(s1.length()>s2.length()){
         swap(s1,s2);
     }
-    else if(s1.length() == s2.length()){
-        for(int i = 0; i<s1.length(); i++){
-            if(s1[i]>s2[i]){
-                swap(s1,s2);
-                break;
-            }
-        }
-    }
     int n = s1.length();
     int m = s2.length();
-    reverse(s1.begin(), s1.end());
-    reverse(s2.begin(), s2.end());
+    reverse(s1.begin(),s1.end());
+    reverse(s2.begin(),s2.end());
+
     string ans = "";
-    int carry;
+    int carry = 0;
     for(int i = 0; i<n; i++){
-        int n2 = (s2[i]-'0')  - carry;
-        int n1 = s1[i]-'0';
-        carry = 0;
-        if(n1>n2){
-            carry = 1;
-            n2+=10;
-        }
-        ans+=to_string(n2-n1);
+        int num = nmb(s1[i]) + nmb(s2[i]) + carry;
+        ans+=to_string(num%10);
+        carry = num/=10;
     }
     for(int i = n; i<m; i++){
-        int num = s2[i]-'0';
-        num = num-carry;
-        ans+=to_string(num);
-        carry = 0;
+        int num = (nmb(s2[i]) + carry);
+        ans+=to_string(num%10);
+        carry = num/10;
     }
-    reverse(ans.begin(), ans.end());
+    if(carry){
+        ans+=to_string(carry);
+    }
+    reverse(ans.begin(),ans.end());
     return ans;
 }
 
 int main(){
-    string s1;
-    string s2;
+    string s1,s2;
     cin>>s1>>s2;
-    cout<<substractString(s1,s2)<<endl;
-
+    cout<<sumStr(s1,s2)<<endl;
 }

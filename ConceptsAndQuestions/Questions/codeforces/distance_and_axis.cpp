@@ -1,0 +1,58 @@
+
+
+//Shrey Dubey
+
+//Contact Me at wshrey09@gmail.com
+
+
+
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<map>
+#include<unordered_map>
+#include<vector>
+#include<set>
+#include<list>
+#include<iomanip>
+#include<queue>
+#include<stack>
+#include <math.h>
+
+
+
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
+#define pb push_back
+#define F first
+#define S second
+#define umap unordered_map
+#define mp make_pair
+
+#define fo(n) for(int i = 0; i<n; i++)
+#define fnd(stl, data) find(stl.begin(), stl.end(), data)
+
+using namespace std;
+typedef long long ll;
+int modulo = 1e9 + 7;
+
+int solve(int n, int k){
+    if(k>=n){
+        return (k-n);
+    }
+    if((n%2) == (k%2)){
+        return 0;
+    }
+    else{
+        return 1;
+    }
+}
+
+int main(){
+    int t;
+    cin>>t;
+    int n,k;
+    while(t--){
+        cin>>n>>k;
+        cout<<solve(n,k)<<"\n";
+    }
+}

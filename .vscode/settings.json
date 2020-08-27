@@ -6,6 +6,7 @@
         "memory": "cpp",
         "utility": "cpp",
         "string": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "iosfwd": "cpp"
     }
 }

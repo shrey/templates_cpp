@@ -1,8 +1,17 @@
-fo(a.size()){
-        cout<<a[i]<<" ";
-    }
-    cout<<endl;
-    fo(b.size()){
-        cout<<b[i]<<" ";
-    }cout<<endl;
-    cout<<min_diff<<endl;
+12 16
+1 3
+1 9
+9 12
+12 11
+11 9
+3 5
+5 7
+7 3
+5 1
+3 6
+6 1
+6 2
+2 8
+8 3
+2 4
+4 10

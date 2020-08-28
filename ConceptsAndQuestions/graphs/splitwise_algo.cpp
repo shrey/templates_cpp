@@ -77,4 +77,5 @@ int main(){
         cnt++;
     }
     cout<<cnt<<endl;
+
 }

@@ -1,3 +1,4 @@
+//https://www.geeksforgeeks.org/different-ways-sum-n-using-numbers-greater-equal-m/
 
 
 //Shrey Dubey
@@ -35,31 +36,20 @@ using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
 
-int solve(int a[], int n){
-    umap<int,int> freqLeft;
-    int ans = 0;
-    for(int j = 0; j<n; j++){
-        umap<int,int> freqRight;
-        for(int k = n-1; k>=(j+1); k--){
-            ans+=(freqLeft[a[k]]*freqRight[a[j]]);
-            freqRight[a[k]]++;
-        }
-        freqLeft[a[j]]++;
-    }
-
-    return ans;
-}
-
 int main(){
-    int t;
-    cin>>t;
-    int n;
-    while(t--){
-        cin>>n;
-        int arr[n];
-        fo(n){
-            cin>>arr[i];
+    int n,m;
+    cin>>n>>m;
+    int dp[n+2][n+2];
+    // dp[i][j] sum i using nos greater than equal to j
+    memset(dp,0,sizeof dp);
+    dp[0][n+1] = 1;
+    for(int k = n; k>=m; k--){
+        for(int i = 0; i<=n; i++){
+            dp[i][k] = dp[i][k+1];
+            if((i-k)>=0){
+                dp[i][k] += dp[i-k][k];
+            }
         }
-        cout<<solve(arr,n)<<"\n";
     }
+    cout<<dp[n][m]<<endl;
 }

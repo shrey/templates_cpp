@@ -35,31 +35,20 @@ using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
 
-int solve(int a[], int n){
-    umap<int,int> freqLeft;
-    int ans = 0;
-    for(int j = 0; j<n; j++){
-        umap<int,int> freqRight;
-        for(int k = n-1; k>=(j+1); k--){
-            ans+=(freqLeft[a[k]]*freqRight[a[j]]);
-            freqRight[a[k]]++;
-        }
-        freqLeft[a[j]]++;
+void permutations(string s, int i){
+    if(i == s.length()){
+        cout<<s<<endl;
     }
 
-    return ans;
+    for(int j = i; j<s.length(); j++){
+        swap(s[i],s[j]);
+        permutations(s,i+1);
+        swap(s[i],s[j]);
+    }
 }
 
 int main(){
-    int t;
-    cin>>t;
-    int n;
-    while(t--){
-        cin>>n;
-        int arr[n];
-        fo(n){
-            cin>>arr[i];
-        }
-        cout<<solve(arr,n)<<"\n";
-    }
+    string s;
+    cin>>s;
+    permutations(s,0);
 }

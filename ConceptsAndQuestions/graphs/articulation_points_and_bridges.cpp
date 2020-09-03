@@ -37,6 +37,8 @@ int modulo = 1e9 + 7;
 
 const int N = 100005;
 
+//articulation points and bridges are points which on removing increase the number of connected components
+
 vector<int> gr[N];
 int low[N], disc[N], tme = 0; //discovery time and lowest time
 vector<bool> visited(N, false);

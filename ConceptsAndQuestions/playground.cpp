@@ -1,82 +1,66 @@
-
-
-//Shrey Dubey
-
-//Contact Me at wshrey09@gmail.com
-
-
-
-#include<iostream>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<unordered_map>
-#include<vector>
-#include<set>
-#include<list>
-#include<iomanip>
-#include<queue>
-#include<stack>
-#include <math.h>
-
-
-
-#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
-#define pb push_back
-#define F first
-#define S second
-#define umap unordered_map
-#define mp make_pair
-
-#define fo(n) for(int i = 0; i<n; i++)
-#define fnd(stl, data) find(stl.begin(), stl.end(), data)
-
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
+#include <queue>
+#include <ctime>
+#include <cassert>
+#include <complex>
+#include <string>
+#include <cstring>
+#include <chrono>
+#include <random>
+#include <bitset>
 using namespace std;
-typedef long long ll;
-int modulo = 1e9 + 7;
 
-string substractString(string s1, string s2){
-    if(s1.length()>s2.length()){
-        swap(s1,s2);
-    }
-    else if(s1.length() == s2.length()){
-        for(int i = 0; i<s1.length(); i++){
-            if(s1[i]>s2[i]){
-                swap(s1,s2);
-                break;
-            }
-        }
-    }
-    int n = s1.length();
-    int m = s2.length();
-    reverse(s1.begin(), s1.end());
-    reverse(s2.begin(), s2.end());
-    string ans = "";
-    int carry;
-    for(int i = 0; i<n; i++){
-        int n2 = (s2[i]-'0')  - carry;
-        int n1 = s1[i]-'0';
-        carry = 0;
-        if(n1>n2){
-            carry = 1;
-            n2+=10;
-        }
-        ans+=to_string(n2-n1);
-    }
-    for(int i = n; i<m; i++){
-        int num = s2[i]-'0';
-        num = num-carry;
-        ans+=to_string(num);
-        carry = 0;
-    }
-    reverse(ans.begin(), ans.end());
-    return ans;
+#ifdef LOCAL
+	#define eprintf(...) fprintf(stderr, __VA_ARGS__);fflush(stderr);
+#else
+	#define eprintf(...) 42
+#endif
+
+using ll = long long;
+using ld = long double;
+using uint = unsigned int;
+using ull = unsigned long long;
+template<typename T>
+using pair2 = pair<T, T>;
+using pii = pair<int, int>;
+using pli = pair<ll, int>;
+using pll = pair<ll, ll>;
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+#define pb push_back
+#define mp make_pair
+#define all(x) (x).begin(),(x).end()
+#define fi first
+#define se second
+
+double startTime;
+double getCurrentTime() {
+	return ((double)clock() - startTime) / CLOCKS_PER_SEC;
 }
 
-int main(){
-    string s1;
-    string s2;
-    cin>>s1>>s2;
-    cout<<substractString(s1,s2)<<endl;
+ll getAdd(ll x) {
+	ll m1 = 10, m2 = 0;
+	while(x > 0) {
+		ll y = x % 10;
+		x /= 10;
+		m1 = min(m1, y);
+		m2 = max(m2, y);
+	}
+	return m1 * m2;
+}
 
+int main()
+{
+    ll a;
+    cin>>a;
+    cout<<a<<endl;
 }

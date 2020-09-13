@@ -20,30 +20,46 @@
 #include <math.h>
 
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define F first
 #define S second
 #define umap unordered_map
 #define mp make_pair
-#define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+
 #define fo(n) for(int i = 0; i<n; i++)
 #define fnd(stl, data) find(stl.begin(), stl.end(), data)
-
 
 using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
 
-int main(){
-    KOBE;
-
+bool solve(ll p[], ll c[], ll n){
+    if(p[0]<c[0]) return false;
+    for(int i = 1; i<n; i++){
+        if(p[i]<p[i-1] || c[i]<c[i-1] || p[i]<c[i]) return false;
+        if(c[i]>c[i-1]){
+            if(p[i]-p[i-1]<c[i]-c[i-1]) return false;
+        }
+    }
+    return true;
 }
 
+int main(){
+    ll t,n;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        ll p[n], c[n];
+        fo(n){
+            cin>>p[i]>>c[i];
+        }
+        if(solve(p,c,n)){
+            cout<<"YES"<<"\n";
+        }else{
+            cout<<"NO"<<"\n";
+        }
 
-//common errors
-// row - n, col - m always and loop var
-// see the freq of numbers carefully
-// see if there's array overflow
+    }
+}

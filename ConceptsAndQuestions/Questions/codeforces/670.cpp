@@ -39,11 +39,39 @@ int modulo = 1e9 + 7;
 
 int main(){
     KOBE;
+    ll t;
+    cin>>t;
 
+    while(t--){
+        ll n;
+        cin>>n;
+        ll arr[n];
+        fo(n) cin>>arr[i];
+        ll freq[200] = {0};
+        fo(n) freq[arr[i]]++;
+        ll i = 0;
+        while(freq[i]>0){
+            i++;
+        }
+        ll ans = 0;
+        ans+=i;
+        i = 0;
+        while(freq[i]>0 && (freq[i])>=2){
+            i++;
+        }
+        ans+=i;
+        cout<<ans<<"\n";
+
+    }
 }
 
+/*
+3
+3
+1 2 3
+4
+0 0 1 1
+5
+0 1 2 0 1
 
-//common errors
-// row - n, col - m always and loop var
-// see the freq of numbers carefully
-// see if there's array overflow
+*/

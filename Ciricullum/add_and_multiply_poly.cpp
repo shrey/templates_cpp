@@ -9,7 +9,7 @@ struct poly{
 void displayPoly(poly *x){
     for(int i = 0; i<=x->degree; i++){
         cout<<x->coeff[i]<<"x^"<<i<<" + ";
-    }cout<<endl;
+    }cout<<"\b\b"<<endl;
 }
 
 void addPolynomial(poly *a, poly *b){
@@ -41,3 +41,31 @@ void multiplyPolynomial(poly *a, poly *b){
     }
     displayPoly(&c);
 }
+
+int main(){
+    poly a,b;
+
+    cin>>a.degree>>b.degree;
+    for(int i = 0; i<30; i++){
+        a.coeff[i] = 0;
+        b.coeff[i] = 0;
+    }
+    for(int i = 0; i<=a.degree; i++){
+        cin>>a.coeff[i];
+    }
+    for(int i = 0; i<=b.degree; i++){
+        cin>>b.coeff[i];
+    }
+    displayPoly(&a);
+    displayPoly(&b);
+    addPolynomial(&a,&b);
+    multiplyPolynomial(&a,&b);
+}
+
+
+/*
+3
+4
+1 2 3 4
+3 4 5 6 7
+*/

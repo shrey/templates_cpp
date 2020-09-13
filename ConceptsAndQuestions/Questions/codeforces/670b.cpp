@@ -65,7 +65,7 @@ ll solve(ll arr[], ll n){
         }
         ans = max(ans,curr);
     }
-    fo(n2) cout<<neg[i]<<" ";cout<<endl;
+    // fo(n2) cout<<neg[i]<<" ";cout<<endl;
     if(neg.size()>=5){
         ll curr = 1;
         for(int i = 0; i<5; i++){

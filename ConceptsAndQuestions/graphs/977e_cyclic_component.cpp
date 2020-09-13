@@ -37,13 +37,46 @@ using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
 
-int main(){
-    KOBE;
+const ll M = 2e5+1;
+vector<ll> gr[M];
+umap<ll,bool> visited;
+bool ans = true;
 
+void dfs(ll src){
+    visited[src] = true;
+    ll deg = gr[src].size();
+    if(deg!=2) ans = false;
+    for(auto x: gr[src]){
+        if(!visited[x]) dfs(x);
+    }
 }
 
+bool isCyclic(ll src){
+    ans = true;
+    dfs(src);
+    return ans;
+}
 
-//common errors
-// row - n, col - m always and loop var
-// see the freq of numbers carefully
-// see if there's array overflow
+int main(){
+    KOBE;
+    ll n,m;
+    cin>>n>>m;
+    ll x,y;
+    fo(m){
+        cin>>x>>y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    ll ans =0;
+    for(int i = 1; i<=n; i++){
+        if(!visited[i]){
+            // cout<<"("<<i<<endl;
+            if(isCyclic(i)){
+                // cout<<"()"<<i<<endl;
+                ans++;
+            }
+        }
+    }
+
+    cout<<ans<<"\n";
+}

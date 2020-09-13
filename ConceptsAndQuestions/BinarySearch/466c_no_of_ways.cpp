@@ -28,22 +28,44 @@
 #define S second
 #define umap unordered_map
 #define mp make_pair
-#define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+
 #define fo(n) for(int i = 0; i<n; i++)
 #define fnd(stl, data) find(stl.begin(), stl.end(), data)
-
 
 using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
 
-int main(){
-    KOBE;
-
+ll ways(ll arr[], ll n){
+    ll s = 0;
+    fo(n) s+=arr[i];
+    if(s%3!=0) return 0;
+    ll cnt[n], sum[n];
+    ll ss = 0;
+    for(int i = n-1; i>=0; i--){
+        ss+=arr[i];
+        cnt[i] = 0;
+        if(ss == s/3) cnt[i] = 1;
+        sum[i] = cnt[i];
+        if(i<n-1) sum[i]+=sum[i+1];
+    }
+    ll ans = 0;
+    ll currSum = 0;
+    for(int i = 0; i<n-2; i++){
+        currSum += arr[i];
+        if(currSum == s/3){
+            ans+=sum[i+2];
+        }
+    }
+    return ans;
 }
 
-
-//common errors
-// row - n, col - m always and loop var
-// see the freq of numbers carefully
-// see if there's array overflow
+int main(){
+    ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+    ll n;
+    cin>>n;
+    ll arr[n];
+    ll pref[n];
+    fo(n) cin>>arr[i];
+    cout<<ways(arr,n)<<"\n";
+}

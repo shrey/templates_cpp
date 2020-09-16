@@ -37,20 +37,38 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 ll mod = 1e9 + 7;
-
-ll cl(double a){
-    if(a>(ll) a){
-        return (ll)a+1;
-    }
-    else{
-        return (ll)a;
-    }
-
-}
-
+const ll M = 2e5 +1;
+ll dp[M];
+ll pref[M];
 int main(){
     KOBE;
-
+    ll t,k;
+    dp[0] = 1;
+    cin>>t>>k;
+    for(int i = 1; i<k; i++){
+        dp[i] = 1;
+    }
+    for(int i = k; i<M-1; i++){
+        dp[i] = (dp[i-1]%mod + dp[i-k]%mod)%mod;
+    }
+    ll curr = 0;
+    pref[0] = 0;
+    for(int i = 1; i<M-1; i++){
+        curr+=dp[i];
+        curr%=mod;
+        pref[i] = curr;
+    }
+    // for(int i = 1; i<=10; i++){
+    //     cout<<dp[i]<<" ";
+    // }cout<<"\n";
+    while(t--){
+        ll a,b;
+        cin>>a>>b;
+        ll ans = pref[b]-pref[a-1];
+        ans+=mod;
+        ans%=mod;
+        cout<<ans<<"\n";
+    }
 }
 
 

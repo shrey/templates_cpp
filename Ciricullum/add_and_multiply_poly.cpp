@@ -39,6 +39,7 @@ void multiplyPolynomial(poly *a, poly *b){
             c.coeff[i+j] += a->coeff[i]*b->coeff[j];
         }
     }
+    cout<<"Product of polynomials is:-"<<"\n";
     displayPoly(&c);
 }
 

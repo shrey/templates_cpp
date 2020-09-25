@@ -11,6 +11,7 @@
         "queue": "cpp",
         "stack": "cpp",
         "algorithm": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "iomanip": "cpp"
     }
 }

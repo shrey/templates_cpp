@@ -60,7 +60,14 @@ ll getAdd(ll x) {
 
 int main()
 {
-    ll a;
-    cin>>a;
-    cout<<a<<endl;
+    // string s1, s2;
+	// cin>>s1>>s2;
+	// if(s1>s2){
+	// 	cout<<"s1"<<"\n";
+	// }
+	// else{
+	// 	cout<<"s2"<<"\n";
+	// }
+	if(-90) cout<<"YES"<<endl;
+	else cout<<"NO"<<endl;
 }

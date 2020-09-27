@@ -52,8 +52,51 @@ ll cl(double a){
     }
 }
 
+const ll M = 5e6+1;
+
+bool prime[M] = {false};
+ll prime_fact_cnt[M] = {0};
+ll fact[M] = {0};
+void prime_seive(){
+    fo(M) prime[i] = true;
+    for(int p = 2; p*p<M; p++){
+        if(prime[p] == true){
+            for(int i = p*p; i<M; i+=p){
+                prime[i] = false;
+                if(!fact[i]) fact[i] = p;
+            }
+        }
+    }
+}
+
+void compute(){
+    prime_fact_cnt[1] = 0;
+    for(ll i = 2; i<M; i++){
+        if(prime[i]){
+            prime_fact_cnt[i] = 1;
+        }
+        else{
+            prime_fact_cnt[i] = prime_fact_cnt[i/fact[i]]+1;
+        }
+    }
+}
+
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    prime_seive();
+    compute();
+
+    fact[1] = 0;
+    for(ll i = 2; i<M; i++){
+        fact[i] = fact[i-1]+prime_fact_cnt[i];
+    }
+    while(t--){
+        ll a,b;
+        cin>>a>>b;
+        cout<<fact[a]-fact[b]<<"\n";
+    }
 }
 
 

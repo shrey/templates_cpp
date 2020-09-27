@@ -12,6 +12,7 @@
         "stack": "cpp",
         "algorithm": "cpp",
         "vector": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "random": "cpp"
     }
 }

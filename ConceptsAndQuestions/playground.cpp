@@ -68,6 +68,5 @@ int main()
 	// else{
 	// 	cout<<"s2"<<"\n";
 	// }
-	if(-90) cout<<"YES"<<endl;
-	else cout<<"NO"<<endl;
+	for(ll i = 0; i<2000; i++) cout<<1<<" ";
 }

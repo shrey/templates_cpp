@@ -52,8 +52,44 @@ ll cl(double a){
     }
 }
 
+
+ll is_1(ll n, ll curr){
+    if(n&curr) return 1;
+    return 0;
+}
+
+ll pow_of_2(ll n){
+    ll i = 0;
+    ll curr = 1;
+    while(curr<=n){
+        i++;
+        curr*=2;
+    }
+    i--;
+    return i;
+}
+
 int32_t main(){
     KOBE;
+    ll l,r;
+    cin>>l>>r;
+    ll curr = 1;
+    ll ans = 0;
+    ll i = 0;
+    ll diff = r-l;
+    while(curr <= diff){
+        ans+=curr;
+        curr*=2;
+        i++;
+    }
+    while(curr<=r){
+        if(is_1(l,curr) != is_1(r,curr)){
+            ans+=curr;
+        }
+        curr*=2;
+    }
+    cout<<ans<<"\n";
+
 }
 
 
@@ -62,3 +98,4 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
+// left shift operators take extra time

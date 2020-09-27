@@ -59,7 +59,7 @@ int main(){
     KOBE;
     cin>>n;
     for(ll i = 1; i<=n; i++) cin>>arr[i];
-    umap<ll,ll> cnt;
+    map<ll,ll> cnt;
     ll ans = 1;
     for(ll i = 1; i<=n; i++){
         cnt[arr[i]] = i;

@@ -52,8 +52,53 @@ ll cl(double a){
     }
 }
 
+ll n,x,y;
+const ll M = 1e5+1;
+umap<ll,bool> good;
+umap<ll,bool> visited;
+vl gr[M];
+ll c[M];
+ll ans;
+bool possible = false;
+
+void dfs(ll curr){
+    visited[curr] = true;
+    bool flag = true;
+    ll col = c[gr[curr][0]];
+    for(auto x: gr[curr]){
+        if(!visited[x]){
+            dfs(x);
+            if(col != c[x] || !good[x]){
+                good[curr] = false;
+                flag = false;
+            }
+        }
+    }
+    if(flag){
+        possible = true;
+        ans = curr;
+        return;
+    }
+}
+
+
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n-1){
+        cin>>x>>y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    dfs(1);
+    if(possible){
+        YES;
+        cout<<ans<<"\n";
+    }
+    else{
+        NO;
+    }
 }
 
 

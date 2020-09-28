@@ -50,6 +50,30 @@ ll cl(double a){
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        ll n,k;
+        cin>>n>>k;
+        ll arr[n];
+        ll sm = imax;
+        ll ind;
+        fo(n){
+            cin>>arr[i];
+            if(sm>arr[i]){
+                sm = arr[i];
+                ind = i;
+            }
+
+        }
+        ll ans = 0;
+        for(ll i = 0; i<n; i++){
+            if(i!=ind){
+                ans+=(k-arr[i])/sm;
+            }
+        }
+        cout<<ans<<"\n";
+    }
 }
 
 

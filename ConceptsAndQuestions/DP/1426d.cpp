@@ -48,8 +48,29 @@ ll cl(double a){
     }
 }
 
+const ll M = 2e5+1;
+
+
 int32_t main(){
     KOBE;
+    ll n;
+    cin>>n;
+    ll arr[n+1];
+    fo(n) cin>>arr[i+1];
+    set<ll> s;
+    ll curr = 0, ans = 0;
+    s.insert(0);
+    for(ll i = 1; i<=n; i++){
+        curr+=arr[i];
+        if(s.find(curr)!=s.end()){
+            ans++;
+            s.clear();
+            s.insert(0);
+            curr = arr[i];
+        }
+        s.insert(curr);
+    }
+    cout<<ans<<"\n";
 }
 
 

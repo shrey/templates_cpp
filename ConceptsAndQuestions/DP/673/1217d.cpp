@@ -48,7 +48,61 @@ ll cl(double a){
     }
 }
 
+
+const ll M = 1e5+1;
+ll arr[M]; ll n;
+vector< vl > ans;
+
+void oper(ll i, ll j, ll x){
+    arr[i] -= i*x;
+    arr[j] += i*x;
+    vl temp;
+    temp.pb(i);
+    temp.pb(j);
+    temp.pb(x);
+    ans.pb(temp);
+}
+
+bool solve(){
+    ll sum = 0;
+    for(ll i = 1; i<=n; i++) sum+=arr[i];
+    if(sum%n!=0){
+        return false;
+    }
+    ll res = sum/n;
+    for(ll i = 2; i<=n; i++){
+        if(arr[i]%i){
+            oper(1,i,i-(arr[i]%i));
+        }
+        oper(i,1,arr[i]/i);
+    }
+    for(ll i = 2; i<=n; i++){
+        oper(1,i,res);
+    }
+    for(ll i = 1; i<=n; i++){
+        if(arr[i]!=res) return false;
+    }
+    if(ans.size()>3*n) return false;
+    cout<<ans.size()<<"\n";
+    for(auto x: ans){
+        cout<<x[0]<<" "<<x[1]<<" "<<x[2]<<"\n";
+    }
+    return true;
+}
+
 int32_t main(){
+    ll t;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        for(ll i = 1; i<=n; i++){
+            cin>>arr[i];
+        }
+        if(!solve()){
+            cout<<"-1\n";
+        }
+        ans.clear();
+    }
     KOBE;
 }
 

@@ -48,8 +48,24 @@ ll cl(double a){
     }
 }
 
+ll flr(double a){
+    return (ll)a;
+}
+
+double comp(double n){
+    return (flr((n+2)*(n+2)/(4.0)));
+}
+
 int32_t main(){
-    KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        double target;
+        cin>>target;
+        double n = 0;
+        while(comp(n)<target) n++;
+        cout<<n<<"\n";
+    }
 }
 
 

@@ -50,6 +50,24 @@ ll cl(double a){
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        ll n,x;
+        cin>>n>>x;
+        if(n<=2){
+            cout<<1<<"\n";
+            continue;
+        }
+        ll floor = 2;
+        ll curr = 3;
+        while(curr<=n){
+            floor++;
+            curr+=x;
+        }
+        floor--;
+        cout<<floor<<"\n";
+    }
 }
 
 

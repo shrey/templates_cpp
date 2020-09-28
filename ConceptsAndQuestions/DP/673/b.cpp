@@ -50,6 +50,43 @@ ll cl(double a){
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        ll n,T;
+        cin>>n>>T;
+        ll arr[n];
+        fo(n) cin>>arr[i];
+        umap<ll,ll> c;
+        umap<ll,ll> d;
+        umap<ll,ll> val;
+        ll ans = 0;
+        for(ll i = 0; i<n; i++){
+            ll req = T-arr[i];
+            if(c[req] > d[req]){
+                if(d[req]){
+                    ans++;
+                }
+                d[arr[i]]++;
+                val[i] = 1;
+            }
+            else if(c[req]<d[req]){
+                if(c[req]){
+                    ans++;
+                }
+                c[arr[i]]++;
+            }
+            else{
+                if(c[req]){
+                    ans++;
+                }
+                c[arr[i]]++;
+            }
+        }
+        for(ll i = 0; i<n; i++){
+            cout<<val[i]<<" ";
+        }cout<<"\n";
+    }
 }
 
 

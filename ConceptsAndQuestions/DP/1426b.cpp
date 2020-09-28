@@ -2,10 +2,6 @@
 
 //Shrey Dubey
 
-//Contact Me at wshrey09@gmail.com
-
-
-
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -51,77 +47,34 @@ ll cl(double a){
         return (ll)a;
     }
 }
-
-ll n,x,y;
-const ll M = 1e5+5;
-umap<ll,bool> good;
-umap<ll,bool> visited;
-vl gr[M];
-ll c[M];
-bool possible = false;
-
-bool dfs(ll curr, ll par, ll col){
-    for(auto x: gr[curr]){
-        if(x!=par && (c[x]!=col || (!dfs(x,curr,col)))) return false;
-    }
-    return true;
-}
-
-
-bool comp(ll i){
-    for(auto x: gr[i]){
-        if(!dfs(x,i,c[x])) return false;
-    }
-    return true;
-}
-
-ll ans = -1;
+ll n,m;
 bool solve(){
-    bool flag = true;
-    for(ll i = 1; i<=n; i++){
-        for(auto x: gr[i]){
-            if(c[x]!=c[i]){
-                flag = false;
-                // cout<<i<<" _ "<<c1<<" () "<<x<<" _ "<<c2<<"\n";
-                if(comp(i)){
-                    ans = i;
-                    // cout<<i<<endl;
-                    return true;
-                }
-                if(comp(x)){
-                    ans = x;
-                    // cout<<x<<endl;
-                    return true;
-                }
+    ll mat[2][2];
+    ll cnt = 0;
+    fo(n){
+        forn(i,2){
+            forn(j,2){
+                cin>>mat[i][j];
             }
         }
+        if(mat[1][0] == mat[0][1]) cnt++;
     }
-    if(flag) return true;
+    if(cnt>=1 && m%2 == 0) return true;
     return false;
 }
 
 int32_t main(){
     KOBE;
-    cin>>n;
-    fo(n-1){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr[y].pb(x);
-    }
-    fo(n) cin>>c[i+1];
-    // cout<<"here";
-    if(solve()){
-        YES;
-        if(ans == -1){
-            cout<<1<<"\n";
+    ll t;
+    cin>>t;
+    while(t--){
+        cin>>n>>m;
+        if(solve()){
+            YES;
+        }else{
+            NO;
         }
-        else{
-            cout<<ans<<"\n";
-        }
-    }else{
-        NO;
     }
-
 }
 
 

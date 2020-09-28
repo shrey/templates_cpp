@@ -41,6 +41,7 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define all(x) (x).begin(),(x).end()
 #define fi first
 #define se second
+#define pr(t) cout<<t<<"\n"
 
 double startTime;
 double getCurrentTime() {
@@ -58,6 +59,16 @@ ll getAdd(ll x) {
 	return m1 * m2;
 }
 
+class idea{
+	public:
+		idea(ll a, ll b = 5){
+			pr(1);
+		}
+		idea(ll a){
+			pr(2);
+		}
+};
+
 int main()
 {
     // string s1, s2;
@@ -68,5 +79,6 @@ int main()
 	// else{
 	// 	cout<<"s2"<<"\n";
 	// }
-	for(ll i = 0; i<2000; i++) cout<<1<<" ";
+	idea a(1,2);
+
 }

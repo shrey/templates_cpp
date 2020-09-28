@@ -55,19 +55,52 @@ int32_t main(){
     while(t--){
         ll n;
         cin>>n;
+        ll arr[n+1];
+        for(ll i = 1; i<=n; i++){
+            cin>>arr[i];
+        }
         if(n == 1){
-            cout<<"0\n";
+            cout<<arr[1]<<"\n";
             continue;
         }
-        ll num = sqrt(n);
-        if(num*(num+1) >= n){
-            num*=2;
-            num--;
+        ll dp[n+1];
+        umap<ll,ll> lastpos;
+        for(ll i = 1; i<=n;i++){
+            dp[i] = 0;
         }
-        else{
-            num*=2;
+        for(ll i = 1; i<=n; i++){
+            dp[arr[i]] = max(dp[arr[i]],i-lastpos[arr[i]]);
+            lastpos[arr[i]] = i;
         }
-        cout<<num<<"\n";
+        for(ll i = 1; i<=n; i++){
+            dp[arr[i]] = max(dp[arr[i]],n-lastpos[arr[i]]+1);
+        }
+        vl ans(n+1,-1);
+        for(ll i = 1; i<=n; i++){
+            ll gap = dp[arr[i]];
+            if(ans[gap] == -1){
+                ans[gap] = arr[i];
+            }else{
+                ans[gap] = min(arr[i],ans[gap]);
+            }
+        }
+        ll curr = imax;
+        bool flag = true;
+        for(ll i = 1; i<=n; i++){
+            if(ans[i]!=-1 && flag){
+                flag = false;
+                curr = ans[i];
+            }
+            if(!flag){
+                ans[i] = (ans[i] == -1)? curr : min(ans[i],curr);
+                if(ans[i]!=-1 && ans[i]<curr){
+                    curr = ans[i];
+                }
+            }
+        }
+        for(ll i = 1; i<=n; i++){
+            cout<<ans[i]<<" ";
+        }cout<<"\n";
     }
 }
 

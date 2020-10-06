@@ -45,7 +45,7 @@ ll cnum(char ch){
 }
 string finalOrder = "";
 ll n;
-string s[200];
+vector<string> s;
 bool possible = true;
 vector<bool> visited(100, false);
 vector<bool> cstack(100,false);
@@ -66,11 +66,26 @@ void dfs(ll curr){
     cstack[curr] = false;
 }
 
+ll k;
+umap<ll,vector<string> > pm;
+
 int main(){
     KOBE;
-    cin>>n;
+    cin>>n>>k;
     fo(n){
-        cin>>s[i];
+        ll curr;
+        cin>>curr;
+        fo(k){
+            string cur;
+            cin>>cur;
+            pm[curr].pb(cur);
+        }
+    }
+
+    fo(1001){
+        for(auto str: pm[i]){
+            s.pb(str);
+        }
     }
     for(int i = 1; i<n; i++){
         string curr = s[i];

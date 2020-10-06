@@ -26,6 +26,40 @@ node* insert(node *s, int x){
     }
 }
 
+node *insertBegin(node *s, int x){
+    node *q = (node*)malloc(sizeof(node));
+    q->val = x;
+    if(s==NULL){
+        s = q;
+        s->next = NULL;
+        return s;
+    }
+    node *p = s;
+    q->next = s;
+    s = q;
+    return s;
+}
+
+node *insertAfter(node *s, int x,int num){
+    node *q = (node*)malloc(sizeof(node));
+    q->val = x;
+    if(s == NULL){
+        s = q;
+        s->next = NULL;
+        return s;
+    }
+    node *p = s;
+    while(p!=NULL && p->val!=num){
+        p = p->next;
+    }
+    if(p!=NULL){
+        node *nxt = p->next;
+        p->next = q;
+        q->next = nxt;
+    }
+    return s;
+}
+
 node* erase(node *s, int x){
     if(s == NULL){
         cout<<"Linked List Is Empty"<<"\n";
@@ -54,10 +88,11 @@ void search(node *s, int x){
     int i = 1;
     while(p!=NULL){
         if(p->val == x){
-            cout<<"Node found first at position"<<" "<<x<<"\n";
+            cout<<"Node found first at position"<<" "<<i<<"\n";
             return;
         }
         p = p->next;
+        i++;
     }
     cout<<"Node Not Found"<<"\n";
 }
@@ -81,7 +116,7 @@ void display(node *s){
 }
 
 int main(){
-    int choice,num;
+    int choice,num,x;
     node *s;
     int n = 0;
     do{
@@ -90,7 +125,9 @@ int main(){
         cout<<"SEARCH(3)"<<endl;
         cout<<"DISPLAY(4)"<<endl;
         cout<<"COUNT(5)"<<endl;
-        cout<<"EXIT(6)"<<endl;
+        cout<<"INSERT START(6)"<<endl;
+        cout<<"INSERT AFTER(7)"<<endl;
+        cout<<"EXIT(8)"<<endl;
         cin>>choice;
         switch (choice)
         {
@@ -113,11 +150,19 @@ int main(){
             count(s);
             break;
         case 6:
+            cin>>num;
+            s = insertBegin(s,num);
+            break;
+        case 7:
+            cin>>num>>x;
+            s = insertAfter(s,x,num);
+            break;
+        case 8:
             cout<<"THANK YOU FOR INTERACTING"<<endl;
             break;
         default:
             cout<<"PLEASE ENTER A VALID QUERY"<<endl;
             break;
         }
-    }while(choice!=6);
+    }while(choice!=8);
 }

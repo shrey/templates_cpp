@@ -33,7 +33,19 @@
 using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
+const ll M = 1e5+1;
+bool prime[M];
 
+void seive(){
+    fo(M) prime[i] = true;
+    for(int p = 2; p*p<M; p++){
+        if(prime[p] == true){
+            for(int i = p*p; i<M; i+=p){
+                prime[i] = false;
+            }
+        }
+    }
+}
 
 int prime_seive(int n){
     bool prime[n+1];

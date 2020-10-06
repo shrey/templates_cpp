@@ -1,6 +1,7 @@
-
 #include <iostream>
 #define size 20
+
+using namespace std;
 struct sparse{
     int nrows;
     int ncols;
@@ -9,9 +10,9 @@ struct sparse{
     int col[size];
     int value[size];
 };
-typedef struct sparse mySparse;
-mySparse addMatrix(mySparse A,mySparse B){
-    mySparse C;
+
+sparse addMatrix(sparse A,sparse B){
+    sparse C;
     int i=0,j=0,k=0;
     C.nrows=A.nrows;
     C.ncols=A.ncols;
@@ -60,8 +61,8 @@ mySparse addMatrix(mySparse A,mySparse B){
     C.nz=k;
     return C;
 }
-mySparse transposeMatrix(mySparse A){
-    mySparse C;
+sparse transposeMatrix(sparse A){
+    sparse C;
     int mat[A.ncols];
     for(int i=0;i<A.ncols;i++){
         mat[i]=0;
@@ -84,22 +85,32 @@ mySparse transposeMatrix(mySparse A){
     return C;
 
 }
-mySparse multiplyMatrix(mySparse A,mySparse D){
-    mySparse B= transposeMatrix(D);
-    mySparse C;
+sparse multiplyMatrix(sparse A,sparse B){
+    sparse D= transposeMatrix(B);
+    sparse C;
     C.nrows=A.nrows;
-    C.ncols=B.nrows;
+    C.ncols=D.nrows;
     int k=0;
     for(int i=0;i<C.ncols*C.nrows;i++){
         C.value[i]=0;
     }
     for(int i=0;i<A.nz;i++){
-        for(int j=0;j<B.nz;j++){
-            if(A.col[i]==B.col[j]){
+        for(int j=0;j<D.nz;j++){
+            int flag=0;
+            if(A.col[i]==D.col[j]){
+                int m=0;
+                while(m<k){
+                    if(C.row[m]==A.row[i] && C.col[m]==D.row[j]){
+                        C.value[m]=C.value[m]+(A.value[i]*D.value[j]);
+                        flag=1;
+                        break;
+                    }
+                    m++;
+                }
+                if(flag==1) continue;
                 C.row[k]=A.row[i];
-                C.col[k]=B.row[j];
-                C.value[k]+=A.value[i]*B.value[j];
-
+                C.col[k]=D.row[j];
+                C.value[k]=C.value[k]+(A.value[i]*D.value[j]);
                 int t=k;
                 while(t>0 && C.row[t]==C.row[t-1] && C.col[t]<C.col[t-1] ){
                     int c=C.row[t];
@@ -120,53 +131,84 @@ mySparse multiplyMatrix(mySparse A,mySparse D){
     C.nz=k;
     return C;
 }
-void readMatrix(mySparse* A){
-    printf("Enter the number of rows:\n");
-    scanf("%d",&A->nrows);
-    printf("Enter the number of columns:\n");
-    scanf("%d",&A->ncols);
-    printf("Enter the number of values:\n");
-    scanf("%d",&A->nz);
-    printf("Enter values in the table:\n");
-    printf("Row no.     column no.      value\n");
+void readMatrix(sparse* A){
+    cout<<"Enter the number of rows:\n";
+    cin>>A->nrows;
+    cout<<"Enter the number of columns:\n";
+    cin>>A->ncols;
+    cout<<"Enter the number of non-zero values:\n";
+    cin>>A->nz;
+    cout<<"Enter values in the table:\n";
+    cout<<"Row no.     column no.      value\n";
     for(int i=0;i<A->nz;i++){
-        scanf("%d",&A->row[i]);
-        scanf("%d",&A->col[i]);
-        scanf("%d",&A->value[i]);
+        cin>>A->row[i];
+        cin>>A->col[i];
+        cin>>A->value[i];
     }
 }
-void printMatrix(mySparse A){
-    printf("Row no.     column no.      value\n");
+void printMatrix(sparse A){
+    cout<<"Row no.     column no.      value\n";
     for(int i=0;i<A.nz;i++){
-        printf("%d\t\t",A.row[i]);
-        printf("%d\t\t",A.col[i]);
-        printf("%d\n",A.value[i]);
+        cout<<A.row[i];
+        cout<<"\t\t"<<A.col[i];
+        cout<<"\t\t"<<A.value[i]<<"\n";
     }
     return;
 }
+
+void printNormal(sparse a){
+    cout<<"Original Matrix was: "<<"\n";
+    int mat[size+1][size+1] = {0};
+    for(int i = 0; i<a.nz; i++){
+        mat[a.row[i]][a.col[i]] = a.value[i];
+    }
+    for(int i = 0; i<a.nrows; i++){
+        for(int j = 0; j<a.ncols; j++){
+            cout<<mat[i][j]<<" ";
+        }cout<<"\n";
+    }
+}
+
 int main() {
-    mySparse A,B,C,D,E;
+    sparse A,B,C,D,E;
     readMatrix(&A);
     readMatrix(&B);
+    printNormal(A);
+    printNormal(B);
     if(A.nrows!=B.nrows || A.ncols!=B.ncols){
-        printf("No. of rows and columns should be same to add matrices.\n");
+        cout<<"No. of rows and columns should be same to add matrices.\n";
         goto label;
     }
     C= addMatrix(A,B);
     D=transposeMatrix(C);
-    printf("Matrix A: \n");
+    cout<<"Matrix A: \n";
     printMatrix(A);
-    printf("Matrix B: \n");
+    cout<<"Matrix B: \n";
     printMatrix(B);
-    printf("Matrix C=A+B: \n");
+    cout<<"Matrix C=A+B: \n";
     printMatrix(C);
-    printf("Matrix D=Transpose(C): \n");
+    cout<<"Transpose of C: \n";
     printMatrix(D);
     label:
     if(A.ncols!=B.nrows){
-        printf("Given matrices can not be multiplied.\n");
+        cout<<"Given matrices can not be multiplied.\n";
         return 0;
     }
     E=multiplyMatrix(A,B);
     printMatrix(E);
 }
+
+
+/*
+4 5 5
+0 1 3
+1 1 4
+1 3 2
+2 3 8
+3 4 9
+5 2 3
+2 1 6
+3 0 3
+4 1 7
+
+*/

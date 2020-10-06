@@ -88,15 +88,78 @@ void printSparse(Sparse s){
     }
 }
 
+
+Sparse transposeMatrix(Sparse A){
+    Sparse C;
+    int mat[A.ncols];
+    for(int i=0;i<A.ncols;i++){
+        mat[i]=0;
+    }
+    C.nrows=A.ncols;
+    C.ncols=A.nrows;
+    C.nz=A.nz;
+    for(int i=0;i<A.nz;i++){
+        mat[A.col[i]]++;
+    }
+    for(int i=1;mat[i]!=0;i++){
+        mat[i]+=mat[i-1];
+    }
+    for(int i=A.nz-1;i>=0;i--){
+        C.row[mat[A.col[i]]-1]=A.col[i];
+        C.col[mat[A.col[i]]-1]=A.row[i];
+        C.value[mat[A.col[i]]-1]=A.value[i];
+        mat[A.col[i]]--;
+    }
+    return C;
+
+}
+Sparse multiplyMatrix(Sparse A,Sparse D){
+    Sparse B= transposeMatrix(D);
+    Sparse C;
+    C.nrows=A.nrows;
+    C.ncols=B.nrows;
+    int k=0;
+    for(int i=0;i<C.ncols*C.nrows;i++){
+        C.value[i]=0;
+    }
+    for(int i=0;i<A.nz;i++){
+        for(int j=0;j<B.nz;j++){
+            if(A.col[i]==B.col[j]){
+                C.row[k]=A.row[i];
+                C.col[k]=B.row[j];
+                C.value[k]+=A.value[i]*B.value[j];
+
+                int t=k;
+                while(t>0 && C.row[t]==C.row[t-1] && C.col[t]<C.col[t-1] ){
+                    int c=C.row[t];
+                    C.row[t]=C.row[t-1];
+                    C.row[t-1]=c;
+                    c=C.col[t];
+                    C.col[t]=C.col[t-1];
+                    C.col[t-1]=c;
+                    c=C.value[t];
+                    C.value[t]=C.value[t-1];
+                    C.value[t-1]=c;
+                    t--;
+                }
+                k++;
+            }
+        }
+    }
+    C.nz=k;
+    return C;
+}
+
+
 int main(){
     int mat[][6] = {
-        {0,0,0,5,0,0},
+        {0,0,0,5,0,3},
         {0,0,7,0,8,0},
         {0,0,6,0,0,0},
         {0,8,6,0,0,9}
         };
     int mat2[][6] = {
-        {0,0,0,5,6,0},
+        {0,0,0,5,6,2},
         {0,0,7,0,8,0},
         {0,0,6,0,0,0},
         {0,8,6,0,0,9}

@@ -14,6 +14,7 @@
 #include<queue>
 #include<stack>
 #include <math.h>
+#include<climits>
 
 using namespace std;
 typedef long long ll;
@@ -24,7 +25,7 @@ typedef long double ld;
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
-#define ss second
+#define sec second
 #define umap unordered_map
 #define mp make_pair
 #define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
@@ -35,17 +36,22 @@ typedef long double ld;
 #define lmax LLONG_MAX
 #define vi vector<int>
 #define vl vector<ll>
+#define vp vector<pair<ll,ll> >
 #define pr(t) cout<<t<<"\n"
 #define int long long
 ll mod = 1e9 + 7;
 
-ll cl(double a){
+ll cl(ld a){
     if(a>(ll) a){
         return (ll)a+1;
     }
     else{
         return (ll)a;
     }
+}
+
+ll flr(ld a){
+    return (ll) a;
 }
 
 int32_t main(){
@@ -58,3 +64,10 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
+
+
+//problem ideas
+//check piegonhole wherever possible
+//there might be many instances of limited answers like 0,1,2 only
+// see suffix and prefix
+//don't be obsessed with binary search

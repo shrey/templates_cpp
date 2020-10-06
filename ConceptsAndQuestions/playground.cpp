@@ -17,6 +17,7 @@
 #include <chrono>
 #include <random>
 #include <bitset>
+#define fo(n) for(int i = 0; i<n; i++)
 using namespace std;
 
 #ifdef LOCAL
@@ -58,27 +59,64 @@ ll getAdd(ll x) {
 	}
 	return m1 * m2;
 }
-
+ll gval = 10;
 class idea{
+	int len,wid;
+	static int stat;
 	public:
+		idea(){
+			cout<<"Def"<<"\n";
+		}
 		idea(ll a, ll b = 5){
+			len = wid = a;
 			pr(1);
 		}
 		idea(ll a){
 			pr(2);
 		}
+		idea(idea &i){
+			len+=i.len;
+		}
+		void disp(){
+			cout<<len<<wid<<"\n";
+		}
 };
+
+void display(const int c1 = 5){
+	ll arr[c1];
+	fo(c1) arr[i] = 0;
+	fo(c1) cout<<arr[i];
+}
 
 int main()
 {
-    // string s1, s2;
-	// cin>>s1>>s2;
-	// if(s1>s2){
-	// 	cout<<"s1"<<"\n";
+    // idea i;
+	// idea i2(2,3);
+	// i = i2;
+	// i.disp();
+	// i2.disp();
+	// int gval = 68;
+	// cout<<gval<<::gval<<"\n";
+	// {
+	// 	cout<<"hery"<<"\n";
 	// }
-	// else{
-	// 	cout<<"s2"<<"\n";
+	// display(6);
+	// ll n;
+	// cin>>n;
+
+	// while(n>0){
+
+	// switch(n){
+	// 	default:
+	// 		cout<<"exit"<<"\n";
+	// 	case 1:
+	// 	continue;
+	// 	case 2:
+	// 	case 3:
+	// 	break;
 	// }
-	idea a(1,2);
+	// n--;
+	// }
+	cout<<sqrt(7)<<"\n";
 
 }

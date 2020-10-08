@@ -56,8 +56,41 @@ ll flr(ld a){
     return (ll) a;
 }
 
+const ll M = 2e5+10;
+
+ll ssub[M] = {0};
+ll sdig[M] = {0};
+string s;
+
+ll nm(char ch){
+    return (ch-'0');
+}
+
+ll add(ll a, ll b){
+    return ((a%mod) + (b%mod))%mod;
+}
+
+ll mult(ll a, ll b){
+    return ((a%mod) * (b%mod))%mod;
+}
+
 int32_t main(){
     KOBE;
+    cin>>s;
+    ll n = s.length();
+    ll a[s.length()];
+    fo(n) a[i] = (s[i]-'0');
+    ll sum = 0;
+    ll ans = 0;
+    ll p = 1;
+    for(ll i = n-1; i>=0; i--){
+        ll k = (((i*(i+1)/2)%mod*p)%mod + sum)%mod;
+        sum+=((n-i)*p)%mod;
+        sum%=mod;
+        p = (p*10)%mod;
+        ans = (ans + (k*a[i])%mod)%mod;
+    }
+    cout<<ans<<"\n";
 }
 
 

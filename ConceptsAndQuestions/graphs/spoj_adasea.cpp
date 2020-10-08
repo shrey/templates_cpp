@@ -56,8 +56,80 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll n,m;
+const ll M = 1010;
+ll mat[M][M];
+ll visited[M][M] = {0};
+
+bool ok(ll i, ll j){
+    if(i>=0 && i<n && j>=0 && j<m && mat[i][j] == 1 && !visited[i][j]){
+        return true;
+    }
+    return false;
+}
+
+ll dfs(ll i, ll j){
+    visited[i][j] = true;
+    ll ans = 1;
+    if(ok(i+1,j)){
+        ans+=dfs(i+1,j);
+    }
+    if(ok(i-1,j)){
+        ans+=dfs(i-1,j);
+    }
+    if(ok(i,j+1)){
+        ans+=dfs(i,j+1);
+    }
+    if(ok(i,j-1)){
+        ans+=dfs(i,j-1);
+    }
+    return ans;
+}
+
+void comp(ll a, ll b){
+    if(b%a == 0){
+        cout<<b/a<<"\n";
+        return;
+    }
+    for(ll i = 2; i<=min(a,b); i++){
+        while(a%i == 0 && b%i == 0){
+            a/=i; b/=i;
+        }
+    }
+    cout<<b<<" / "<<a<<"\n";
+}
+
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        cin>>n>>m;
+        ll d = n*m;
+        ll num = 0;
+        forn(i,n){
+            forn(j,m){
+                char ch;
+                cin>>ch;
+                if(ch == '~') mat[i][j] = 0;
+                else mat[i][j] = 1;
+            }
+        }
+        forn(i,n){
+            forn(j,m){
+                if(!visited[i][j] && mat[i][j] == 1){
+                    ll sz = dfs(i,j);
+                    num+=(sz*sz);
+                }
+            }
+        }
+        comp(d,num);
+        forn(i,M){
+            forn(j,M){
+                visited[i][j] = 0;
+            }
+        }
+    }
 }
 
 

@@ -39,7 +39,7 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define pr(t) cout<<t<<"\n"
+#define pr(st) cout<<st<<"\n"
 #define int long long
 ll mod = 1e9 + 7;
 
@@ -56,8 +56,66 @@ ll flr(ld a){
     return (ll) a;
 }
 
+const ll M = 1e5+10;
+vector<ll> st(4*M,0);
+
+
+void build(int a[], int v, int tl, int tr) {
+    if (tl == tr) {
+        st[v] = a[tl];
+    } else {
+        int tm = (tl + tr) / 2;
+        build(a, v*2+1, tl, tm);
+        build(a, v*2+2, tm+1, tr);
+        st[v] = 0;
+    }
+}
+
+void update(int v, int tl, int tr, int l, int r, int add) {
+    if (l > r)
+        return;
+    if (l == tl && r == tr) {
+        st[v] += add;
+    } else {
+        int tm = (tl + tr) / 2;
+        update(v*2+1, tl, tm, l, min(r, tm), add);
+        update(v*2+2, tm+1, tr, max(l, tm+1), r, add);
+    }
+}
+
+int get(int v, int tl, int tr, int pos) {
+    if (tl == tr)
+        return st[v];
+    int tm = (tl + tr) / 2;
+    if (pos <= tm)
+        return st[v] + get(v*2+1, tl, tm, pos);
+    else
+        return st[v] + get(v*2+2, tm+1, tr, pos);
+}
+
+
 int32_t main(){
     KOBE;
+    ll n,m,c;
+    cin>>n>>m>>c;
+    ll a[n];
+    fo(n) a[i] = c;
+    build(a,0,0,n-1);
+    while(m--){
+        char ch;
+        cin>>ch;
+        if(ch == 'Q'){
+            ll q;
+            cin>>q;
+            q--;
+            cout<<get(0,0,n-1,q)<<"\n";
+        }else{
+            ll l,r,k;
+            cin>>l>>r>>k;
+            l--; r--;
+            update(0,0,n-1,l,r,k);
+        }
+    }
 }
 
 
@@ -72,4 +130,4 @@ int32_t main(){
 //check piegonhole wherever possible
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
-//don't be obsessed with binary search
+//don'st be obsessed with binary search

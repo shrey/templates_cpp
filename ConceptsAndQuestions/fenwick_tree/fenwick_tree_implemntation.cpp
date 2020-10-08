@@ -34,8 +34,6 @@ typedef long double ld;
 #define forn(x,n) for(ll x = 0; x<n; x++)
 #define imax INT_MAX
 #define lmax LLONG_MAX
-#define imin INT_MIN
-#define lmin LLONG_MIN
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
@@ -56,8 +54,55 @@ ll flr(ld a){
     return (ll) a;
 }
 
+
+const ll M = 2e5+100;
+ll fwt[M] = {0};
+ll arr[M];
+ll n;
+
+void updatebit(ll i, ll val){
+    i = i+1;
+    while(i<=n){
+        fwt[i]+=val;
+        i += (i&(-i));
+    }
+}
+
+ll getsum(ll i){
+    if(i<0) return 0;
+    ll sum = 0;
+    i = i+1;
+    while(i>0){
+        sum+=fwt[i];
+        i-=(i&(-i));
+    }
+    return sum;
+}
+
+void construct(){
+    for(ll i = 0; i<n; i++){
+        updatebit(i,arr[i]);
+    }
+}
+
+ll rngsum(ll l, ll r){
+    return (getsum(r) - getsum(l-1));
+}
+
+void updateRange(ll l, ll r, ll val){
+    updatebit(l,val);
+    updatebit(r+1,-val);
+}
+
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n) cin>>arr[i];
+    construct();
+    ll l = 0, r = 3;
+    updateRange(l,r,5);
+    cout<<rngsum(l,r)<<"\n";
 }
 
 

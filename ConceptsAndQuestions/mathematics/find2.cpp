@@ -56,7 +56,44 @@ ll flr(ld a){
     return (ll) a;
 }
 
+class demo{
+    static ll cnt;
+    int a;
+    public:
+        static void st(){
+            cout<<cnt<<"\n";
+        }
+        demo(){
+            cout<<"HERE"<<"\n";
+        }
+        demo(demo &d1){
+            cout<<"CPY"<<"\n";
+        }
+};
+
+ll demo:: cnt = 99;
+
 int32_t main(){
+    demo a;
+    demo c = a;
+    demo d;
+    d = a;
+    demo e(d);
+    ll arr[] = {1,3,1,4,3,5,5,6,7,7};
+    ll n = sizeof(arr)/sizeof(ll);
+    ll tot = 0;
+    fo(n) tot = tot ^ arr[i];
+    ll msk = 1;
+    while((tot&msk) == 0){
+        msk = msk<<1;
+    }
+    ll n1 = 0;
+    fo(n){
+        if(arr[i]&msk){
+            n1^=arr[i];
+        }
+    }
+    cout<<n1<<" "<<(tot^n1)<<"\n";
     KOBE;
 }
 

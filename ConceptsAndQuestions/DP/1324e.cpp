@@ -34,8 +34,6 @@ typedef long double ld;
 #define forn(x,n) for(ll x = 0; x<n; x++)
 #define imax INT_MAX
 #define lmax LLONG_MAX
-#define imin INT_MIN
-#define lmin LLONG_MIN
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
@@ -56,9 +54,73 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll n,h,l,r;
+const ll M = 2000+10;
+
+ll arr[M];
+ll dp[M][M] = {0};
+
+ll prev(ll t){
+    if(t>=0) return t;
+    return (t+24);
+}
+
+ll nxt(ll t){
+    return (t%h);
+}
+
+bool ok(ll n){
+    if(n>=l && n<=r) return true;
+    return false;
+}
+
+ll recur(ll i, ll tme){
+    if(i == n) return 0;
+    ll a = 0;
+    if(ok(tme)) a = 1;
+    if(dp[i][tme]!=-1) return dp[i][tme];
+    dp[i][tme] =  a + max(recur(i+1,nxt(tme+arr[i+1])),recur(i+1,nxt(tme+arr[i+1]-1)));
+    return dp[i][tme];
+}
+
 int32_t main(){
     KOBE;
+    cin>>n>>h>>l>>r;
+    fo(n) cin>>arr[i];
+    forn(i,M){
+        forn(j,M){
+            dp[i][j] = -1;
+        }
+    }
+    cout<<max(recur(0,arr[0]-1),recur(0,arr[0]))<<"\n";
 }
+    // if(ok(arr[0])){
+    //     dp[0][arr[0]] = 1;
+    // }
+    // if(ok(arr[0]-1)){
+    //     dp[0][arr[0]-1] = 1;
+    // }
+    // ll ans = 0;
+    // for(ll i = 1; i<n; i++){
+    //     for(ll j = 0; j<=h; j++){
+
+    //         ll t1 = prev(j-arr[i]);
+    //         ll t2 = prev(j-(arr[i]-1));
+    //         if(ok(j)){
+    //             dp[i][j] = max(dp[i][j],dp[i-1][t1]+1);
+    //         }
+    //         if(ok(j)){
+    //             dp[i][j] = max(dp[i][j],dp[i-1][t2]+1);
+    //         }
+    //         ans = max(ans,dp[i][j]);
+    //     }
+    // }
+    // for(ll i = 0; i<n; i++){
+    //     for(ll j = 0; j<=h; j++){
+    //         cout<<dp[i][j]<<" ";
+    //     }cout<<"\n";
+    // }
+    // cout<<ans<<"\n";
 
 
 //common errors

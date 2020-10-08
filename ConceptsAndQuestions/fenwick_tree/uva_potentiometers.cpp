@@ -56,8 +56,63 @@ ll flr(ld a){
     return (ll) a;
 }
 
+const ll M = 3e5+100;
+ll fwt[M] = {0};
+ll arr[M];
+ll n;
+
+
+void updatebit(ll i, ll val){
+    i = i+1;
+    while(i<=n){
+        fwt[i]+=val;
+        i += (i&(-i));
+    }
+}
+
+ll getsum(ll i){
+    if(i<0) return 0;
+    ll sum = 0;
+    i = i+1;
+    while(i>0){
+        sum+=fwt[i];
+        i-=(i&(-i));
+    }
+    return sum;
+}
+
+void construct(){
+    for(ll i = 0; i<n; i++){
+        updatebit(i,arr[i]);
+    }
+}
+
+ll rangeq(ll l, ll r){
+    return (getsum(r) - getsum(l-1));
+}
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n) cin>>arr[i];
+    construct();
+    string s = "";
+    do{
+        cin>>s;
+        if(s == "END") break;
+        ll l,r;
+        cin>>l>>r;
+        if(s == "M"){
+            l--; r--;
+            cout<<rangeq(l,r)<<"\n";
+        }
+        else if(s == "S"){
+            l--;
+            updatebit(l,r-arr[l]);
+        }
+        else{
+            break;
+        }
+    }while(s!="END");
 }
 
 

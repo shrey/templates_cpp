@@ -50,7 +50,6 @@ ll cl(double a){
 const ll M = 1e5+1;
 
 vector<ll> st(M);
-vector<ll> lazy(M,0);
 
 
 ll buildTree(ll a[], ll ss, ll se, ll si){

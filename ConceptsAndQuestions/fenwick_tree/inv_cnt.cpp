@@ -35,7 +35,6 @@ typedef long double ld;
 #define imax INT_MAX
 #define lmax LLONG_MAX
 #define imin INT_MIN
-#define lmin LLONG_MIN
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
@@ -56,8 +55,56 @@ ll flr(ld a){
     return (ll) a;
 }
 
+
+const ll M = 2e5+100;
+ll fwt[M] = {0};
+ll arr[M];
+ll n;
+
+void updatebit(ll i, ll val, ll n){
+    i = i+1;
+    while(i<=n){
+        fwt[i]+=val;
+        i += (i&(-i));
+    }
+}
+
+ll getsum(ll i){
+    if(i<0) return 0;
+    ll sum = 0;
+    i = i+1;
+    while(i>0){
+        sum+=fwt[i];
+        i-=(i&(-i));
+    }
+    return sum;
+}
+
+
+void solve(){
+    ll maxelem = imin;
+    fo(n){
+        maxelem = max(arr[i],maxelem);
+    }
+    ll ans = 0;
+
+    for(ll i = n-1; i>=0; i--){
+        ans += getsum(arr[i]-1);
+        updatebit(arr[i],1,maxelem);
+    }
+    cout<<ans<<"\n";
+}
+
+
+ll rngsum(ll l, ll r){
+    return (getsum(r) - getsum(l-1));
+}
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n) cin>>arr[i];
+    solve();
 }
 
 

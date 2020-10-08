@@ -90,33 +90,7 @@ void display(const int c1 = 5){
 
 int main()
 {
-    // idea i;
-	// idea i2(2,3);
-	// i = i2;
-	// i.disp();
-	// i2.disp();
-	// int gval = 68;
-	// cout<<gval<<::gval<<"\n";
-	// {
-	// 	cout<<"hery"<<"\n";
-	// }
-	// display(6);
-	// ll n;
-	// cin>>n;
-
-	// while(n>0){
-
-	// switch(n){
-	// 	default:
-	// 		cout<<"exit"<<"\n";
-	// 	case 1:
-	// 	continue;
-	// 	case 2:
-	// 	case 3:
-	// 	break;
-	// }
-	// n--;
-	// }
-	cout<<sqrt(7)<<"\n";
-
+	enum shape{round,square,rectangle};
+	shape s = square;
+	cout<<s<<"\n";
 }

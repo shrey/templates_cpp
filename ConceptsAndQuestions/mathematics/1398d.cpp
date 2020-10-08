@@ -34,8 +34,6 @@ typedef long double ld;
 #define forn(x,n) for(ll x = 0; x<n; x++)
 #define imax INT_MAX
 #define lmax LLONG_MAX
-#define imin INT_MIN
-#define lmin LLONG_MIN
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
@@ -56,8 +54,40 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll R,G,B;
+const ll M = 210;
+ll dp[M][M][M] = {0};
+ll r[M],g[M],b[M];
+
+void solve(){
+    ll ans = 0;
+    for(ll i = 0; i<=R; i++){
+        for(ll j = 0; j<=G; j++){
+            for(ll k = 0; k<=B; k++){
+                if(i<R && j<G)
+                    dp[i+1][j+1][k] = max(dp[i+1][j+1][k],dp[i][j][k] + r[i]*g[j]);
+                if(i<R && k<B)
+                    dp[i+1][j][k+1] = max(dp[i+1][j][k+1],dp[i][j][k] + r[i]*b[k]);
+                if(j<G && k<B)
+                    dp[i][j+1][k+1] = max(dp[i][j+1][k+1],dp[i][j][k] + g[j]*b[k]);
+                ans = max(ans,dp[i][j][k]);
+            }
+        }
+    }
+    cout<<ans<<"\n";
+}
+
+
 int32_t main(){
     KOBE;
+    cin>>R>>G>>B;
+    fo(R) cin>>r[i];
+    fo(G) cin>>g[i];
+    fo(B) cin>>b[i];
+    sort(r,r+R,greater<int>());
+    sort(g,g+G,greater<int>());
+    sort(b,b+B,greater<int>());
+    solve();
 }
 
 

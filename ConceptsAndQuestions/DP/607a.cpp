@@ -58,8 +58,34 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll n;
+const ll M = 2e6+10;
+ll dp[M] = {0};
+map<ll,ll> pos;
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    ll maxc = 0;
+    fo(n){
+        ll a,b;
+        cin>>a>>b;
+        maxc = max(a,maxc);
+        pos[a] = b;
+    }
+    ll ans = INT_MIN;
+    for(ll i = 0; i<=maxc; i++){
+        if(pos[i]){
+            dp[i] = 1;
+            if(i>pos[i]){
+                dp[i] = dp[i-pos[i]-1]+1;
+            }
+        }else{
+            dp[i] = dp[i-1];
+        }
+        ans = max(ans,dp[i]);
+    }
+    cout<<n-ans<<"\n";
 }
 
 

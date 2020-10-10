@@ -58,8 +58,56 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll n,m;
+const ll M = 510;
+ll mat[M][M];
+ll dp[M][1024] = {0};
+ll pos[M][1024];
+
 int32_t main(){
     KOBE;
+    cin>>n>>m;
+    forn(i,n){
+        forn(j,m){
+            cin>>mat[i][j];
+        }
+    }
+    for(ll i = 0; i<m; i++){
+        dp[0][mat[0][i]] = 1;
+        pos[0][mat[0][i]] = i;
+    }
+    for(ll i = 1; i<n; i++){
+        for(ll j = 0; j<m; j++){
+            for(ll k = 0; k<=1023; k++){
+                ll tmp = mat[i][j]^k;
+                if(dp[i-1][k]){
+                    dp[i][tmp] = 1;
+                    pos[i][tmp] = j;
+                }
+            }
+        }
+    }
+    ll ans = -1;
+    for(ll i = 1; i<=1023; i++){
+        if(dp[n-1][i]){
+            ans = i;
+        }
+    }
+    if(ans == -1){
+        cout<<"NIE\n";
+        return 0;
+    }else{
+        cout<<"TAK\n";
+        vl res;
+        for(ll i = n-1; i>=0; i--){
+            ll j = pos[i][ans];
+            res.pb(j);
+            ans^=(mat[i][j]);
+        }
+        for(ll i = res.size()-1; i>=0; i--){
+            cout<<res[i]+1<<" ";
+        }cout<<"\n";
+    }
 }
 
 

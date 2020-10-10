@@ -15,6 +15,7 @@
         "iomanip": "cpp",
         "random": "cpp",
         "__node_handle": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "map": "cpp"
     }
 }

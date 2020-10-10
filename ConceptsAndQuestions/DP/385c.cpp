@@ -58,8 +58,74 @@ ll flr(ld a){
     return (ll) a;
 }
 
+const ll M = 1e7+1;
+
+const ll maxn = 1e7+1;
+ll n,m,l,r,maxe = imin;
+ll dp[maxn] = {0};
+ll cnt[maxn] = {0};
+ll arr[M];
+
+bool prime[M];
+
+void seive(){
+    fo(M) prime[i] = true;
+    for(int p = 2; p*p<M; p++){
+        if(prime[p] == true){
+            for(int i = p*p; i<M; i+=p){
+                prime[i] = false;
+            }
+        }
+    }
+}
+
+ll concat(ll n){
+    ll count = 0;
+    for(ll i = 1; (n*i)<=maxe; i++){
+        if(cnt[n*i]) count+=(cnt[n*i]);
+    }
+    return count;
+}
+
+void compute(){
+    for(ll i = 2; i<=maxe; i++){
+        dp[i] = dp[i-1];
+        if(prime[i]){
+            dp[i]+=concat(i);
+        }
+    }
+}
+
+ll solve(){
+
+    if(l>maxe && r>maxe) return 0;
+    l = min(maxe,l);
+    r = min(maxe,r);
+    return dp[r]-dp[l-1];
+}
+
+
+
 int32_t main(){
     KOBE;
+    seive();
+    cin>>n;
+    fo(n) cin>>arr[i];
+
+    fo(n){
+        maxe = max(arr[i],maxe);
+        cnt[arr[i]]++;
+    }
+
+    compute();
+    cin>>m;
+    while(m--){
+        cin>>l>>r;
+        cout<<solve()<<"\n";
+    }
+    // for(ll i = 2; i<=maxe; i++){
+    //     cout<<dp[i]<<" ";
+    // }cout<<"\n";
 }
 
 

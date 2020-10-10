@@ -58,8 +58,45 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll n,m;
+const ll M = 1e6+10;
+ll arr[M];
+ll dp[M] = {0};
+ll cnt[1001] = {0};
 int32_t main(){
     KOBE;
+    cin>>n>>m;
+    fo(n) cin>>arr[i];
+    fo(n) arr[i] = arr[i]%m;
+    if(n>m){
+        YES;
+        return 0;
+    }
+    for(ll i = 0; i<n; i++){
+        ll currcnt[1001] = {0};
+        for(ll j = 0; j<=m; j++){
+            if(cnt[j]){
+                // cout<<i<<" () "<<j<<"\n";
+                currcnt[((j+arr[i])%m)] = 1;
+            }
+        }
+        cnt[arr[i]] = 1;
+        for(ll j = 0; j<=m; j++){
+            if(currcnt[j]) cnt[j] = 1;
+        }
+
+    }
+    // forn(i,n){
+    //     forn(j,m){
+    //         cout<<dp[i][j]<<" ";
+    //     }cout<<"\n";
+    // }
+    // fo(m) cout<<cnt[i]<<" ";cout<<"\n";
+    if(cnt[0]){
+        YES;
+        return 0;
+    }
+    NO;
 }
 
 

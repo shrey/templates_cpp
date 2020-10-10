@@ -1,5 +1,4 @@
 
-
 //Shrey Dubey
 
 #include<iostream>
@@ -60,6 +59,67 @@ ll flr(ld a){
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        ll n,k;
+        string s;
+        cin>>n>>k>>s;
+        //if k remains after all operations then minimise remaining l
+        ll i = 0;
+        ll l = 0;
+        ll w = 0;
+        ll ans = 0;
+        if(s[0] == 'W') ans++;
+        for(ll i = 1; i<n; i++){
+            if(s[i] == 'W'){
+                if(s[i-1] == 'W') ans+=2;
+                else ans+=1;
+            }
+        }
+        fo(n){
+            if(s[i] == 'L') l++;
+            else w++;
+        }
+        if(l<=k){
+            cout<<2*n-1<<"\n";
+            continue;
+        }
+        if(w == 0 && k>0){
+            cout<<2*k-1<<"\n";
+            continue;
+        }
+        vl cons;
+        while(i<n){
+            if(s[i] == 'W'){
+                ll curr = 0;
+                i++;
+                while(i<n && s[i]!='W'){
+                    i++;
+                    curr++;
+                }
+                if(i<n && curr>0){
+                    cons.pb(curr);
+                }
+            }
+            else{
+                i++;
+            }
+        }
+        sort(cons.begin(),cons.end());
+        for(auto x: cons){
+            // cout<<x<<"()\n";
+            if(x<=k){
+                ans+=(2*x+1);
+                k-=x;
+            }
+            else{
+                break;
+            }
+        }
+        if(k>0) ans+=2*k;
+        cout<<ans<<"\n";
+    }
 }
 
 

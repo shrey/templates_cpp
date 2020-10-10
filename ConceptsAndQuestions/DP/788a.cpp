@@ -41,7 +41,11 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define endl "\n"
+
+
+ll n;
+const ll M = 2e5+10;
+ll arr[M];
 
 ll mod = 1e9 + 7;
 
@@ -58,9 +62,42 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll diff[M];
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n) cin>>arr[i];
+    for(ll i = 0; i<n-1; i++){
+        diff[i] = abs(arr[i]-arr[i+1]);
+    }
+    ll flag = -1;
+    n--;
+    ll curr = diff[0];
+    // fo(n) cout<<diff[i]<<" ";cout<<"\n";
+    ll s = 0, e = 0;
+    ll ans = 0;
+    ans = max(ans,curr);
+    while(s<n || e<n){
+        if(e<n && curr>=0){
+            e++;
+            curr+=(flag*diff[e]);
+            ans = max(ans,curr);
+            flag*=-1;
+        }
+        else if(curr<0 || e == n){
+            curr-=diff[s];
+            s++;
+            curr*=-1;
+            flag*=-1;
+            ans = max(ans,curr);
+        }
+        ans = max(ans,curr);
+    }
+    ans = max(ans,curr);
+    cout<<ans<<"\n";
 }
+
 
 
 //common errors

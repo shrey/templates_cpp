@@ -58,8 +58,67 @@ ll flr(ld a){
     return (ll) a;
 }
 
+struct pos{
+    ll x;
+    ll y;
+    ll time;
+};
+
+
+
+ll r,n;
+const ll M = 1e6+1;
+pos p[M];
+
+ll dp[M] = {0};
+
+
+ll calc(ll x1,ll y1, ll x2, ll y2){
+    return (abs(x1-x2) + abs(y1-y2));
+}
+
+bool ok(pos &p1, pos &p2){
+    ll t = calc(p1.x,p1.y,p2.x,p2.y);
+    if((p2.time-p1.time)>=t) return true;
+    return false;
+}
+
+
+void solve(){
+    ll ans = 0;
+    ll pmx = imin;
+    pos in;
+
+    for(ll i = 1; i<=n; i++){
+        ll mx = imin;
+        if(ok(p[0],p[i])) dp[i] = 1;
+        if(i<2*r){
+            for(ll j = 0; j<i; j++){
+                if(ok(p[j],p[i]) && dp[j]) mx = max(dp[j],mx);
+            }
+            dp[i] = max(mx+1,dp[i]);
+        }
+        else{
+            for(ll j = i-2*r; j<i; j++){
+                if(ok(p[j],p[i]) && dp[j]) mx = max(dp[j],mx);
+            }
+            dp[i] = max(dp[i],max(mx+1,pmx+1));
+            if(dp[i-2*r]) pmx = max(pmx,dp[i-2*r]);
+        }
+        ans = max(ans,dp[i]);
+    }
+    cout<<ans<<"\n";
+}
+
+
 int32_t main(){
     KOBE;
+    cin>>r>>n;
+    p[0].x = 1; p[0].y = 1; p[0].time = 0;
+    fo(n){
+        cin>>p[i+1].time>>p[i+1].x>>p[i+1].y;
+    }
+    solve();
 }
 
 

@@ -58,8 +58,45 @@ ll flr(ld a){
     return (ll) a;
 }
 
+void solve(){
+    ll n;
+    string s;
+    cin>>n>>s;
+    ll cnt = 0;
+    while(s.size() && s[0] == s.back()){
+        s.pop_back();
+        cnt++;
+    }
+    if(s.empty()){
+        if(cnt<=3){
+            cout<<cnt/3<<"\n";
+            return;
+        }
+        else{
+            cout<<(cnt+2)/3<<"\n";
+            return;
+        }
+    }
+    ll ans = 0;
+    for(ll i = 0; i<s.length()-1; i++){
+        cnt++;
+        if(s[i]!=s[i+1]){
+            // cout<<i<<"()"<<cnt<<"\n";
+            ans+=(cnt/3);
+            cnt = 0;
+        }
+    }
+    cnt++;
+    ans+=(cnt/3);
+    cout<<ans<<"\n";
+}
+
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--)
+        solve();
 }
 
 

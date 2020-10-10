@@ -43,7 +43,7 @@ typedef long double ld;
 #define int long long
 #define endl "\n"
 
-ll mod = 1e9 + 7;
+const ll mod = 998244353;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -58,8 +58,35 @@ ll flr(ld a){
     return (ll) a;
 }
 
+const ll M = 1e6+10;
+ll p[M] = {0};
+
+void pcom(){
+    p[0] = 1;
+    for(ll i = 1; i<M; i++){
+        p[i] = (p[i-1]*10)%mod;
+    }
+}
+ll n;
+
+ll comp(ll i){
+    ll ans = ((10*9*2*p[n-i-1])%mod + ((n-i-1)*10*p[n-i-2]*9*9)%mod)%mod;
+    return ans;
+}
+
 int32_t main(){
     KOBE;
+    pcom();
+    cin>>n;
+    vl ans;
+    for(ll i = 1; i<=n; i++){
+        if(i == n){
+            ans.pb(10);
+        }else{
+            ans.pb(comp(i));
+        }
+    }
+    fo(ans.size())cout<<ans[i]<<" ";  cout<<"\n";
 }
 
 

@@ -58,8 +58,49 @@ ll flr(ld a){
     return (ll) a;
 }
 
+string str;
+const ll M = 1e6+10;
+ll res[M] = {0};
 int32_t main(){
     KOBE;
+    cin>>str;
+    stack<ll> s;
+    ll n = str.length();
+    for(ll i = 0; i<n; i++){
+        if(str[i] == '('){
+            s.push(i);
+        }else{
+            if(!s.empty()){
+                ll top = s.top();
+                s.pop();
+                res[top] = 1;
+                res[i] = 1;
+            }
+        }
+    }
+    ll mxlen = 0;
+    ll curr = 0;
+    ll freq = 0;
+    for(ll i = 0; i<n; i++){
+        if(res[i] == 1){
+            curr++;
+            if(curr == mxlen){
+                freq++;
+            }
+            if(curr>mxlen){
+                mxlen = curr;
+                freq = 1;
+            }
+        }
+        else{
+            curr = 0;
+        }
+    }
+    if(mxlen == 0){
+        cout<<0<<" "<<1<<"\n";
+    }else{
+        cout<<mxlen<<" "<<freq<<"\n";
+    }
 }
 
 

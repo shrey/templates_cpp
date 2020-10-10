@@ -41,8 +41,6 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define endl "\n"
-
 ll mod = 1e9 + 7;
 
 ll cl(ld a){
@@ -58,8 +56,35 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll n,k;
+const ll M = 2e5+10;
+ll arr[M];
+ll l[M] = {0}, r[M] = {0};
+
+
 int32_t main(){
     KOBE;
+    cin>>n>>k;
+    fo(n) cin>>arr[i];
+    map<ll,ll> cnt;
+    for(ll i = 0; i<n; i++){
+        if(arr[i]%k == 0){
+            l[i] = cnt[arr[i]/k];
+        }
+        cnt[arr[i]]++;
+    }
+    cnt.clear();
+    for(ll i = n-1; i>=0; i--){
+        if(arr[i]%k == 0){
+            r[i] = cnt[arr[i]*k];
+        }
+        cnt[arr[i]]++;
+    }
+    ll ans = 0;
+    for(ll i = 0; i<n; i++){
+        ans += (l[i]*r[i]);
+    }
+    cout<<ans<<"\n";
 }
 
 

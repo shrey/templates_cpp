@@ -57,9 +57,38 @@ ll cl(ld a){
 ll flr(ld a){
     return (ll) a;
 }
+const ll M = 2e5+10;
+
+void solve(){
+    ll n,k;
+    string s;
+    cin>>n>>k>>s;
+    string t = "RGB";
+    ll ans = lmax;
+    for(ll gp = 0; gp<3; gp++){
+        ll curr = 0;
+        vl res(n);
+        for(ll i = 0; i<n; i++){
+            res[i] = (s[i] != t[(i+gp)%3]);
+            curr+=res[i];
+            if(i>=k){
+                curr-=res[i-k];
+            }
+            if(i>=(k-1)){
+                ans = min(ans,curr);
+            }
+        }
+    }
+    cout<<ans<<"\n";
+}
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        solve();
+    }
 }
 
 

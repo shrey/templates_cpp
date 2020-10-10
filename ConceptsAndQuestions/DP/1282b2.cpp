@@ -58,8 +58,43 @@ ll flr(ld a){
     return (ll) a;
 }
 
+
+const ll M = 2e5+10;
+
+ll n,p,k,arr[M];
+
+
+
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        cin>>n>>p>>k;
+        fo(n) cin>>arr[i];
+        sort(arr,arr+n);
+        ll pref = 0;
+        ll cnt = 0;
+        ll sum = 0;
+        ll ans = 0;
+        for(ll i = 0; i<=k; i++){
+            sum = pref;
+            if(sum>p) break;
+            cnt = i;
+            for(ll j = (i+k-1); j<n; j+=k){
+                if(sum+arr[j]<=p){
+                    sum+=arr[j];
+                    cnt+=k;
+                }
+                else{
+                    break;
+                }
+            }
+            pref+=arr[i];
+            ans = max(ans,cnt);
+        }
+        cout<<ans<<"\n";
+    }
 }
 
 

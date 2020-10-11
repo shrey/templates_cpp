@@ -1,7 +1,7 @@
 
 
-//Shrey Dubey
 
+//Shrey Dubey
 
 #include<iostream>
 #include<string>
@@ -59,11 +59,77 @@ ll flr(ld a){
     return (ll) a;
 }
 
+struct env{
+    ll h,w;
+    bool operator<(const env& t) const
+    {
+        return (this->h<t.h);
+    }
+};
 
-//code starts here
+const ll M = 5010;
+env e[M];
+ll n,h,w;
+
+bool compare(env &a, env &b){
+    return (a.h<b.h);
+}
+
+bool ok(env &a){
+    if(a.h>h && a.w>w) return true;
+    return false;
+}
+
+bool sm(env &a, env &b){
+    if(b.h>a.h && b.w>a.w) return true;
+    return false;
+}
+
+map<pair<ll,ll>,ll> pos;
 
 int32_t main(){
     KOBE;
+    cin>>n>>w>>h;
+    fo(n){
+        cin>>e[i].w>>e[i].h;
+        pos[mp(e[i].h,e[i].w)] = i;
+    }
+    sort(e,e+n,compare);
+    // lis approach
+    ll dp[M] = {0};
+    ll ans = 0;
+    for(ll i = 0; i<n; i++){
+        if(ok(e[i])) dp[i] = 1;
+        else continue;
+        for(ll j = 0; j<i; j++){
+            if(sm(e[j],e[i]) && ok(e[j])){
+                dp[i] = max(dp[i],dp[j]+1);
+            }
+        }
+        ans = max(ans,dp[i]);
+    }
+    cout<<ans<<"\n";
+    if(ans == 0) return 0;
+    vl res;
+    ll ind;
+    fo(n){
+        if(dp[i] == ans){
+            ind = i;
+            break;
+        }
+    }
+    res.pb(pos[mp(e[ind].h,e[ind].w)]);
+    ans--;
+    for(ll i = ind-1; i>=0 && ans>0; i--){
+        if(dp[i] == ans && sm(e[i],e[ind])){
+            res.pb(pos[mp(e[i].h,e[i].w)]);
+            ind = i;
+            ans--;
+        }
+        if(ans<=0) break;
+    }
+    reverse(res.begin(),res.end());
+    fo(res.size()) cout<<res[i]+1<<" ";cout<<"\n";
 }
 
 

@@ -2,7 +2,6 @@
 
 //Shrey Dubey
 
-
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -59,11 +58,61 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll comp(ll a, ll b){
+    if((a+b)%2 == 0) return (a+b)/2;
+    return (a+b+1)/2;
+}
 
-//code starts here
+
+void solve(){
+    ll n;
+    string s;
+    cin>>n>>s;
+    ll ans = 0;
+    ll i = 0;
+    vl cons;
+    ll curr = 0;
+    while(i<n){
+        ll ind = i;
+        curr = 1;
+        while(i<n-1 && s[i] == s[i+1]){
+            curr++;
+            i++;
+        }
+        cons.pb(curr);
+        i++;
+    }
+    i = 0;
+    while(i<cons.size()){
+        if(cons[i] == 0){
+            i++;
+        }
+        else if(cons[i]>1){
+            ans++;
+            i++;
+        }
+        else{
+            if(i<cons.size()-1){
+                cons[i+1]--;
+                ans++;
+                i++;
+            }
+            else{
+                ans++;
+                i++;
+            }
+        }
+    }
+    cout<<ans<<"\n";
+}
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        solve();
+    }
 }
 
 

@@ -16,7 +16,6 @@
 #include<stack>
 #include <math.h>
 #include<climits>
-#include<bitset>
 
 using namespace std;
 typedef long long ll;
@@ -41,11 +40,8 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
@@ -66,8 +62,57 @@ ll flr(ld a){
 
 //code starts here
 
+vl b(3);
+
+ll ans = 0;
+
+void oper(){
+    // fo(3) cout<<b[i]<<" ";cout<<"\n";
+    if(b[0]<0 || b[1]<0){
+        return;
+    }
+    ll tb = min((b[0]-b[2])/2,b[1]);
+    b[0]-=tb*2;
+    b[1] -= tb;
+    // cout<<tb<<"()\n";
+    ans+=tb;
+    sort(b.rbegin(),b.rend());
+}
+
+ll solve(){
+    if(b[0]>2*(b[0]+b[1]+b[2]-b[0])){
+        return (b[0]+b[1]+b[2] - b[0]);
+    }else{
+        return (b[0]+b[1]+b[2])/3;
+    }
+}
+
 int32_t main(){
     KOBE;
+    cin>>b[0]>>b[1]>>b[2];
+    sort(b.rbegin(),b.rend());
+    cout<<solve()<<"\n";
+    // if(b[0]-b[2]<=1){
+    //     cout<<(b[0]+b[1]+b[2])/3<<"\n";
+    //     return 0;
+    // }
+    // while(b[0]-b[2]>1 && (b[0]>0 && b[1]>0)){
+    //     oper();
+    // }
+    // ans+=min(b[0],min(b[1],b[2]));
+    // cout<<ans<<"\n";
+    // ll tb = (b[0]-b[2])/2;
+    // b[0]-=(tb*2);
+    // b[1]-=tb;
+    // ans+=(tb);
+    // if(b[1]-b[2]>1 && b[0]>b[2]){
+    //     tb = min((b[1]-b[2])/2,b[0]-b[2]);
+    //     b[1]-=2*tb;
+    //     b[0]-=tb;
+    //     ans+=tb;
+    // }
+    // ans+=(min(b[0],min(b[1],b[2])));
+    // cout<<ans<<"\n";
 }
 
 

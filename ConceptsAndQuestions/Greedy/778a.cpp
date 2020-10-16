@@ -66,8 +66,62 @@ ll flr(ld a){
 
 //code starts here
 
+string s,w;
+const ll M = 2e5+100;
+ll mv[M];
+
+
+bool subs(string &curr){
+    ll i = 0, j = 0;
+    while(i<curr.length() && j<w.length()){
+        if(curr[i] == w[j]){
+            i++; j++;
+        }
+        else i++;
+    }
+    if(j == w.length()) return true;
+    return false;
+}
+
+
+bool is_subs(ll m){
+    string curr = "";
+    umap<ll,bool> mark;
+    fo(m) mark[mv[i]] = true;
+    fo(s.length()){
+        if(!mark[i]) curr+=s[i];
+    }
+    // cout<<curr<<"()\n";
+    if(subs(curr)) return true;
+    return false;
+}
+
+void solve(){
+    ll st = 0, en = s.length()-1;
+    ll ans = 0;
+    while(st<=en){
+        ll mid = (st+en)/2;
+        // cout<<st<<"()"<<en<<"()"<<mid<<"\n";
+        if(is_subs(mid)){
+            ans = max(mid,ans);
+            st = mid+1;
+        }
+        else{
+            en = mid-1;
+        }
+    }
+    cout<<ans<<"\n";
+}
+
+
 int32_t main(){
     KOBE;
+    cin>>s>>w;
+    fo(s.length()){
+         cin>>mv[i];
+         mv[i]--;
+    }
+    solve();
 }
 
 

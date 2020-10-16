@@ -66,8 +66,54 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,k,d;
+const ll M = 3e5+100;
+vector<pair<ll,ll> > gr[M];
+umap<ll,bool> p;
+vb visited(M,false);
+vl res(M,0);
+qp q;
+
+void bfs(){
+    while(!q.empty()){
+        auto cur = q.front();
+        q.pop();
+        ll pos = cur.ff;
+        ll par = cur.sec;
+        if(visited[pos]) continue;
+        visited[pos] = true;
+        for(ll i = 0; i<gr[pos].size(); i++)
+            if(gr[pos][i].first!=par){
+                if(visited[gr[pos][i].first]) res[gr[pos][i].second] = 1;
+                else q.push(mp(gr[pos][i].first,pos));
+            }
+    }
+    ll rescnt = 0;
+    for(ll i = 1; i<=n-1; i++){
+        if(res[i]) rescnt++;
+    }
+    cout<<rescnt<<"\n";
+    for(ll i = 1; i<=n-1; i++){
+        if(res[i]) cout<<i<<" ";
+    }cout<<"\n";
+}
+
+
 int32_t main(){
     KOBE;
+    cin>>n>>k>>d;
+    fo(k){
+        ll x;
+        cin>>x;
+        q.push(mp(x,0));
+    }
+    fo(n-1){
+        ll x,y;
+        cin>>x>>y;
+        gr[x].pb(mp(y,i+1));
+        gr[y].pb(mp(x,i+1));
+    }
+    bfs();
 }
 
 

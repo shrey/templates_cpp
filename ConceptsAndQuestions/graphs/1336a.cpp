@@ -16,7 +16,6 @@
 #include<stack>
 #include <math.h>
 #include<climits>
-#include<bitset>
 
 using namespace std;
 typedef long long ll;
@@ -41,11 +40,8 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
@@ -66,8 +62,57 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 2e5+10;
+vl gr[M];
+ll n,k;
+umap<ll,ll> dist;
+umap<ll,ll> visited;
+umap<ll,ll> child;
+vl det;
+
+bool compare(pair<ll,ll> &a, pair<ll,ll> &b){
+    // cout<<a.sec<<" "<<b.sec<<"rr\n";
+    if(a.sec == b.sec){
+        return (child[a.ff]>child[b.ff]);
+    }
+    return(a.sec>b.sec);
+}
+
+void dfs(ll cur, ll par){
+    visited[cur] = true;
+    dist[cur] = dist[par]+1;
+    child[cur] = 1;
+    for(auto x: gr[cur]){
+        if(!visited[x]){
+            dfs(x,cur);
+            child[cur]+=child[x];
+        }
+    } det.pb(child[cur]-dist[cur]);
+
+}
+
+ll ans = 0;
+
+void solve(){
+    dfs(1,0);
+    sort(det.rbegin(),det.rend());
+    for(ll i = 0; i<n-k; i++){
+        ans+=det[i];
+    }
+    cout<<ans<<"\n";
+}
+
 int32_t main(){
     KOBE;
+    cin>>n>>k;
+    fo(n-1){
+        ll x,y;
+        cin>>x>>y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    dist[0] = 0;
+    solve();
 }
 
 

@@ -2,6 +2,7 @@
 
 //Shrey Dubey
 
+
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -58,42 +59,90 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll comp(ll a, ll b){
-    if((a+b)%2 == 0) return (a+b)/2;
-    return (a+b+1)/2;
+
+//code starts here
+
+string str;
+const ll M = 27;
+vl gr[M];
+string ans = "";
+vl visited(26,false);
+
+void addEdge(ll a, ll b){
+    if(a == b) return;
+    if(find(gr[a].begin(),gr[a].end(),b) == gr[a].end()){
+        gr[a].pb(b);
+        gr[b].pb(a);
+    }
 }
 
+
+void dfs(ll cur){
+    visited[cur] = true;
+    char c = 'a'+cur;
+    ans+=c;
+    for(auto ch: gr[cur]){
+        if(!visited[ch]) dfs(ch);
+    }
+}
+
+bool spec(){
+    if(str.length() == 1) return true;
+    for(ll i = 1; i<str.length(); i++){
+        if(str[i]!=str[i-1]) return false;
+    }
+    return true;
+}
 
 void solve(){
-    ll n;
-    string s;
-    cin>>n>>s;
-    ll ans = 0;
-    ll i = 0;
-    vl cons;
-    ll curr = 1;
+    cin>>str;
+    if(spec()){
+        YES;
+        visited[str[0]-'a'] = true;
+        ans+=(str[0]);
+        fo(26){
+            if(!visited[i]){
+                char c = 'a'+i;
+                ans+=c;
+            }
+        }
+        cout<<ans<<"\n";
+        return;
+    }
+    for(ll i = 1; i<str.length(); i++){
+        addEdge(str[i]-'a',str[i-1]-'a');
+    }
 
-    for(ll i = 1; i<n; i++){
-        if(s[i] == s[i-1]){
-            curr++;
-        }else{
-            cons.pb(curr);
-            curr = 1;
+    bool flag = false;
+    for(ll i = 0; i<26; i++){
+        if(gr[i].size()>2){
+            flag = false;
+            break;
+        }
+        if(gr[i].size() == 1){
+            flag = true;
         }
     }
-    cons.pb(curr);
-    ans = cons.size()+1;
-    ll nt = 0;
-    for(ll i = 0; i<cons.size(); i++){
-        if(cons[i] == 1){
-            nt++;
-        }else{
-            ans+=(min(cons[i]-1,nt+1));
-            nt = max((ll)0,nt-(cons[i]-2));
+    if(!flag){
+        NO;
+        return;
+    }
+    for(ll i = 0; i<26; i++){
+        if(gr[i].size() == 1 && !visited[i]){
+            dfs(i);
         }
     }
-    cout<<ans/2<<"\n";
+    for(ll i = 0; i<26; i++){
+        if(!visited[i]){
+            char c = 'a'+i;
+            ans+=c;
+        }
+    }
+    YES;
+    cout<<ans<<"\n";
+
 }
+
 
 int32_t main(){
     KOBE;
@@ -101,6 +150,9 @@ int32_t main(){
     cin>>t;
     while(t--){
         solve();
+        fo(27) gr[i].clear();
+        fo(26) visited[i] = false;
+        ans = "";
     }
 }
 

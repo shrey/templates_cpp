@@ -16,7 +16,6 @@
 #include<stack>
 #include <math.h>
 #include<climits>
-#include<bitset>
 
 using namespace std;
 typedef long long ll;
@@ -41,11 +40,8 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
@@ -66,8 +62,39 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 1e6;
+ll n,k;
+
+void solve(){
+    cin>>n>>k;
+    ll a[n];
+    fo(n) cin>>a[i];
+    vl pre(2*k+2);
+    vl cnt(2*k+2);
+    for(ll i = 0; i<n/2; i++){
+        ll mx = (k+max(a[i],a[n-i-1]));
+        ll mn = (min(a[i],a[n-i-1]));
+        pre[mn+1]++;
+        pre[mx+1]--;
+        cnt[a[i]+a[n-i-1]]++;
+    }
+    for(ll i = 1; i<=2*k; i++){
+        pre[i] += pre[i-1];
+    }
+    ll ans = 1e9;
+    for(ll i = 2; i<=2*k; i++){
+        ll k = (pre[i]-cnt[i]) + 2*(n/2-pre[i]);
+        ans = min(ans,k);
+    }
+    cout<<ans<<"\n";
+}
+
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--) solve();
+
 }
 
 

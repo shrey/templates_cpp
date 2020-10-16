@@ -41,11 +41,8 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
@@ -65,9 +62,55 @@ ll flr(ld a){
 
 
 //code starts here
+const ll M = 2e5+10;
+ll arr[M];
+ll n;
+ll freq[20] = {0};
+
+
+void comp(ll num){
+    ll mask = 1;
+    ll i = 0;
+    while(num>0){
+        if(num&1){
+            freq[i]++;
+        }
+        i++;
+        num = num>>1;
+    }
+}
+
+
+ll numcomp(){
+    ll num = 0;
+    ll mask = 1;
+    for(ll i = 0; i<20; i++){
+        if(freq[i]){
+            num+=mask;
+            freq[i]--;
+        }
+        mask = mask<<1;
+    }
+    return num;
+}
+
+void solve(){
+    fo(n) comp(arr[i]);
+    for(ll i = n-1; i>=0; i--){
+        arr[i] = numcomp();
+    }
+    ll ans = 0;
+    fo(n){
+        ans+=(arr[i]*arr[i]);
+    }
+    cout<<ans<<"\n";
+}
 
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n) cin>>arr[i];
+    solve();
 }
 
 

@@ -16,7 +16,6 @@
 #include<stack>
 #include <math.h>
 #include<climits>
-#include<bitset>
 
 using namespace std;
 typedef long long ll;
@@ -41,11 +40,8 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
@@ -64,10 +60,62 @@ ll flr(ld a){
 }
 
 
+ll d(ll a, ll b){
+    if((a%b) == 0) return a/b;
+    return a/b+1;
+}
+
 //code starts here
+
+ll n,k;
+string s;
+
+// bool special(ll freq[]){
+//     for(ll i = 1; i<=26; i++){
+//         if(freq[i]){
+//             if(freq[i]!=k) return false;
+//         }
+//     }
+//     return true;
+// }
+
+// bool sing(){
+//     for(ll i = 1; i<n; i++){
+//         if(s[i]!=s[i-1]) return false;
+//     }
+//     return true;
+// }
+
+void solve(){
+    cin>>n>>k>>s;
+    sort(s.begin(),s.end());
+    if(s[0]!=s[k-1]){
+        cout<<s[k-1]<<"\n";
+        return;
+    }
+    cout<<s[0];
+    if(s[k]!=s[n-1]){
+        for(ll i = k; i<n; i++)
+            cout<<s[i];
+            cout<<"\n";
+            return;
+    }
+    else{
+        for(ll i = 0; i<(n-1)/k; i++){
+            cout<<s[n-1];
+        }cout<<"\n";
+        return;
+    }
+
+}
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--){
+        solve();
+    }
 }
 
 

@@ -68,6 +68,31 @@ ll flr(ld a){
 
 int32_t main(){
     KOBE;
+    ll n;
+    cin>>n;
+
+    ll arr[n];
+    fo(n) cin>>arr[i];
+    vl v1,v2;
+    sort(arr,arr+n);
+    fo(n){
+        if(i<n/2){
+            v1.pb(arr[i]);
+        }
+        else v2.pb(arr[i]);
+    }
+    ll i = 0, j = 0;
+    ll ans = n;
+    while(i<v1.size() && j<v2.size()){
+        if(v2[j]>=2*v1[i]){
+            ans--;
+            i++; j++;
+        }
+        else{
+            j++;
+        }
+    }
+    cout<<ans<<"\n";
 }
 
 

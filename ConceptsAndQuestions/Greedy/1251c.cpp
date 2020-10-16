@@ -66,8 +66,52 @@ ll flr(ld a){
 
 //code starts here
 
+ll r(char c){
+    return (c-'0')%2;
+}
+
+ll nm(char c){
+    return c-'a';
+}
+void solve(){
+    string s;
+    cin>>s;
+    ll n = s.length();
+    string s0 = "",s1 = "";
+    fo(n){
+        if(r(s[i])){
+            s1+=s[i];
+        }else{
+            s0+=s[i];
+        }
+    }
+    string res = "";
+    ll i = 0, j = 0;
+    while(i<s0.length() && j<s1.length()){
+        if(nm(s0[i])<nm(s1[j])){
+            res+=s0[i];
+            i++;
+        }else{
+            res+=s1[j];
+            j++;
+        }
+    }
+    while(i<s0.length()){
+        res+=s0[i];
+        i++;
+    }
+    while(j<s1.length()){
+        res+=s1[j];
+        j++;
+    }
+    cout<<res<<"\n";
+}
+
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--) solve();
 }
 
 

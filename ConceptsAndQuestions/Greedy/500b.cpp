@@ -66,8 +66,53 @@ ll flr(ld a){
 
 //code starts here
 
+ll n;
+const ll M = 310;
+ll arr[M];
+char mat[M][M];
+vl gr[M];
+umap<ll,bool> visited;
+vl cst;
+vl nlist;
+void dfs(ll src){
+    // cout<<"df"<<endl;
+    // cout<<src<<"->";
+    visited[src] = true;
+    cst.pb(src);
+    nlist.pb(arr[src]);
+    for(auto x: gr[src]){
+        if(!visited[x]) dfs(x);
+    }
+}
+
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n) cin>>arr[i];
+    forn(i,n){
+        forn(j,n){
+            cin>>mat[i][j];
+            if(mat[i][j] == '1'){
+                gr[i].pb(j);
+                gr[j].pb(i);
+            }
+        }
+    }
+    for(ll i = 0; i<n; i++){
+        if(!visited[i]){
+            dfs(i);
+            // cout<<"\n";
+            sort(nlist.begin(),nlist.end());
+            sort(cst.begin(),cst.end());
+            fo(cst.size()){
+                arr[cst[i]] = nlist[i];
+            }
+            cst.clear();
+            nlist.clear();
+        }
+    }
+    fo(n) cout<<arr[i]<<" ";cout<<"\n";
 }
 
 

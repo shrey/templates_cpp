@@ -16,7 +16,6 @@
 #include<stack>
 #include <math.h>
 #include<climits>
-#include<bitset>
 
 using namespace std;
 typedef long long ll;
@@ -41,11 +40,8 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
@@ -65,9 +61,46 @@ ll flr(ld a){
 
 
 //code starts here
+ll comp(ll a, ll b){
+    if(a%b) return a/b+1;
+    return a/b;
+}
+
+
+void solve(){
+    ll n,x;
+    cin>>n>>x;
+    vl d(n), h(n);
+    fo(n) cin>>d[i]>>h[i];
+    bool flag = false;
+    ll maxd = 0;
+    ll mxv = 0;
+    fo(n){
+        if(d[i]>=x){
+            cout<<1<<"\n";
+            return;
+        }
+        if(d[i]>h[i]){
+            maxd = max(maxd,(d[i]-h[i]));
+            flag = true;
+        }
+        mxv = max(mxv,d[i]);
+    }
+    if(!flag){
+        cout<<"-1\n";
+        return;
+    }
+    // cout<<mxv<<"\n";
+    ll ans = comp(x-mxv,maxd);
+    ans++;
+    cout<<ans<<"\n";
+}
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--) solve();
 }
 
 

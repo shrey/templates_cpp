@@ -63,11 +63,54 @@ ll flr(ld a){
     return (ll) a;
 }
 
-
+ll nm(char a){
+    return (a-'a');
+}
 //code starts here
+const ll M = 30;
+
+void solve(){
+    ll n;
+    cin>>n;
+    ll mat[M][M] = {0};
+    string s1,s2;
+    cin>>s1>>s2;
+    fo(n){
+        if(s1[i]!=s2[i]){
+            if(s1[i]>s2[i]){
+                pr(-1);
+                return;
+            }
+            mat[nm(s1[i])][nm(s2[i])]++;
+        }
+    }
+    ll ans = 0;
+    ll i = 0;
+    while(i<25){
+        ll j = i+1;
+        while(j<26){
+            if(mat[i][j]){
+                ans++;
+                ll k = j+1;
+                while(k<26){
+                    mat[j][k]+=mat[i][k];
+                    k++;
+                }
+                break;
+            }
+            j++;
+        }
+        i++;
+    }
+    cout<<ans<<"\n";
+}
+
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    while(t--) solve();
 }
 
 

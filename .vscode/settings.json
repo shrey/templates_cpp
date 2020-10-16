@@ -16,6 +16,7 @@
         "random": "cpp",
         "__node_handle": "cpp",
         "tuple": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "set": "cpp"
     }
 }

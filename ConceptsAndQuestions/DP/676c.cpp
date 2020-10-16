@@ -49,7 +49,6 @@ ll cl(double a){
 }
 
 const ll M = 2e5+1;
-umap<ll,ll> visited;
 ll ans = INT_MIN;
 
 
@@ -58,20 +57,17 @@ void maxAns(string &s, char ch, ll k){
     ll t = 0;
     ll n = s.length();
     while(r<n && l<n){
-        while(t<=k && r<n){
-            if(s[r] !=ch){
-                if(t == k){
-                    r--; break;
-                }
-                t++;
-            }
-            r++;
-        }
-        if(r == n) r--;
-        // cout<<l<<" "<<r<<" "<<t<<endl;
-        if(s[l] != ch) t--;
-        ans = max(ans,(r-l+1));
-        l++;
+       if(s[r]!=ch){
+           t++;
+       }
+       while(t>k && l<=r){
+           if(s[l]!=ch){
+               t--;
+           }
+           l++;
+       }
+       ans = max(ans,r-l+1);
+       r++;
     }
 }
 

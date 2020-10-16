@@ -16,7 +16,6 @@
 #include<stack>
 #include <math.h>
 #include<climits>
-#include<bitset>
 
 using namespace std;
 typedef long long ll;
@@ -41,11 +40,8 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
@@ -66,8 +62,54 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,p;
+string s;
+
+ll tch(char a, char b){
+    ll n1 = abs(a-b);
+    return min(n1,26-n1);
+}
+
+// ll tp(ll a, ll b){
+//     ll n1 = abs(b-a);
+//     return min(n,n-n1);
+// }
+
+void solve(){
+    p--;
+    if(p>=n/2){
+        reverse(s.begin(),s.end());
+        p = (n-p-1);
+    }
+    ll ans = 0;
+    ll r = -1;
+    ans+=tch(s[p],s[n-p-1]);
+    for(ll i = p+1; i<n/2; i++){
+        if(s[i]!=s[n-i-1]){
+            r = i;
+            ans+=tch(s[i],s[n-i-1]);
+        }
+    }
+    ll l = -1;
+    for(ll i = p-1; i>=0; i--){
+        if(s[i]!=s[n-i-1]){
+            l = i;
+            ans+=tch(s[i],s[n-i-1]);
+        }
+    }
+    // cout<<r<<"()"<<l<<"\n";
+    l = (l == -1)? p : l;
+    r = (r == -1)? p : r;
+    ans += (r-p) + (p-l);
+    ans+=(min(r-p,p-l));
+    cout<<ans<<"\n";
+}
+
 int32_t main(){
     KOBE;
+    cin>>n>>p;
+    cin>>s;
+    solve();
 }
 
 

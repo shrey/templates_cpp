@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -16,6 +17,7 @@
 #include <math.h>
 #include<climits>
 #include<bitset>
+#include<cstring>
 
 using namespace std;
 typedef long long ll;
@@ -65,32 +67,36 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
-ll arr[M];
+ll n,m,k;
+const ll M = 80;
+ll dp[71][71][36][71] = {0};
+ll mat[71][71];
+
+
+ll recur(ll i, ll j, ll c, ll r){
+    if(i == n) return (r == 0);
+    if(j == m) return recur(i+1,0,m/2,r);
+    if(dp[i][j][c][r]!=-1) return dp[i][j][c][r];
+    ll res = recur(i,j+1,c,r);
+    if(c>0){
+        ll op = recur(i,j+1,c-1,(r+mat[i][j])%k);
+        res = max(res,mat[i][j]*(op!=0) + op);
+    }
+    return dp[i][j][c][r] = res;
+}
 
 void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
-        }
+    cin>>n>>m>>k;
+    memset(dp,-1,sizeof(dp));
+    forn(i,n){
+        forn(j,m) cin>>mat[i][j];
     }
-    cout<<(a+b)<<"\n";
+    cout<<recur(0,0,m/2,0)-1<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
-    }
+    solve();
 }
 
 
@@ -106,3 +112,9 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
+/*
+1 3
+S10
+011
+00S
+*/

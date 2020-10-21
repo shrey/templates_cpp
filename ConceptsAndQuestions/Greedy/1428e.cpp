@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -65,32 +66,41 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
+priority_queue<pair<ll,pair<ll,ll> > > p;
+
+ll n,k;
+const ll M = 2e5;
 ll arr[M];
 
-void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
-        }
-    }
-    cout<<(a+b)<<"\n";
+
+ll sq(ll x){
+    return x*x;
+}
+
+ll val(ll tot, ll num){
+    ll qof = tot/num;
+    ll rem = tot%num;
+    ll res = (sq(qof))*(num-rem) + sq(qof+1)*rem;
+    return res;
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
+    cin>>n>>k;
+    ll ans = 0;
+    fo(n){
+        cin>>arr[i];
+        ans+=sq(arr[i]);
+        p.push(mp(val(arr[i],1)-val(arr[i],2),mp(arr[i],2)));
     }
+    fo(k-n){
+        ans-=p.top().ff;
+        ll a = p.top().sec.ff, b = p.top().sec.sec;
+        p.pop();
+        p.push(mp(val(a,b) - val(a,b+1),mp(a,b+1)));
+    }
+    cout<<ans<<"\n";
+
 }
 
 

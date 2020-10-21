@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -21,8 +22,10 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
@@ -30,7 +33,7 @@ typedef long double ld;
 #define umap unordered_map
 #define mp make_pair
 #define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
-#define fo(n) for(ll i = 0; i<n; i++)
+#define fo(n) for(ll i = 1; i<=n; i++)
 #define fnd(stl, data) find(stl.begin(), stl.end(), data)
 #define forn(x,n) for(ll x = 0; x<n; x++)
 #define imax INT_MAX
@@ -65,32 +68,44 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
+ll n,m,d;
+const ll M = 3e5;
 ll arr[M];
+ll cpy[M];
 
 void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
+    queue<ll> s;
+    map<ll,ll> pos;
+    ll curpos = 1;
+    sort(arr+1,arr+n+1);
+    pos[arr[1]] = 1;
+    s.push(arr[1]);
+    for(ll i = 2; i<=n; i++){
+        if(s.empty() || arr[i]-s.front()<=d){
+            curpos++;
+            pos[arr[i]] = curpos;
+            s.push(arr[i]);
         }else{
-            a++;
+            ll tp = s.front();
+            s.pop();
+            pos[arr[i]] = pos[tp];
+            s.push(arr[i]);
         }
     }
-    cout<<(a+b)<<"\n";
+    cout<<curpos<<"\n";
+    fo(n) cout<<pos[cpy[i]]<<" ";
+    cout<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
+    cin>>n>>m>>d;
+
+    fo(n){
+        cin>>arr[i];
+        cpy[i] = arr[i];
     }
+    solve();
 }
 
 

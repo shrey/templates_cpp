@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -16,13 +17,16 @@
 #include <math.h>
 #include<climits>
 #include<bitset>
+#include<cstring>
 
 using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
@@ -65,32 +69,62 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
-ll arr[M];
+const ll M = 1010;
+vector<pair<ll,ll> > g[M];
+vector<ll> d[M];
+vector<pair<ll,ll> > r;
+ll n,m,k,x,y,w;
 
-void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
+
+void dijkstra(ll s, vector<ll> &d){
+    d = vl(n+1,imax);
+    d[s] = 0;
+    set<pair<ll,ll> > st;
+    st.insert(mp(d[s],s));
+    while(!st.empty()){
+        ll cur = st.begin()->second;
+        st.erase(st.begin());
+        for(auto nbr:g[cur]){
+            ll to = nbr.first;
+            ll wt = nbr.second;
+            if(d[to]>d[cur]+wt){
+                auto it = st.find(mp(d[to],to));
+                if(it!=st.end()) st.erase(it);
+                d[to] = d[cur]+wt;
+                st.insert(mp(d[to],to));
+            }
         }
     }
-    cout<<(a+b)<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
+    cin>>n>>m>>k;
+    fo(m){
+        cin>>x>>y>>w;
+        g[x].pb(mp(y,w));
+        g[y].pb(mp(x,w));
     }
+    fo(k){
+        cin>>x>>y;
+        r.pb(mp(x,y));
+    }
+    for(ll i = 1; i<=n; i++){
+        dijkstra(i,d[i]);
+    }
+    ll ans = imax;
+    for(ll i = 1; i<=n; i++){
+        for(auto c: g[i]){
+            ll j = c.first;
+            ll cur = 0;
+            for(auto rd: r){
+                ll a = rd.ff, b = rd.sec;
+                cur+=(min(d[a][b],min(d[a][i]+d[b][j],d[a][j]+d[b][i])));
+            }
+            ans = min(ans,cur);
+        }
+    }
+    pr(ans);
 }
 
 

@@ -1,4 +1,6 @@
 
+
+
 //Shrey Dubey
 
 
@@ -65,32 +67,49 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
-ll arr[M];
+ll n,m;
+const ll M = 1e5;
+ll l[M];
 
 void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
+    ll sum = 0;
+    fo(m) sum+=l[i];
+    if(sum<n){
+        cout<<"-1\n";
+        return;
+    }
+    // sort(l,l+m);
+    for(ll i = 0; i<m; i++){
+        if(l[i]>(n-i)){
+            cout<<"-1\n";
+            return;
         }
     }
-    cout<<(a+b)<<"\n";
+    vl ans;
+    ll ss[m];
+    ss[m-1] = l[m-1];
+    for(ll i = m-2; i>=0 ; i--){
+        ss[i] = ss[i+1] + l[i];
+    }
+    // fo(m) cout<<ss[i]<<" ";cout<<"\n";
+    ll i = 0;
+    ll j = 0;
+    while(i<n && j<m){
+        i = max(i,n-ss[j]);
+        // cout<<i<<" "<<ss[i]<<"()\n";
+        ans.pb(i+1);
+        i++;
+        j++;
+    }
+    fo(ans.size()) cout<<ans[i]<<" ";cout<<"\n";
+    return;
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
-    }
+    cin>>n>>m;
+    fo(m) cin>>l[i];
+    solve();
 }
 
 

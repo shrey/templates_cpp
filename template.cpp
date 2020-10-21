@@ -17,13 +17,16 @@
 #include <math.h>
 #include<climits>
 #include<bitset>
+#include<cstring>
 
 using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first

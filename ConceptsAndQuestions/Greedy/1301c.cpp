@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -65,32 +66,23 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
-ll arr[M];
-
 void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
-        }
-    }
-    cout<<(a+b)<<"\n";
+    ll n,m;
+    cin>>n>>m;
+    ll q = (n-m)/(m+1);
+    ll rem = (n-m)%(m+1);
+
+    ll res = q*(q+1)*(m+1-rem)/2 + (q+1)*(q+2)*rem/2;
+    ll ans = (n*(n+1))/2 - res;
+    cout<<ans<<"\n";
 }
+
 
 int32_t main(){
     KOBE;
     ll t;
     cin>>t;
-    while(t--){
-        solve();
-    }
+    while(t--) solve();
 }
 
 

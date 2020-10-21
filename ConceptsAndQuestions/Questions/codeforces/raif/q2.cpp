@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -65,32 +66,28 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
+const ll M = 2e5;
 ll arr[M];
+ll n;
+vp res;
 
 void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
+    map<ll,stack<ll> > target;
+    stack<ll> ones;
+    fo(n){
+        if(arr[i] == 1) ones.push(i);
+    }
+    for(ll i = 0; i<n; i++){
+        if(arr[i] == 1){
+            if(ones.top() == i) ones.pop();
         }
     }
-    cout<<(a+b)<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
-    }
+    cin>>n;
+    fo(n) cin>>arr[i];
 }
 
 

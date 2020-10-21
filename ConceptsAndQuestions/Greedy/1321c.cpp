@@ -65,32 +65,50 @@ ll flr(ld a){
 
 //code starts here
 
+ll n;
 string s;
-const ll M = 3e5+10;
-ll arr[M];
+
+bool ok(ll j){
+    if(j == 0){
+        if(s[j]-s[j+1] == 1) return true;
+    }
+    else if(j == s.length()-1){
+        if(s[j]-s[j-1] == 1) return true;
+    }else{
+        if(s[j]-s[j-1] == 1 || s[j]-s[j+1] == 1) return true;
+    }
+    return false;
+}
 
 void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
+    ll ans = 0;
+    string str = s;
+    sort(str.begin(),str.end());
+    reverse(str.begin(),str.end());
+    ll j = 0;
+    while(str[j]>'a'){
+        char ch = str[j];
+        char prev = ch-1;
+        for(ll i = 0; i<n; i++){
+            if(((i>0) && (s[i] == ch && s[i-1] == prev))){
+                s.erase(s.begin()+i);
+                ans++;
+            }
+            else if(i<n-1 && s[i] == ch && s[i+1] == prev){
+                s.erase(s.begin()+i);
+                ans++;
+            }
         }
+        j++;
     }
-    cout<<(a+b)<<"\n";
+    cout<<ans<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
-    }
+    cin>>n>>s;
+    solve();
+    // if(ok(0)) YES;
 }
 
 

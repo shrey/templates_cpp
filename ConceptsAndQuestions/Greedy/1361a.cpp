@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -21,8 +22,10 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
@@ -65,32 +68,66 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
-ll arr[M];
+const ll M = 6e5;
+vl gr[M];
+vl col[M];
+ll n,m;
+ll t[M];
+bool possible = true;
+vl visited(M,0);
 
-void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
+bool check(ll v, ll clr){
+    set<ll> s;
+    for(auto x: gr[v]){
+        if(visited[x] && t[x] == clr){
+            return false;
+        }
+        else if(visited[x] && t[x]<clr){
+            s.insert(t[x]);
         }
     }
-    cout<<(a+b)<<"\n";
+    if(s.size() == clr-1){
+        return true;
+    }
+    return false;
+}
+
+void solve(){
+    for(ll i = 1; i<=n; i++){
+        for(auto v: col[i]){
+            if(check(v,i)){
+                visited[v] = true;
+            }
+            else{
+                pr(-1);
+                return;
+            }
+        }
+    }
+    vp res;
+    for(ll i = 1; i<=n; i++){
+        res.pb(mp(t[i],i));
+    }
+    sort(res.begin(),res.end());
+    for(auto p: res){
+        cout<<p.sec<<" ";
+    }cout<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
+    cin>>n>>m;
+    fo(m){
+        ll x,y;
+        cin>>x>>y;
+        gr[x].pb(y);
+        gr[y].pb(x);
     }
+    for(ll i = 1; i<=n; i++){
+        cin>>t[i];
+        col[t[i]].pb(i);
+    }
+    solve();
 }
 
 

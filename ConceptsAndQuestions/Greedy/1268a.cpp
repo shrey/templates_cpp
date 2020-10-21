@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -21,8 +22,10 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
@@ -65,32 +68,36 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,k;
 string s;
-const ll M = 3e5+10;
-ll arr[M];
 
 void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
+    cin>>n>>k>>s;
+    string str = s;
+    for(ll i = 0; i<n-k; i++){
+        str[i+k] = str[i];
+    }
+    if(str<s){
+        ll pos = k-1;
+        while(pos>0  && s[pos] == '9'){
+            for(ll i = pos; i<n; i+=k){
+                str[i] = '0';
+            }
+            pos--;
+        }
+
+        char ch = s[pos]+1;
+        for(ll i = pos; i<n; i+=k){
+            str[i] = ch;
         }
     }
-    cout<<(a+b)<<"\n";
+    cout<<n<<"\n";
+    cout<<str<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
-    }
+    solve();
 }
 
 

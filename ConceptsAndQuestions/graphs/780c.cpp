@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -21,8 +22,10 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
@@ -65,32 +68,48 @@ ll flr(ld a){
 
 //code starts here
 
-string s;
-const ll M = 3e5+10;
-ll arr[M];
+const ll M = 3e5;
+ll n,x,y;
+vl gr[M];
+ll ncol = imin;
+ll col[M] = {0};
 
-void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
+void dfs(ll src, ll par){
+    ll curcol = 1;
+    // cout<<src<<"()"<<par<<"\n";
+    for(auto x: gr[src]){
+        if(x!=par){
+            while(curcol == col[par] || curcol == col[src]) curcol++;
+            col[x] = curcol;
+            dfs(x,src);
+            curcol++;
         }
     }
-    cout<<(a+b)<<"\n";
+}
+
+void solve(){
+    for(ll i = 1; i<=n; i++){
+        ncol = max(ncol,(ll)gr[i].size());
+    }
+    ncol++;
+    col[0] = 0;
+    col[1] = 1;
+    cout<<ncol<<"\n";
+    dfs(1,0);
+    for(ll i = 1; i<=n; i++){
+        cout<<col[i]<<" ";
+    }cout<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
+    cin>>n;
+    fo(n-1){
+        cin>>x>>y;
+        gr[x].pb(y);
+        gr[y].pb(x);
     }
+    solve();
 }
 
 

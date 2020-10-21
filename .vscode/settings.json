@@ -17,6 +17,7 @@
         "__node_handle": "cpp",
         "tuple": "cpp",
         "map": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "cstring": "cpp"
     }
 }

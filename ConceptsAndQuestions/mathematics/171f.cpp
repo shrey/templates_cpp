@@ -18,7 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
+
 
 using namespace std;
 typedef long long ll;
@@ -51,7 +51,6 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 
@@ -71,62 +70,49 @@ ll flr(ld a){
 
 //code starts here
 
+const ll mx = 11184;
 
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
+const ll M = 6e6;
 
-umap<ll,bool> visited;
+bool prime[M];
 
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
+
+bool check(ll num){
+    string s1 = to_string(num);
+    string s2 = to_string(num);
+    reverse(s1.begin(),s1.end());
+    if(s1 == s2 || !prime[stoi(s1)]) return false;
+    return true;
 }
 
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
+void seive(){
+    fo(M) prime[i] = true;
+    for(int p = 2; p*p<M; p++){
+        if(prime[p] == true){
+            for(int i = p*p; i<M; i+=p){
+                prime[i] = false;
+            }
         }
     }
 }
 
-void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
-    }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
-        }
-    }
-}
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
+    ll cnt = 0;
+    seive();
+    ll n;
+    cin>>n;
+    ll k = 0;
+    for(ll i = 2; i<=M; i++){
+        if(prime[i] && check(i)){
+            k++;
+            if(k == n){
+                pr(i);
+                break;
+            }
+        }
     }
-    solve();
 }
 
 

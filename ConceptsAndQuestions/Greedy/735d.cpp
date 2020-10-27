@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -51,7 +50,6 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 
@@ -71,61 +69,31 @@ ll flr(ld a){
 
 //code starts here
 
+ll n;
 
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
+bool is_prime(ll n){
+    for(ll i = 2; (i*i)<=n; i++){
+        if(n%i == 0) return false;
     }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
+    return true;
 }
 
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
+    if(is_prime(n)){
+        pr(1);
+        return;
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
-        }
+    if(n%2 == 0 || is_prime(n-2)){
+        pr(2);
+        return;
     }
+    pr(3);
+    return;
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
+    cin>>n;
     solve();
 }
 

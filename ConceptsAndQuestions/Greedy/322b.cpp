@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -51,7 +50,6 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 
@@ -71,62 +69,24 @@ ll flr(ld a){
 
 //code starts here
 
-
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
-
-void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
-    }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
-        }
-    }
-}
+ll p[3];
+ll ans = 0;
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
+    fo(3) cin>>p[i];
+    sort(p,p+3);
+    ll cur = p[0]/3 + p[1]/3 + p[2]/3;
+    ans = max(cur,ans);
+    if(p[0]>0){
+        cur = (p[0]-1)/3 + (p[1]-1)/3 + (p[2]-1)/3 + 1;
+        ans = max(ans,cur);
     }
-    solve();
+    if(p[0]>1){
+        cur = (p[0]-2)/3 + (p[1]-2)/3 + (p[2]-2)/3 + 2;
+        ans = max(ans,cur);
+    }
+    pr(ans);
 }
 
 

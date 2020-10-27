@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -51,7 +50,6 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 
@@ -71,61 +69,45 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,x;
 
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
-
+vector<pair<pair<ll,ll>, pair<ll,ll> > > qr;
+const ll M = 2e5+100;
+const ll inf = 2e12;
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
+    fo(n){
+        ll l,r,c;
+        cin>>l>>r>>c;
+        qr.pb(mp(mp(l,-1),mp(r,c)));
+        qr.pb(mp(mp(r,1),mp(l,c)));
+    }
+    sort(qr.begin(),qr.end());
+    ll bestcost[M];
+    fo(M) bestcost[i] = inf;
+    ll ans = 2*inf;
+    for(ll i = 0; i<qr.size(); i++){
+        ll type = qr[i].ff.sec;
+        ll curlen = abs(qr[i].ff.ff-qr[i].sec.ff);
+        curlen++;
+        if(type == -1){
+            if(curlen<=x){
+                ans = min(ans,qr[i].sec.sec + bestcost[x-curlen]);
+            }
+        }
+        else{
+            bestcost[curlen] = min(bestcost[curlen],qr[i].sec.sec);
         }
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
-        }
+    if(ans>=inf){
+        pr(-1);
+        return;
     }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
+    cin>>n>>x;
     solve();
 }
 

@@ -72,60 +72,36 @@ ll flr(ld a){
 //code starts here
 
 
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
+const ll M = 2e5+10;
+ll n,k,arr[M];
 
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
 
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
+    vector<vl> val(M);
+    fo(n){
+        ll x = arr[i];
+        ll cur = 0;
+        while(x>0){
+            val[x].pb(cur);
+            x/=2;
+            cur++;
         }
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
+    ll ans = lmax;
+    for(ll i = 0; i<M; i++){
+        sort(val[i].begin(),val[i].end());
+        if(val[i].size()<k){
+            continue;
         }
+        ans = min(ans,(ll)accumulate(val[i].begin(),val[i].begin()+k,0));
     }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
+    cin>>n>>k;
+    fo(n) cin>>arr[i];
     solve();
 }
 

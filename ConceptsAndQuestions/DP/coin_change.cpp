@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -71,62 +70,24 @@ ll flr(ld a){
 
 //code starts here
 
-
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
-
-void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
-    }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
-        }
-    }
-}
+const ll M = 300;
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
+    ll arr[] = {2, 5, 3, 6};
+    ll n = sizeof(arr)/sizeof(ll);
+    ll S = 10;
+    ll dp[M][M] = {0};
+    for(ll i = 0; i<n; i++){
+        dp[i][0] = 1;
+        for(ll j = 1; j<=S; j++){
+            if(i>0) dp[i][j] += dp[i-1][j];
+            if(j>=arr[i]){
+                dp[i][j] += dp[i][j-arr[i]];
+            }
+        }
     }
-    solve();
+    cout<<dp[n-1][S]<<"\n";
 }
 
 

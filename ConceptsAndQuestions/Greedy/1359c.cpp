@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -51,7 +50,7 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
+#define read(a) cin>>a;
 
 ll mod = 1e9 + 7;
 
@@ -71,62 +70,53 @@ ll flr(ld a){
 
 //code starts here
 
+ll tc;
+ld h,c,t;
 
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
+ld eqn(ld x){
+    return (ld)(((h-c)*x)/(2*x+1));
 }
 
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
+ld tempCal(ld k){
+    ld op = (ld) k;
+    ld ans = (ld)((op+1)*h + op*c)/(2*op+1);
+    return ans;
 }
 
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
+    cin>>h>>c>>t;
+    ld avg = (h+c)/2;
+    // if(t == c || t == h){
+    //     pr(1);
+    //     return;
+    // }
+    if(t<=avg){
+        pr(2);
+        return;
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
-        }
+    ld k1 = flr(((t-h)/(h+c-2*t)));
+    ld k2 = k1+1;
+    // cout<<k1<<"()"<<k2<<"\n";
+    ld t1 = tempCal(k1);
+    ld t2 = tempCal(k2);
+    ll ans;
+    // cout<<t2<<" "<<t1<<"\n";
+    if(abs(t-t1)<abs(t-t2)){
+        ans = k1;
     }
+    else if(abs(t-t1)>abs(t-t2)){
+        ans = k2;
+    }
+    else{
+        ans = min(k1,k2);
+    }
+    cout<<2*ans+1<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
-    solve();
+    read(tc);
+    while(tc--) solve();
 }
 
 

@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -16,13 +17,16 @@
 #include <math.h>
 #include<climits>
 #include<bitset>
+#include<cstring>
 
 using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
@@ -42,55 +46,20 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
-#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
 
 ll mod = 1e9 + 7;
 
-ll cl(ld a){
-    if(a>(ll) a){
-        return (ll)a+1;
-    }
-    else{
-        return (ll)a;
-    }
-}
+class employee{
+	int emp_no;
+	char name[20];
+	static int emp_cnt;
+};
 
-ll flr(ld a){
-    return (ll) a;
-}
-
-
-//code starts here
-
-string s;
-const ll M = 3e5+10;
-ll arr[M];
-
-void solve(){
-    cin>>s;
-    ll a = 0, b = 0;
-    for(ll i = 0; i<s.length(); i++){
-        if(s[i] == 'B'){
-            if(a) a--;
-            else if(b) b--;
-            else b++;
-        }else{
-            a++;
-        }
-    }
-    cout<<(a+b)<<"\n";
-}
-
-int32_t main(){
-    KOBE;
-    ll t;
-    cin>>t;
-    while(t--){
-        solve();
-    }
+int main(){
+   cout<<sizeof(employee)<<"\n";
 }
 
 

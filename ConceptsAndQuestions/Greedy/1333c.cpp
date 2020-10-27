@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -51,7 +50,6 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 
@@ -71,61 +69,35 @@ ll flr(ld a){
 
 //code starts here
 
-
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
+ll n;
+const ll M = 3e5;
+ll arr[M];
 
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
+    vl pre(n+1,0);
+    fo(n){
+        pre[i+1] = pre[i] + arr[i];
     }
+    set<ll> s;
+    s.insert(0);
     ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
+    ll st = 0, end = 0;
+    while(st<n){
+        while(end<n && !s.count(pre[end+1])){
+            end++;
+            s.insert(pre[end]);
         }
+        ans += (end-st);
+        s.erase(pre[st]);
+        st++;
     }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
+    cin>>n;
+    fo(n) cin>>arr[i];
     solve();
 }
 

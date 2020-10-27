@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -50,6 +51,7 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 

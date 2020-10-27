@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -29,7 +28,6 @@ typedef long double ld;
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
-#define pb push_back
 #define ff first
 #define sec second
 #define umap unordered_map
@@ -51,7 +49,6 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 
@@ -71,61 +68,43 @@ ll flr(ld a){
 
 //code starts here
 
+string rp;
+ll nb,ns,nc,pb,ps,pc,r,b,s,c;
 
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
+ll check(ll x){
+    ll c1 = max((ll)0,(x*c-nc)*pc);
+    ll c2 = max((ll)0,(x*b-nb)*pb);
+    ll c3 = max((ll)0,(x*s-ns)*ps);
+    if(c1+c2+c3<=r) return 1;
+    return 0;
 }
 
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
+    b = 0; s = 0; c = 0;
+    fo(rp.length()){
+        if(rp[i] == 'B') b++;
+        else if(rp[i] == 'C') c++;
+        else if(rp[i] == 'S') s++;
     }
+    ll st = 0, e = 1e13;
     ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
+    while(st<=e){
+        ll mid = (st+e)/2;
+        if(check(mid)){
+            ans = mid;
+            st = mid+1;
+        }
+        else{
+            e = mid-1;
         }
     }
+    cout<<ans<<"\n";
 }
+
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
+    cin>>rp>>nb>>ns>>nc>>pb>>ps>>pc>>r;
     solve();
 }
 

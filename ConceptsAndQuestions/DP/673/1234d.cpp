@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -71,61 +70,43 @@ ll flr(ld a){
 
 //code starts here
 
-
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
-
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
-        }
+    string s;
+    cin>>s;
+    umap<ll,set<ll> > op;
+    fo(s.length()){
+        op[s[i]-'a'].insert(i);
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
+    ll q;
+    cin>>q;
+    while(q--){
+        ll x;
+        cin>>x;
+        if(x == 1){
+            ll pos; char ch;
+            cin>>pos>>ch;
+            pos--;
+            op[s[pos]-'a'].erase(pos);
+            s[pos] = ch;
+            op[ch-'a'].insert(pos);
+        }else{
+            ll l,r;
+            cin>>l>>r;
+            l--;
+            r--;
+            ll res = 0;
+            fo(26){
+                auto it = op[i].lower_bound(l);
+                if(it!=op[i].end() && *it<=r) res++;
+            }
+            pr(res);
         }
     }
 }
+
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
     solve();
 }
 

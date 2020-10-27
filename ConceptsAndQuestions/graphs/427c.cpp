@@ -74,7 +74,7 @@ ll flr(ld a){
 
 const ll M = 4e5;
 vl gr[M], gr2[M];
-ll n,m,x,y;
+ll n,m,cost[M],x,y;
 vl scc;
 vl order;
 
@@ -90,7 +90,7 @@ void dfs(ll cur){
 
 void dfs2(ll cur){
     visited[cur] = true;
-    scc.pb(cur);
+    scc.pb(cost[cur]);
     for(auto x: gr2[cur]){
         if(!visited[x]){
             dfs2(x);
@@ -110,17 +110,25 @@ void solve(){
     for(ll i = n-1; i>=0; i--){
         if(!visited[order[i]]){
             dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
+            sort(scc.begin(),scc.end());
+            ll cnt = 0;
+            ll k = 1;
+            while(k<scc.size() && scc[k] == scc[k-1]){
+                k = (k+1)%mod;
+            }
+            ans+=scc[0];
+            ways = (ways*k)%mod;
             scc.clear();
         }
     }
+    cout<<ans<<" "<<ways<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
+    cin>>n;
+    for(ll i = 1; i<=n; i++) cin>>cost[i];
+    cin>>m;
     fo(m){
         cin>>x>>y;
         gr[x].pb(y);

@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -71,61 +70,57 @@ ll flr(ld a){
 
 //code starts here
 
-
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
+ll a[6];
+const ll M = 2e5;
+ll b[M],n;
 
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
+    sort(a,a+6);
+    sort(b,b+n);
+    vp notes;
+    for(ll i = 0; i<n; i++){
+        for(ll j = 0;j<6; j++){
+            notes.pb(mp(b[i]-a[j],i));
         }
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
+    sort(notes.begin(),notes.end());
+    // for(auto x: notes){
+    //     cout<<x.ff<<"()"<<x.sec<<"\n";
+    // }
+    ll ans = lmax;
+    ll l = 0, r = 0, distinct = 0;
+    map<ll,ll> marked;
+    marked[notes[r].sec]++;
+    distinct++;
+    while(r<notes.size()){
+        // cout<<l<<" "<<r<<"()"<<distinct<<"\n";
+        if(distinct == n){
+            ans = min(ans,notes[r].ff - notes[l].ff);
+            marked[notes[l].sec]--;
+            if(marked[notes[l].sec] == 0) distinct--;
+            l++;
+        }
+        else{
+            r++;
+            if(r<notes.size()){
+                marked[notes[r].sec]++;
+                // if(notes[r].sec == 5){
+                //     cout<<marked[notes[r].sec]<<"--<>\n";
+                // }
+                if(marked[notes[r].sec] == 1) {
+                    distinct++;
+                }
+            }
         }
     }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
+    fo(6) cin>>a[i];
+    cin>>n;
+    fo(n) cin>>b[i];
     solve();
 }
 

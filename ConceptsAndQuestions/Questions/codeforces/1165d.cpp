@@ -71,62 +71,52 @@ ll flr(ld a){
 
 //code starts here
 
-
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
-
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
+    ll n;
+    cin>>n;
+    ll fact[n];
+    fo(n) cin>>fact[i];
+    ll f1 = lmax, f2 = 0;
+    umap<ll,ll> cnt;
+    fo(n){
+        f1 = min(f1,fact[i]);
+        f2 = max(f2,fact[i]);
+        cnt[fact[i]]++;
+    }
+    ll num = f1*f2;
+    // pr(num);
+    set<ll> op;
+    // umap<ll,bool> mark;
+    for(ll i = 2; i*i<=num; i++){
+        if(num%i == 0){
+            op.insert(i);
+            op.insert(num/i);
         }
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
-        }
+    // for(auto x: op){
+    //     cout<<x<<" ";
+    // }cout<<"\n";
+    sort(fact,fact+n);
+    if(n!=op.size()){
+        pr(-1);
+        return;
     }
+    ll i = 0;
+    for(auto x: op){
+        if(x!=fact[i]){
+            pr(-1);
+            return;
+        }
+        i++;
+    }
+    pr(num);
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
-    solve();
+    ll t;
+    cin>>t;
+    while(t--) solve();
 }
 
 

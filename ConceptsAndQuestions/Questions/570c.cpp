@@ -18,7 +18,6 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -71,61 +70,61 @@ ll flr(ld a){
 
 //code starts here
 
-
-const ll M = 4e5;
-vl gr[M], gr2[M];
-ll n,m,x,y;
-vl scc;
-vl order;
-
-umap<ll,bool> visited;
-
-void dfs(ll cur){
-    visited[cur] = true;
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-    order.pb(cur);
-}
-
-void dfs2(ll cur){
-    visited[cur] = true;
-    scc.pb(cur);
-    for(auto x: gr2[cur]){
-        if(!visited[x]){
-            dfs2(x);
-        }
-    }
-}
+ll n,m;
+string s;
 
 void solve(){
-    for(ll i = 1; i<=n;i++){
-        if(!visited[i]){
-            dfs(i);
+    ll cur = 0;
+    ll ans = 0;
+    for(ll i = 0; i<n; i++){
+        if(s[i] == '.'){
+            cur++;
+        }else{
+            if(cur>1){
+                ans+=(cur-1);
+            }
+            cur = 0;
         }
     }
-    ll ans = 0;
-    ll ways = 1;
-    visited.clear();
-    for(ll i = n-1; i>=0; i--){
-        if(!visited[order[i]]){
-            dfs2(order[i]);
-            for(auto x: scc){
-                cout<<x<<" ";
-            }cout<<"\n";
-            scc.clear();
+    if(cur>1) ans+=(cur-1);
+    while(m--){
+        ll pos; char ch;
+        cin>>pos>>ch;
+        pos--;
+        if(ch == '.'){
+            if(s[pos] == '.'){
+                pr(ans);
+                continue;
+            }
+            if(pos>0 && s[pos-1] == '.'){
+                ans++;
+            }
+            if(pos<n-1 && s[pos+1] == '.'){
+                ans++;
+            }
+            s[pos] = '.';
+            pr(ans);
+        }
+        else{
+            if(s[pos]!='.'){
+                pr(ans);
+                continue;
+            }
+            if(pos>0 && s[pos-1] == '.'){
+                ans--;
+            }
+            if(pos<n-1 && s[pos+1] == '.'){
+                ans--;
+            }
+            s[pos] = ch;
+            pr(ans);
         }
     }
 }
 
 int32_t main(){
     KOBE;
-    cin>>n>>m;
-    fo(m){
-        cin>>x>>y;
-        gr[x].pb(y);
-        gr2[y].pb(x);
-    }
+    cin>>n>>m>>s;
     solve();
 }
 

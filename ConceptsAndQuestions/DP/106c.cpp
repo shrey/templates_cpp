@@ -51,10 +51,8 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<<"\n"
+#define nl cout<"\n"
 #define re(x) cin>>x
-#define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -74,8 +72,41 @@ ll flr(ld a){
 
 //code starts here
 
+
+const ll M = 1010;
+ll c[M],d[M],dp[20][M][M],n,m,a[M],b[M];
+
+
+ll recur(ll i, ll cnt, ll gms){
+    if(gms==0 || i > m){
+        return 0;
+    }
+    // cout<<i<<"()"<<cnt<<"()"<<gms<<"\n";
+    if(dp[i][cnt][gms]!=-1){
+        return dp[i][cnt][gms];
+    }
+    ll a1 = 0, a2 = 0, a3 = 0;
+    if(a[i]>=(cnt+1)*b[i] && gms>=c[i]){
+        a1 = d[i] + recur(i,cnt+1,gms-c[i]);
+    }
+    a3 = recur(i+1,0,gms);
+    dp[i][cnt][gms] = max(a1,a3);
+    return dp[i][cnt][gms];
+}
+
+void solve(){
+    memset(dp,-1,sizeof(dp));
+    cin>>n>>m>>c[0]>>d[0];
+    a[0] = 0; b [0] = 0;
+    for(ll i = 1; i<=m; i++){
+        cin>>a[i]>>b[i]>>c[i]>>d[i];
+    }
+    pr(recur(0,0,n));
+}
+
 int32_t main(){
     KOBE;
+    solve();
 }
 
 

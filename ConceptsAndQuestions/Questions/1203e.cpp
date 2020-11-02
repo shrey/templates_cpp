@@ -52,9 +52,6 @@ typedef long double ld;
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
 #define nl cout<<"\n"
-#define re(x) cin>>x
-#define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -74,8 +71,32 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 5e5;
+ll n, arr[M];
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n) cin>>arr[i];
+    sort(arr,arr+n);
+    umap<ll,ll> freq;
+    ll ans = 0;
+    // fo(n) cout<<arr[i]<<" ";nl;
+    for(ll i = 0; i<n; i++){
+        if(arr[i]>1 && freq[arr[i]-1] == 0){
+            freq[arr[i]-1]++;
+            ans++;
+        }
+        else if(freq[arr[i]] == 0){
+            freq[arr[i]]++;
+            ans++;
+        }
+        else if(freq[arr[i]+1] == 0){
+            freq[arr[i]+1]++;
+            ans++;
+        }
+    }
+    pr(ans);
 }
 
 

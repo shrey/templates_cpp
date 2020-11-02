@@ -53,9 +53,7 @@ typedef long double ld;
 ll mod = 1e9 + 7;
 
 class employee{
-	int emp_no;
-	char name[20];
-	static int emp_cnt;
+
 };
 
 int main(){

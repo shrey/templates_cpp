@@ -74,8 +74,54 @@ ll flr(ld a){
 
 //code starts here
 
+string s;
+ll m;
+ll q;
+const ll M = 2e5;
+void solve(){
+    stack<ll> st;
+    ll open[M] = {0}, close[M] = {0};
+    ll n = s.length();
+    ll tot = 0;
+    fo(n){
+        if(s[i] == '('){
+            st.push(i);
+        }
+        else if(s[i] == ')'){
+            if(!st.empty()){
+                ll op = st.top();
+                st.pop();
+                tot++;
+                open[op]++;
+                close[i]++;
+            }
+        }
+    }
+    for(ll i = 1; i<n; i++){
+        open[i] += open[i-1];
+    }
+    for(ll i = n-2; i>=0; i--){
+        close[i] += close[i+1];
+    }
+    while(m--){
+        ll l,r;
+        re(l); re(r);
+        l--;
+        r--;
+        ll a = l>0? open[l-1] : 0;
+        ll b = r<n-1? close[r+1] : 0;
+        ll k = r<n-1? close[r+1] - (open[n-1]-open[r]) : 0;
+        cout<<k<<"()\n";
+        ll ans = 2*(tot-a-b+k);
+        pr(ans);
+    }
+}
+
 int32_t main(){
     KOBE;
+    re(s);
+    re(m);
+    solve();
 }
 
 

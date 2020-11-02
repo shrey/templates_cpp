@@ -72,6 +72,32 @@ ll flr(ld a){
 }
 
 
+ll n,m;
+vl gr[2010];
+vl side(2010,-1);
+
+bool bpcheck(ll src){
+    queue<ll> q;
+    q.push(src);
+    side[src] = 0;
+    while(!q.empty()){
+        ll par = q.front();
+        q.pop();
+        for(auto x: gr[par]){
+            if(side[x] == -1){
+                side[x] = side[par] ^ 1;
+                q.push(x);
+            }else{
+                if(side[x] == side[par]){
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+
 //code starts here
 
 int32_t main(){

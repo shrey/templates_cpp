@@ -28,7 +28,7 @@ typedef long double ld;
 #define Yes cout<<"Yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
-#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
+#define prDouble(x) cout<<fixed<<setprecision(15)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
 #define sec second
@@ -54,7 +54,6 @@ typedef long double ld;
 #define nl cout<<"\n"
 #define re(x) cin>>x
 #define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -74,8 +73,20 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,m;
+
+void solve(){
+    cin>>m>>n;
+    ld ans = 0.0;
+    for(ld i = 1; i<m; i++){
+        ans+=pow(i/m,n);
+    }
+    prDouble(m-ans);nl;
+}
+
 int32_t main(){
     KOBE;
+    solve();
 }
 
 

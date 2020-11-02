@@ -55,8 +55,8 @@ typedef long double ld;
 #define re(x) cin>>x
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
-
-ll mod = 1e9 + 7;
+#define p 998244353
+ll mod = 998244353;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -74,8 +74,60 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 2e5;
+ll n, a[M],b[M];
+
+ll fac[1000010];
+
+ll power(ll x, ll y )
+{
+    ll res = 1;
+    x = x % p;
+    while (y > 0)
+    {
+        if (y & 1)
+            res = (res*x) % p;
+        y = y>>1;
+        x = (x*x) % p;
+    }
+    return res;
+}
+
+
+ll modInverse(ll n )
+{
+    return power(n, p-2);
+}
+
+
+ll ncr(ll n,ll r )
+{
+   if (r==0||r==n)
+      return 1;
+    return (fac[n]* modInverse(fac[r]) % p * modInverse(fac[n-r]) % p) % p;
+}
+
+
+void solve(){
+    sort(a,a+n);
+    sort(b,b+n,greater<ll>());
+    ll ans = 0;
+    for(ll i = 0; i<n; i++){
+        ans = (ans + abs(a[i]-b[i]))%mod;
+    }
+    ans = (ans*ncr(2*n,n))%p;
+    pr(ans);
+}
+
 int32_t main(){
     KOBE;
+    fac[0] = 1;
+    for (ll i=1 ; i<1000010; i++)
+        fac[i] = fac[i-1]*i%p;
+    re(n);
+    fo(n) re(a[i]);
+    fo(n) re(b[i]);
+    solve();
 }
 
 

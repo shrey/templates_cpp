@@ -53,8 +53,6 @@ typedef long double ld;
 #define endl "\n"
 #define nl cout<<"\n"
 #define re(x) cin>>x
-#define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -74,8 +72,39 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 1010;
+ll arr[M],n;
+
+
+void solve(){
+    map<ll,vl> freq;
+    fo(n){
+        freq[arr[i]].pb(i+1);
+    }
+    sort(arr,arr+n);
+    ll ans = 0;
+    ll i = n-1;
+    while(i>=0){
+        ans+=arr[i];
+        i-=2;
+    }
+    pr(ans);
+    i = n-1;
+    while(i>=0){
+        cout<<freq[arr[i]][freq[arr[i]].size()-1]<<" ";
+        freq[arr[i]].pop_back();
+        if(i-1>=0) cout<<freq[arr[i-1]][freq[arr[i-1]].size()-1]<<" ";
+        freq[arr[i-1]].pop_back();
+        nl;
+        i-=2;
+    }
+}
+
 int32_t main(){
     KOBE;
+    re(n);
+    fo(n) re(arr[i]);
+    solve();
 }
 
 

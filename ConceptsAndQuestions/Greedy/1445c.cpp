@@ -74,8 +74,62 @@ ll flr(ld a){
 
 //code starts here
 
+ll t;
+ll p,q;
+vp primecnt;
+
+void fact(){
+    for(ll i = 2; (i*i)<=q; i++){
+        ll cnt = 0;
+        if(q%i == 0){
+            while(q%i == 0 && q>0){
+                cnt++;
+                q/=i;
+            }
+            primecnt.pb(mp(i,cnt));
+        }
+    }
+    if(q>1){
+        primecnt.pb(mp(q,1));
+    }
+}
+
+ll comp(ll num){
+    ll ans = 0;
+    ll temp = p;
+    while(temp>0 && temp%num == 0){
+        temp/=num;
+        ans++;
+    }
+    return ans;
+}
+
+void solve(){
+    re(p); re(q);
+    if(p<q || p%q){
+        pr(p);
+        return;
+    }
+    ll ans = 1;
+    fact();
+    //now we have p%q == 0 and p>q
+    for(auto x: primecnt){
+        ll num = x.ff;
+        ll pw = x.sec;
+        ll cnt = comp(num);
+        ll cur = p/(pow(num,cnt-pw+1));
+        // cout<<num<<"()"<<cur<<"\n";
+        ans = max(ans,cur);
+    }
+    primecnt.clear();
+    pr(ans);
+
+}
+
 int32_t main(){
     KOBE;
+    re(t);
+    while(t--) solve();
 }
 
 

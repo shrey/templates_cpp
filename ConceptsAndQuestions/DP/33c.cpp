@@ -53,8 +53,6 @@ typedef long double ld;
 #define endl "\n"
 #define nl cout<<"\n"
 #define re(x) cin>>x
-#define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -73,9 +71,44 @@ ll flr(ld a){
 
 
 //code starts here
+const ll M = 2e5;
+ll arr[M];
+ll n;
+
+
+
+
+void solve(){
+    ll pre[n+1];
+    ll suff[n+1];
+    ll csum = 0, revsum = 0;
+    ll arr2[n];
+    fo(n) arr2[i] = arr[n-i-1];
+    pre[0] = abs(arr[0]);
+    csum+=arr[0];
+    suff[0] = abs(arr2[0]);
+    revsum+=arr2[0];
+    for(ll i = 1; i<n; i++){
+        csum+=arr[i];
+        pre[i] = max(abs(csum),pre[i-1] + arr[i]);
+        revsum+=arr2[i];
+        suff[i] = max(abs(revsum),suff[i-1] + arr2[i]);
+    }
+    ll ans = 0;
+    fo(n){
+
+        if(i<n-1) ans = max(ans,pre[i] + suff[n-i-2]);
+        else ans = max(ans,pre[i]);
+    }
+    pr(ans);
+
+}
 
 int32_t main(){
     KOBE;
+    re(n);
+    fo(n) re(arr[i]);
+    solve();
 }
 
 

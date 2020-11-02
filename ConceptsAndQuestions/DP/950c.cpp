@@ -53,8 +53,6 @@ typedef long double ld;
 #define endl "\n"
 #define nl cout<<"\n"
 #define re(x) cin>>x
-#define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -73,9 +71,59 @@ ll flr(ld a){
 
 
 //code starts here
+const ll M = 2e5+100;
+string s;
+
+void solve(){
+
+    queue<ll> q1,q2;
+    vl v[M];
+    ll x = 0,t;
+    for(ll i = 0; i<s.length(); i++){
+        if(s[i] == '0'){
+            if(q2.empty()){
+                v[x].pb(i);
+                q1.push(x);
+                x++;
+            }
+            else{
+                ll tp = q2.front();
+                q2.pop();
+                v[tp].pb(i);
+                q1.push(tp);
+            }
+        }
+        else{
+            if(q1.empty()){
+                pr(-1);
+                return;
+            }
+            else{
+                ll tp = q1.front();
+                q1.pop();
+                v[tp].pb(i);
+                q2.push(tp);
+            }
+        }
+    }
+    if(q2.size()!=0){
+        pr(-1);
+        return;
+    }
+    pr(x);
+    for(ll i = 0; i<x; i++){
+        cout<<v[i].size()<<" ";
+        for(ll j = 0; j<v[i].size();j++){
+            cout<<v[i][j]+1<<" ";
+        }nl;
+    }
+
+}
 
 int32_t main(){
     KOBE;
+    re(s);
+    solve();
 }
 
 

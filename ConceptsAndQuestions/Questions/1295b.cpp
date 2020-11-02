@@ -74,8 +74,63 @@ ll flr(ld a){
 
 //code starts here
 
+string s;
+ll n,x,t;
+const ll M = 2e5;
+ll diff[M];
+ll tot = 0;
+bool ok(ll i){
+    if(diff[i] == x){
+        return true;
+    }
+    ll a = x-diff[i], b = tot;
+    if((a>0 && b>0) || (a<0 && b<0)){
+        a = abs(a); b = abs(b);
+        if(a%b) return false;
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+void solve(){
+    re(n); re(x);
+    re(s);
+    tot = 0;
+    fo(s.length()){
+        if(s[i] == '1'){
+            tot--;
+        }
+        else{
+            tot++;
+        }
+        diff[i] = tot;
+    }
+    if(tot == 0){
+        fo(n){
+            if(x == diff[i]){
+                pr(-1);
+                return;
+            }
+        }
+        pr(0);
+        return;
+    }
+    ll ans = 0;
+    if(x == 0){
+        ans++;
+    }
+    for(ll i = 0; i<n; i++){
+        if(ok(i)) ans++;
+    }
+    pr(ans);
+}
+
 int32_t main(){
     KOBE;
+    re(t);
+    while(t--) solve();
 }
 
 

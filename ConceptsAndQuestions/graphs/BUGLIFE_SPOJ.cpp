@@ -73,9 +73,66 @@ ll flr(ld a){
 
 
 //code starts here
+ll n,m;
+vl gr[2010];
+vl side(2010,-1);
+
+bool bpcheck(ll src){
+    queue<ll> q;
+    q.push(src);
+    side[src] = 0;
+    while(!q.empty()){
+        ll par = q.front();
+        q.pop();
+        for(auto x: gr[par]){
+            if(side[x] == -1){
+                side[x] = side[par] ^ 1;
+                q.push(x);
+            }else{
+                if(side[x] == side[par]){
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool solve(){
+    cin>>n>>m;
+    fo(m){
+        ll x,y;
+        cin>>x>>y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    for(ll i = 1; i<n; i++){
+        if(side[i] == -1){
+            if(!bpcheck(i)){
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 int32_t main(){
     KOBE;
+    ll t;
+    cin>>t;
+    FOR(1,t){
+        cout<<"Scenario #"<<i<<":\n";
+        if(solve()){
+            pr("No Suspicious bugs found!");
+        }
+        else{
+            pr("Suspicious bugs found!");
+        }
+        for(ll i = 1; i<=n; i++){
+            side[i] = -1;
+            gr[i].clear();
+        }
+    }
 }
 
 

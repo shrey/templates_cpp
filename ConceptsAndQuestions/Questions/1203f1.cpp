@@ -51,10 +51,8 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<<"\n"
-#define re(x) cin>>x
+#define nl cout<"\n"
 #define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -74,8 +72,49 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,r;
+const ll M = 110;
+vp pos,neg;
+
+
+bool compare(pll &a, pll &b){
+    if(a.ff == b.ff){
+        return a.sec>b.sec;
+    }
+    return a.ff>b.ff;
+}
+
 int32_t main(){
     KOBE;
+    cin>>n>>r;
+    fo(n){
+        ll x,y;
+        cin>>x>>y;
+        if(y>=0){
+            pos.pb(mp(x,y));
+        }
+        else{
+            neg.pb(mp(x,y));
+        }
+    }
+    sort(pos.begin(),pos.end());
+    for(auto p: pos){
+        if(p.ff>r){
+            NO;
+            return 0;
+        }
+        r+=p.sec;
+    }
+    sort(neg.begin(),neg.end(),compare);
+    for(auto p: neg){
+
+        if(p.ff>r){
+            NO;
+            return 0;
+        }
+        r-=p.sec;
+    }
+    YES;
 }
 
 

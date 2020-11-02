@@ -74,8 +74,48 @@ ll flr(ld a){
 
 //code starts here
 
+string s,t;
+
+void np(){
+    pr("No such string");
+}
+
+void solve(){
+    ll i = 0;
+    while(s[i] == t[i]) i++;
+    ll n = s.length();
+
+    if(t[i]-s[i]>1){
+        s[i] = s[i]+1;
+    }else{
+        ll curpos = i;
+        i++;
+        while(i<n && s[i]=='z'){
+            i++;
+        }
+        if(i<n){
+            s[i] = s[i]+1;
+        }else{
+            i = curpos;
+            s[i] = t[i];
+            i++;
+            while(i<n) {
+                s[i] = 'a';
+                i++;
+            }
+            if(s>=t){
+                np();
+                return;
+            }
+        }
+    }
+    pr(s);
+}
+
 int32_t main(){
     KOBE;
+    cin>>s>>t;
+    solve();
 }
 
 

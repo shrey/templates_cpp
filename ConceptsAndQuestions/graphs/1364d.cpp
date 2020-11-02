@@ -74,8 +74,73 @@ ll flr(ld a){
 
 //code starts here
 
+
+const ll M = 3e5;
+ll n,m,k,x,y;
+vl col[2], cyc,s;
+vl pos(M,-1);
+vl gr[M];
+
+ll dfs(ll cur){
+    pos[cur] = s.size();
+    col[pos[cur]%2].pb(cur);
+    s.pb(cur);
+    ll low = -1;
+    for(auto x: gr[cur]){
+        if(pos[x]!=-1 && pos[x]-pos[cur]>1){
+            low = max(low,pos[x]);
+        }
+    }
+    if(low!=-1){
+        for(ll i = low; i<=pos[cur]; i++){
+            cyc.pb(s[i]);
+        }
+        return 1;
+    }
+    for(auto x: gr[cur]){
+        if(pos[x] == -1){
+            if(dfs(x))
+                return 1;
+        }
+    }
+    s.pop_back();
+    return 0;
+}
+
+void solve(){
+    re(n); re(m); re(k);
+    fo(m){
+        re(x); re(y);
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    if(cyc.empty()){
+        if(col[0].size()<col[1].size()) swap(col[0],col[1]);
+        pr(1);
+        fo((k+1)/2){
+            cout<<col[0][i]<<" ";
+        }nl;
+    }else{
+        if(cyc.size()<=k){
+            pr(2);
+            pr(cyc.size());
+            for(ll i: cyc){
+                cout<<i<<" ";
+            }nl;
+        }
+        else{
+            pr(1);
+            fo((k+1)/2){
+                cout<<cyc[2*i]<<" ";
+            }nl;
+        }
+    }
+
+}
+
 int32_t main(){
     KOBE;
+    solve();
 }
 
 

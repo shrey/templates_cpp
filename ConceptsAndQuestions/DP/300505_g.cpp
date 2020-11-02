@@ -74,8 +74,36 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 2e6;
+ll n;
+ll arr[M];
+
+void solve(){
+    re(n);
+    fo(n) re(arr[i]);
+    ll sm[n+1],gr[n+1];
+    gr[0] = arr[0];
+    for(ll i = 1; i<=n; i++){
+        gr[i] = max(arr[i],gr[i-1]);
+    }
+    sm[n-1] = arr[n-1];
+    for(ll i = n-2; i>=0; i--){
+        sm[i] = min(arr[i],sm[i+1]);
+    }
+    ll ans = 0;
+    for(ll i = 1; i<n-1; i++){
+        if(arr[i]<=sm[i+1] && arr[i]>=gr[i-1]){
+            ans++;
+        }
+    }
+    pr(ans);
+}
+
 int32_t main(){
     KOBE;
+    ll t;
+    re(t);
+    while(t--) solve();
 }
 
 

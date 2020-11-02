@@ -74,8 +74,66 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 2e5+100;
+vl gr[M];
+vp edges;
+ll n,m;
+
+vl side(M,-1);
+
+bool bpcheck(ll src){
+    queue<ll> q;
+    q.push(src);
+    side[src] = 0;
+    while(!q.empty()){
+        ll par = q.front();
+        q.pop();
+        for(auto x: gr[par]){
+            if(side[x] == -1){
+                side[x] = side[par] ^ 1;
+                q.push(x);
+            }else{
+                if(side[x] == side[par]){
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+
+void solve(){
+    for(ll i = 1; i<=n; i++){
+        if(side[i] == -1){
+            if(!bpcheck(i)){
+                NO;
+                return;
+            }
+        }
+    }
+    string ans = "";
+    YES;
+    for(auto e: edges){
+        ll u = e.ff;
+        ll v = e.sec;
+        if(side[u] == 0) ans+='1';
+        else ans+='0';
+    }
+    pr(ans);
+}
+
 int32_t main(){
     KOBE;
+    cin>>n>>m;
+    fo(m){
+        ll x,y;
+        re(x); re(y);
+        edges.pb(mp(x,y));
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    solve();
 }
 
 

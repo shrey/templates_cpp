@@ -74,8 +74,48 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,m;
+const ll M = 3e5;
+ll a[M],b[M];
+void solve(){
+    ll n;
+    re(n);
+    fo(n) re(a[i]);
+    ll m;
+    re(m);
+    fo(m) re(b[i]);
+    vp dist;
+    fo(n){
+        dist.pb(mp(a[i],1));
+    }
+    fo(m){
+        dist.pb(mp(b[i],2));
+    }
+    sort(dist.begin(),dist.end());
+    ll ans = 2*(n-m);
+    ll acnt = 0, bcnt = 0;
+    ll sa = 2*n, sb = 2*m;
+    for(ll i = dist.size()-1; i>=0; i--){
+        if(dist[i].sec == 1){
+            acnt++;
+        }
+        else{
+            bcnt++;
+        }
+        ll val = 3*acnt-3*bcnt + 2*((n-acnt) - (m-bcnt));
+        if(val>=ans){
+            ans = val;
+            sa = 3*acnt + 2*(n-acnt);
+            sb = 3*bcnt + 2*(m-bcnt);
+        }
+    }
+    cout<<sa<<":"<<sb<<"\n";
+
+}
+
 int32_t main(){
     KOBE;
+    solve();
 }
 
 

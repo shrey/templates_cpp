@@ -74,8 +74,61 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,x;
+
+vl primes;
+
+void fact(ll num){
+    for(ll i = 2; (i*i)<=num; i++){
+        if(num%i == 0){
+            primes.pb(i);
+            while(num>0 && num%i == 0) num/=i;
+        }
+    }
+    if(num>1) primes.pb(num);
+}
+
+ll pow_mod(ll num, ll k){
+    if(k == 0) return 1;
+    ll a = pow_mod(num,k/2);
+    if(k%2){
+        return (num%mod * (a * a)%mod)%mod;
+    }
+    return ((a*a)%mod);
+}
+
+ll comp(ll cur){
+    ll ans = 0;
+    ll temp = cur;
+
+    while(temp<=n){
+        ans = (ans + (n/temp))%mod;
+        temp = (temp*cur)%mod;
+    }
+    return ans;
+}
+
+void solve(){
+    fact(x);
+    fo(primes.size()) cout<<primes[i]<<" ";
+    nl;
+    ll ans = 1;
+    for(ll i = 0; i<primes.size(); i++){
+        ll k = comp(primes[i]);
+        pr(k);
+        ans = ((ans*(pow_mod(primes[i],k)))%mod);
+        ans = (ans+mod)%mod;
+    }
+    pr(ans);
+}
+
 int32_t main(){
     KOBE;
+    re(x);
+    re(n);
+    pr(n);
+    n%=mod;
+    solve();
 }
 
 

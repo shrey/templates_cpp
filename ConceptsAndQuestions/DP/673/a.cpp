@@ -1,3 +1,8 @@
+
+
+//Shrey Dubey
+
+
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -16,54 +21,91 @@
 #include<numeric>
 
 using namespace std;
+typedef long long ll;
+typedef long double ld;
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
+#define pb push_back
+#define ff first
+#define sec second
+#define umap unordered_map
+#define mp make_pair
+#define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define fo(n) for(ll i = 0; i<n; i++)
+#define fnd(stl, data) find(stl.begin(), stl.end(), data)
+#define forn(x,n) for(ll x = 0; x<n; x++)
+#define imax INT_MAX
+#define lmax LLONG_MAX
+#define imin INT_MIN
+#define lmin LLONG_MIN
+#define vi vector<int>
+#define vl vector<ll>
+#define vp vector<pair<ll,ll> >
+#define vb vector<bool>
+#define pr(t) cout<<t<<"\n"
+#define int long long
+#define ql queue<ll>
+#define qp queue<pair<ll,ll> >
+#define endl "\n"
+#define nl cout<"\n"
+#define re(x) cin>>x
 
-    int a[6];
-    for(int i=0;i<6;i++){
-        cin>>a[i];
-    }
-    int n;
-    cin>>n;
-    int b[n];
-    set<pair<int,int> >s;
-    for(int i=0;i<n;i++){
-        cin>>b[i];
-        for(int j=0;j<6;j++){
-            s.insert(make_pair(b[i]-a[j],i));
-        }
-    }
-    map<int,int>m;
-    for(auto i:s){
-        m[i.second]=0;
-    }
-    for(auto i:s){
-        m[i.second]++;
-    }
-    for(auto i:s){
-        if(m[i.second]>1){
-            m[i.second]--;
-            s.erase(*s.begin());
-        }else{
-            break;
-        }
-    }
-    auto p=*s.begin();
-    int ab=p.first;
-    int op=0;
-    set<int>ss;
-    for(auto i:s){
-        ss.insert(i.second);
-        if(ss.size()==n){
-            op=i.first;
-            break;
-        }
-    }
-    cout<<op-ab<<"\n";
+ll mod = 1e9 + 7;
 
-    return 0;
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
 }
+
+ll flr(ld a){
+    return (ll) a;
+}
+
+
+//code starts here
+
+
+void solve(){
+    ll n,x;
+    re(n); re(x);
+    ll a[n],b[n];
+    fo(n) re(a[i]);
+    fo(n) re(b[i]);
+    sort(b,b+n,greater<ll>());
+    fo(n){
+        if(a[i] + b[i]>x){
+            No;
+            return;
+        }
+    }
+    Yes;
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    cin>>t;
+    while(t--) solve();
+}
+
+
+//common errors
+// row - n, col - m always and loop var
+// see the freq of numbers carefully
+// see if there's array overflow
+// use map for large inputs
+
+
+//problem ideas
+//check piegonhole wherever possible
+//there might be many instances of limited answers like 0,1,2 only
+// see suffix and prefix
+//don't be obsessed with binary search

@@ -19,6 +19,7 @@
 #include<bitset>
 #include<cstring>
 #include<numeric>
+#include <array>
 
 using namespace std;
 typedef long long ll;
@@ -54,7 +55,6 @@ typedef long double ld;
 #define nl cout<<"\n"
 #define re(x) cin>>x
 #define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -74,8 +74,80 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,x,y,z;
+vector<vl> q;
+umap<ll,vl> pos;
+umap<ll,ll> cnt;
+umap<ll,bool> visited;
+umap<ll,bool> psh;
+vl ans;
+
+void fill(ll i){
+    if(i == n){
+        return;
+    }
+    ll cur = ans[i];
+    for(auto vec: pos[cur]){
+        if(!visited[vec]){
+            visited[vec] = true;
+            for(auto x: q[vec]){
+                if(!psh[x]){
+                    ans.pb(x);
+                    psh[x] = true;
+                }
+            }
+        }
+    }
+    fill(i+1);
+}
+
+void solve(){
+    ll fst;
+    for(ll i = 1; i<=n; i++){
+        if(cnt[i] == 1){
+            fst = i;
+            break;
+        }
+    }
+    ans.pb(fst);
+    psh[fst] = true;
+    ll lst = pos[fst][0];
+    visited[lst] = true;
+    ll thr;
+    for(auto x: q[lst]){
+        if(!psh[x] && cnt[x] == 2){
+            ans.pb(x);
+            psh[x] = true;
+        }
+        else{
+            if(!psh[x])thr = x;
+        }
+    }
+    ans.pb(thr);
+    psh[thr] = true;
+    fill(1);
+    for(auto x: ans){
+        cout<<x<<" ";
+    }nl;
+
+}
+
 int32_t main(){
     KOBE;
+    cin>>n;
+    fo(n-2){
+        re(x); re(y); re(z);
+        pos[x].pb(i);
+        pos[y].pb(i);
+        pos[z].pb(i);
+        cnt[x]++;
+        cnt[y]++;
+        cnt[z]++;
+        vl cur;
+        cur.pb(x); cur.pb(y); cur.pb(z);
+        q.pb(cur);
+    }
+    solve();
 }
 
 

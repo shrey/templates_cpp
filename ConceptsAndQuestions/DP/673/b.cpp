@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -17,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -49,6 +51,7 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<"\n"
 
 ll mod = 1e9 + 7;
 
@@ -68,47 +71,37 @@ ll flr(ld a){
 
 //code starts here
 
-ll fact(ll n){
-    ll res = 1;
-    for(ll i = 1; i<=n; i++){
-        res = (res*i)%mod;
-    }
-    return res;
-}
-
 void solve(){
-    ll n,x,pos;
-    cin>>n>>x>>pos;
-    ll gr = n-x;
-    ll sm = x-1;
-    ll s = 0, e = n;
-    ll cur = 0;
-    ll ans = 1;
-    while(s<e){
-        ll mid = (s+e)/2;
-        if(mid == pos){
-            s = mid+1;
+    ll n;
+    cin>>n;
+    ll arr[n];
+    fo(n) cin>>arr[i];
+    ll ans = 0;
+    ll i = 1;
+    umap<ll,ll> ncnt;
+    ncnt[0] = 1;
+    ll curlev = 1;
+    while(i<n){
+        ll j = i;
+        while(j<n-1 && arr[j+1]>arr[j]){
+            j++;
         }
-        else if(mid>pos){
-            ans = (ans*gr)%mod;
-            gr--;
-            cur++;
-            e = mid;
+        // cout<<arr[i]<<" () "<<arr[j]<<" = "<<curlev<<"\n";
+        ncnt[curlev-1]--;
+        ncnt[curlev]+=(j-i+1);
+        if(j<n-1 && ncnt[curlev-1] == 0){
+            curlev++;
         }
-        else{
-            ans = (ans*sm)%mod;
-            sm--;
-            cur++;
-            s = mid+1;
-        }
+        i = j+1;
     }
-    ans = (ans*fact(n-cur-1))%mod;
-    pr(ans);
+    pr(curlev);
 }
 
 int32_t main(){
     KOBE;
-    solve();
+    ll t;
+    cin>>t;
+    while(t--) solve();
 }
 
 
@@ -124,3 +117,9 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
+
+/*
+1
+9
+1 8 9 6 7 2 3 5 4
+*/

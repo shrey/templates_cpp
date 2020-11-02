@@ -74,8 +74,41 @@ ll flr(ld a){
 
 //code starts here
 
+ll t;
+ll M;
+string q;
 int32_t main(){
     KOBE;
+    re(t);
+    ll ans = 0;
+    ll cur = 1;
+    M = pow(2,32);
+    stack<ll> st;
+    st.push(1);
+    bool flag = true;
+    while(t--){
+        re(q);
+        if(q == "for"){
+            ll n;
+            re(n);
+            st.push(min(st.top()*n,M));
+        }
+        else if(q == "end"){
+            st.pop();
+        }
+        else if(q == "add"){
+            ans += st.top();
+            if(ans>=M){
+                flag = false;
+                ans = 0;
+            }
+        }
+    }
+    if(!flag){
+        pr("OVERFLOW!!!");
+        return 0;
+    }
+    pr(ans);
 }
 
 

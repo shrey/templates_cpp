@@ -54,7 +54,6 @@ typedef long double ld;
 #define nl cout<<"\n"
 #define re(x) cin>>x
 #define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -74,8 +73,46 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 3e5;
+ll arr[M];
+ll n,q;
+
 int32_t main(){
     KOBE;
+    re(n);
+    fo(n) re(arr[i+1]);
+    re(q);
+    ll minval = 0;
+    umap<ll,ll> changes;
+    vl sufmax(M,0);
+    umap<ll,ll> latest;
+    for(ll i = 1; i<=q; i++){
+        ll type;
+        re(type);
+        if(type == 1){
+            ll pos,x;
+            cin>>pos>>x;
+            arr[pos] = x;
+            latest[pos] = i;
+        }else{
+            ll x;
+            cin>>x;
+            minval = max(minval,x);
+            changes[i] = x;
+        }
+    }
+    for(ll i = M-1; i>=1; i--){
+        if(changes[i]){
+            sufmax[i] = max(sufmax[i+1],changes[i]);
+        }
+        else{
+            sufmax[i] = sufmax[i+1];
+        }
+    }
+    for(ll i = 1; i<=n; i++){
+        arr[i] = max(arr[i],sufmax[latest[i]+1]);
+        cout<<arr[i]<<" ";
+    }nl;
 }
 
 

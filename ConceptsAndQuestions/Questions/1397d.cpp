@@ -74,8 +74,33 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 110;
+ll t,n,arr[M];
+
+void solve(){
+    re(n);
+    fo(n) re(arr[i]);
+    ll sum = 0;
+    fo(n){
+        sum+=arr[i];
+    }
+    if(sum%2){
+        pr("T");
+        return;
+    }
+    fo(n){
+        if(arr[i]>sum/2){
+            pr("T");
+            return;
+        }
+    }
+    pr("HL");
+}
+
 int32_t main(){
     KOBE;
+    cin>>t;
+    while(t--) solve();
 }
 
 

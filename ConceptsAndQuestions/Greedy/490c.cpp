@@ -74,34 +74,70 @@ ll flr(ld a){
 
 //code starts here
 
+ll powmod(ll n, ll k, ll m){
+    if(k == 0) return (1%m);
+    ll a = powmod(n,k/2,m);
+    if(k%2){
+        return (n%m * (a*a)%m)%m;
+    }
+    return (a*a)%m;
+}
+
+bool ok(string s){
+    if(s[0] == '0') return false;
+    return true;
+}
+
+void prst(string s){
+    ll i = 0;
+    while(i<s.length() && s[i] == '0') i++;
+    for(ll j = i; j<s.length(); j++){
+        cout<<s[j];
+    }nl;
+}
+
+string num;
+ll a,b;
+const ll M = 1e6+100;
+vl frem(M);
+vl revrem(M);
 void solve(){
-    ll n;
-    re(n);
-    ll arr[n];
-    fo(n) re(arr[i]);
-    ll mxd = arr[0];
-    arr[0] = 0;
-    for(ll i = 1; i<n; i++){
-        // cout<<arr[i-1]<<"()"<<arr[i]<<"\n";
-        //arr[i] value changes to the value that is needed from the left side after
-        if(arr[i]>=arr[i-1]){
-            ll diff = arr[i]-arr[i-1];
-            mxd = min(diff,mxd);
-            arr[i]-=mxd;
-        }
-        else{
-            NO;
-            return;
+    frem[0] = (num[0]-'0')%a;
+    for(ll i = 1; i<num.length(); i++){
+        ll cur = num[i]-'0';
+        frem[i] = ((10%a)*(frem[i-1]%a) + (cur)%a)%a;
+    }
+    string numo = num;
+    reverse(num.begin(),num.end());
+    revrem[0] = (num[0]-'0')%b;
+    for(ll i = 1; i<num.length(); i++){
+        ll cur = num[i]-'0';
+        revrem[i] = (((cur%b * powmod(10,i,b))%b) + (revrem[i-1]%b))%b;
+    }
+
+    ll n = num.length();
+    // fo(n) cout<<frem[i]<<" ";nl;
+    // fo(n) cout<<revrem[i]<<" ";nl;
+    for(ll i = 0; i<n-1; i++){
+        if(frem[i] == 0 && revrem[n-i-2] == 0){
+            string n1 = numo.substr(0,i+1);
+            string n2 = numo.substr(i+1,n-i-1);
+            if(ok(n1) && ok(n2)){
+                YES;
+                pr(n1);
+                pr(n2);
+                return;
+            }
         }
     }
-    YES;
+    NO;
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    re(t);
-    while(t--) solve();
+    re(num);
+    re(a); re(b);
+    solve();
 }
 
 

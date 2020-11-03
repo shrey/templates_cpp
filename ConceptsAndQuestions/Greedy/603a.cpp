@@ -74,34 +74,20 @@ ll flr(ld a){
 
 //code starts here
 
+ll n; string s;
+
 void solve(){
-    ll n;
     re(n);
-    ll arr[n];
-    fo(n) re(arr[i]);
-    ll mxd = arr[0];
-    arr[0] = 0;
-    for(ll i = 1; i<n; i++){
-        // cout<<arr[i-1]<<"()"<<arr[i]<<"\n";
-        //arr[i] value changes to the value that is needed from the left side after
-        if(arr[i]>=arr[i-1]){
-            ll diff = arr[i]-arr[i-1];
-            mxd = min(diff,mxd);
-            arr[i]-=mxd;
-        }
-        else{
-            NO;
-            return;
-        }
-    }
-    YES;
+    re(s);
+    ll dp[n+1][2];
+    memset(dp,1,sizeof(dp));
+    string srev = s;
+    reverse(srev.begin(),srev.end());
+
 }
 
 int32_t main(){
     KOBE;
-    ll t;
-    re(t);
-    while(t--) solve();
 }
 
 

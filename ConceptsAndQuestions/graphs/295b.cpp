@@ -54,7 +54,7 @@ typedef long double ld;
 #define nl cout<<"\n"
 #define re cin >>
 #define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define FOR(i,a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -75,14 +75,43 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-
+    ll n;
+    re n;
+    ll a[n+1][n+1];
+    FOR(i,1,n){
+        FOR(j,1,n){
+            re a[i][j];
+        }
+    }
+    ll x[n+1];
+    for(ll i = n; i>=1; i--){
+        re x[i];
+    }
+    ll ans[n+1];
+    for(ll k = 1; k<=n; k++){
+        for(ll i = 1; i<=n; i++){
+            for(ll j = 1; j<=n; j++){
+                a[i][j] = min(a[i][j],a[i][x[k]] + a[x[k]][j]);
+            }
+        }
+        ll res = 0;
+        for(ll i = 1; i<=k; i++){
+            for(ll j = 1; j<=k; j++){
+                res+=a[x[i]][x[j]];
+            }
+        }
+        ans[k] = res;
+    }
+    for(ll i = n; i>=1; i--){
+        cout<<ans[i]<<" ";
+    }nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

@@ -52,11 +52,11 @@ typedef long double ld;
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
 #define nl cout<<"\n"
-#define re cin >>
+#define re(x) cin>>x
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 
-ll mod = 1e9 + 7;
+ll mod = 998244353;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -74,15 +74,46 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+const ll M = 2e5+100;
+ll n,k;
+ll a[M], b[M];
 
+void solve(){
+    re(n); re(k);
+    fo(n) re(a[i]);
+    fo(k) re(b[i]);
+    umap<ll,ll> pos;
+    umap<ll,bool> mark;
+    for(ll i = 0; i<n; i++){
+        pos[a[i]] = i;
+    }
+    vl posarr;
+    ll ans = 1;
+    fo(k){
+        posarr.pb(pos[b[i]]);
+        mark[pos[b[i]]] = true;
+    }
+    for(ll i = 0; i<k; i++){
+        ll cur = 0;
+        if(posarr[i]>0 && !mark[posarr[i]-1]){
+            cur++;
+            mark[posarr[i]] = false;
+        }
+        if(posarr[i]<n-1 && !mark[posarr[i]+1]){
+            cur++;
+            mark[posarr[i]] = false;
+        }
+        ans = (ans*cur)%mod;
+    }
+    // sort(posarr.begin(),posarr.end());
+
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    re(t);
     while(t--) solve();
 }
 

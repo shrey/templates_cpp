@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,56 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+const ll M = 1e5+100;
+vl gr[M];
+ll n,x,y;
+vl deg(M,0);
+
+void solve(){
+    re n;
+    fo(n-1){
+        re x; re y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+        deg[x]++;
+        deg[y]++;
+    }
+
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    re t;
+    // t = 1;
+    while(t--) solve();
 }
 
 

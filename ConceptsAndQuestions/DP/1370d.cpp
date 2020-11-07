@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,80 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+ll n,k;
+const ll M = 2e5+100;
+ll arr[M];
+
+bool check(ll x, ll cur){
+    ll sz = 0;
+    for(ll i = 0; i<n; i++){
+        // cout<<i<<"()"<<sz<<"\n";
+        if(cur){
+            if(arr[i]<=x){
+                cur^=1;
+                sz++;
+            }
+        }
+        else{
+            cur^=1;
+            sz++;
+        }
+    }
+    if(sz>=k) return true;
+    return false;
+}
+
+void solve(){
+    re n; re k;
+    fo(n) re arr[i];
+    ll s = 0, e = 1e9+100;
+    ll ans;
+    while(s<=e){
+        ll mid = (s+e)/2;
+        if(check(mid,0) || check(mid,1)){
+            ans = mid;
+            e = mid-1;
+        }
+        else{
+            s = mid+1;
+        }
+    }
+    pr(ans);
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

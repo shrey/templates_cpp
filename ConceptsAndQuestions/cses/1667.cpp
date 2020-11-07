@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,87 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+const ll M = 2e5+100;
+vl gr[M];
+ll n,m,x,y;
+
+
+void solve(){
+    re n; re m;
+    fo(m){
+        re x; re y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    queue<ll> q;
+    vl visited(M,0);
+    vl par(M,-1);
+    umap<ll,ll> dist;
+    q.push(1);
+    visited[1] = 1;
+    par[1] = 0;
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        for(auto x: gr[cur]){
+            if(!visited[x]){
+                visited[x] = 1;
+                q.push(x);
+                dist[x] = dist[cur] + 1;
+                par[x] = cur;
+            }
+        }
+    }
+    if(visited[n]){
+        pr(dist[n]+1);
+        vl path;
+        ll cur = n;
+        while(cur!=0){
+            path.pb(cur);
+            cur = par[cur];
+        }
+        for(ll i = path.size()-1; i>=0; i--){
+            cout<<path[i]<<" ";
+        }nl;
+    }
+    else{
+        pr("IMPOSSIBLE");
+    }
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

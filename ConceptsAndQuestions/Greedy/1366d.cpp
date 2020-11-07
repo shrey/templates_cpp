@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,96 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+ll n;
+const ll M = 5e5+100;
+ll arr[M];
+vl factors;
+vl primes;
+const ll P = 3180;
+vb is_prime(4000,true);
+
+void seive(){
+    for(ll i = 2; i<=3180; i++){
+        if(is_prime[i]){
+            for(ll j = i*i; j<=P; j+=i){
+                is_prime[j] = false;
+            }
+            primes.pb(i);
+        }
+    }
+    // fo(primes.size()) cout<<primes[i]<<" ";nl;
+}
+
+void fact(ll num){
+    for(ll i = 0; i<primes.size(); i++){
+        ll cnt = 1;
+        while(num>0 && num%primes[i] == 0){
+            num/=primes[i];
+            cnt*=primes[i];
+        }
+        if(cnt!=1){
+            factors.pb(cnt);
+        }
+    }
+    if(num>1) factors.pb(num);
+    return;
+}
+
+void solve(){
+    re n;
+    fo(n) re arr[i];
+    vl l1(n);
+    vl l2(n);
+    for(ll i = 0; i<n; i++){
+        factors.clear();
+        fact(arr[i]);
+        if(factors.size()<=1){
+            l1[i] = -1;
+            l2[i] = -1;
+        }
+        else{
+            l1[i] = factors[0];
+            l2[i] = arr[i]/factors[0];
+        }
+    }
+    fo(n) cout<<l1[i]<<" ";nl;
+    fo(n) cout<<l2[i]<<" ";nl;
+}
+
+int32_t main(){
+    KOBE;
+    seive();
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

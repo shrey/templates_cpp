@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,81 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+const ll M = 1010;
+ll arr[M];
+ll n;
+
+ll mexcom(){
+    vb pre(n+1,false);
+    fo(n) pre[arr[i]] = true;
+    for(ll i = 0; i<n; i++){
+        if(!pre[i]) return i;
+    }
+    return n;
+}
+
+void solve(){
+    re n;
+    fo(n) re arr[i];
+    vl op;
+    vl ans;
+    fo(n){
+        if(arr[i]!=i) op.pb(i);
+    }
+    while(op.size()){
+        ll mex = mexcom();
+        if(mex == n){
+            arr[op[0]] = n;
+            ans.pb(op[0]+1);
+        }
+        else{
+            arr[mex] = mex;
+            ans.pb(mex+1);
+            for(ll i = 0; i<op.size(); i++){
+                if(op[i] == mex){
+                    op.erase(op.begin()+i);
+                    break;
+                }
+            }
+        }
+    }
+    pr(ans.size());
+    fo(ans.size()) cout<<ans[i]<<" ";nl;
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    re t;
+    // t = 1;
+    while(t--) solve();
 }
 
 

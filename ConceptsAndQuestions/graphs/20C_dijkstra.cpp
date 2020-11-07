@@ -45,7 +45,7 @@ class Graph{
 
         void addEdge(ll x, ll y, ll wt){
             gr[x].pb(mp(y,wt));
-            gr[y].pb(mp(x,wt));
+            // gr[y].pb(mp(x,wt));
         }
 
         void printPath(ll src){
@@ -92,7 +92,9 @@ class Graph{
                 printPath(n);
                 cout<<"\n";
             }
-
+            for(ll i = 1; i<=n; i++){
+                cout<<dist[i]<<" ";
+            }cout<<endl;
 
         }
 };

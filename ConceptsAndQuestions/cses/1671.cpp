@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,80 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+const ll M = 2e5+100;
+vp gr[M];
+ll n,m,x,y,w;
+vl dist(M,lmax);
+
+
+void dijkstra(ll src){
+    set<pll> s;
+    fo(M) dist[i] = lmax;
+    s.insert(mp(0,src));
+    dist[src] = 0;
+    while(!s.empty()){
+        pll cur = *s.begin();
+        s.erase(s.begin());
+        ll node = cur.sec;
+        ll d = cur.ff;
+        for(auto x: gr[node]){
+            if(x.sec + d < dist[x.ff]){
+                auto f = s.find(mp(dist[x.ff],x.ff));
+                if(f!=s.end()){
+                    s.erase(f);
+                }
+                dist[x.ff] = x.sec + d;
+                s.insert(mp(dist[x.ff],x.ff));
+            }
+        }
+    }
+}
+
+void solve(){
+    re n; re m;
+    fo(m){
+        re x; re y; re w;
+        gr[x].pb(mp(y,w));
+    }
+    dijkstra(1);
+    for(ll i = 1; i<=n; i++){
+        cout<<dist[i]<<" ";
+    }nl;
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

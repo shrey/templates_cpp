@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,80 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+// #define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
+
+
+//code starts here
+
+ll n,m,q,x,y,w;
+const ll M = 510;
+ll gr[M][M];
+const ll inf = 1e13;
+
+
+void solve(){
+    forn(i,M)
+        forn(j,M)
+            gr[i][j] = inf;
+
+    re n; re m; re q;
+
+    // pr("here");
+    fo(m){
+        re x; re y; re w;
+        gr[x][y] = min(gr[x][y],w);
+        gr[y][x] = min(gr[y][x],w);
+    }
+    fo(M){
+        gr[i][i] = 0;
+    }
+    for(ll k = 1; k<=n; k++){
+        for(ll i = 1; i<=n; i++){
+            for(ll j = 1; j<=n; j++){
+                gr[i][j] = min(gr[i][j],gr[i][k] + gr[k][j]);
+            }
+        }
+    }
+    // pr("here");
+    vl ans;
+    while(q--){
+        re x; re y;
+        if(gr[x][y] == inf){
+            ans.pb(-1);
+        }
+        else ans.pb(gr[x][y]);
+    }
+    fo(ans.size()) pr(ans[i]);
+}
 
 int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

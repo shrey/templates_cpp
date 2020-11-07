@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,83 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+const ll M = 4e5+100;
+ll d[2*M],n,x,b[2*M],c[2*M];
+
+ll sm(ll num){
+    return (num*(num+1)/2);
+}
+
+void solve(){
+    re n; re x;
+    fo(n){
+        re d[i];
+        d[n+i] = d[i];
+    }
+    b[0] = (d[0]*(d[0]+1))/2; //hugs
+    c[0] = d[0]; //days passed
+    n*=2;
+    fo(n){
+        b[i] = d[i]*(d[i]+1)/2;
+    }
+    for(ll i = 1; i<n; i++){
+        b[i] += b[i-1];
+        c[i] = c[i-1] + d[i];
+    }
+    ll s = 0, e = 0;
+    while(e<n && c[e]<x) e++;
+    ll ans = 0;
+    while(1){
+        if(e == n) break;
+        ll hugs = b[e] - b[s];
+        ll days = x - (c[e]-c[s]);
+        if(days<0){
+            s++;
+            continue;
+        }
+        hugs += (sm(d[s]) - sm(d[s]-days));
+        ans = max(ans,hugs);
+        e++;
+        if(c[e]-c[s]>=x){
+            s++;
+        }
+    }
+    pr(ans);
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

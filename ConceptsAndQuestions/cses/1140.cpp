@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,71 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+ll n;
+
+
+void solve(){
+    re n;
+    map<ll,ll> crd;
+    ll cords = 0;
+    ll a[n],b[n],p[n];
+    fo(n){
+        re a[i]; re b[i]; re p[i];
+        b[i]++;
+        crd[a[i]]; crd[b[i]];
+    }
+    for(auto &v: crd){
+        v.sec = cords++;
+    }
+    vector<vp> project(cords+1);
+    fo(n){
+        project[crd[b[i]]].pb(mp(crd[a[i]],p[i]));
+    }
+    vl dp(cords+1,0);
+    for(ll i = 0; i<cords; i++){
+        if(i>0){
+            dp[i] = dp[i-1];
+        }
+        for(auto p: project[i]){
+            dp[i] = max(dp[i],dp[p.ff] + p.sec);
+        }
+    }
+    pr(dp[cords-1]);
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

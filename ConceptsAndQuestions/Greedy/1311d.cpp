@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,73 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+const ll M = 2e4+1;
+
+void solve(){
+    ll a,b,c;
+    re a; re b; re c;
+    ll ans = lmax;
+    ll xa, xb, xc;
+    for(ll i = 1; i<=M; i++){
+        for(ll j = i; j<=M; j+=i){
+            if(c>=j){
+                ll cur = min(c%j,j-c%j) + abs(i-a) + abs(j-b);
+                // if(i == 21 && j == 42) cout<<cur<<"()\n";
+                if(cur<ans){
+                    xa = i; xb = j;
+                    if(c%j<j-c%j){
+                        xc = c-c%j;
+                    }else{
+                        xc = c + (j-c%j);
+                    }
+                    ans = cur;
+                }
+            }
+            else{
+                ll cur = (j-c%j) + abs(i-a) + abs(j-b);
+                if(cur<ans){
+                    ans = cur;
+                    xa = i; xb = j; xc = c+(j-c%j);
+                }
+            }
+        }
+    }
+    pr(ans);
+    cout<<xa<<" "<<xb<<" "<<xc<<"\n";
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    re t;
+    // t = 1;
+    while(t--) solve();
 }
 
 

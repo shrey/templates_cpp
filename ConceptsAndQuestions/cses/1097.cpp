@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,66 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+
+//code starts here
+
+const ll M = 5010;
+ll dp[M][M];
+ll n, arr[M];
+
+ll recur(ll i, ll j){
+    if(i>=n || j<0 || i>j) return 0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(i == j) return arr[i];
+    // cout<<i<<"()"<<j<<"\n";
+    ll n1 = arr[i];
+    ll k1 = recur(i+2,j);
+    ll k2 = recur(i+1,j-1);
+    n1 += min(k1,k2);
+    ll n2 = arr[j];
+    k1 = recur(i,j-2);
+    n2 += min(k1,k2);
+    dp[i][j] = max(n1,n2);
+    return dp[i][j];
+}
+
+void solve(){
+    re n;
+    fo(n) re arr[i];
+    memset(dp,-1,sizeof(dp));
+    pr(recur(0,n-1));
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

@@ -18,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -46,29 +47,89 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define A cout<<"Ashishgup\n"
+#define B cout<<"FastestFinger\n"
 ll mod = 1e9 + 7;
 
-class employee{
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
 
-};
+ll flr(ld a){
+    return (ll) a;
+}
 
-int main(){
-   multiset<ll> m;
-   m.insert(1);
-   m.insert(2);
-   m.insert(2);
-   if(m.find(2)!=m.end()){
-      auto it = m.upper_bound(2);
-      ll pos = distance(m.begin(),it);
-      pr(pos);
-   }
-   else{
-      NO;
-   }
+ll cnt = 0;
+
+void seive(ll num){
+    for(ll i = 2; (i*i)<=num; i++){
+        if(num%i == 0){
+            while(num>0 && num%i == 0){
+                if(i!=2) cnt++;
+                num/=i;
+            }
+        }
+    }
+    if(num>1 && num!=2) cnt++;
+}
+
+//code starts here
+
+void solve(){
+    cnt = 0;
+    ll n;
+    re n;
+    seive(n);
+    if(n == 1){
+        B;
+        return;
+    }
+    if(n%2){
+        A;
+        return;
+    }
+    ll p = 0;
+    while(n>0 && n%2 == 0){
+        n/=2;
+        p++;
+    }
+    if(n == 1){
+        if(p>1){
+            B;
+        }
+        else{
+            A;
+        }
+    }else{
+        if(p>1 || cnt>1){
+            A;
+        }
+        else{
+            B;
+        }
+    }
+
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    re t;
+    // t = 1;
+    while(t--) solve();
 }
 
 

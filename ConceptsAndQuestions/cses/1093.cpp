@@ -1,3 +1,5 @@
+
+
 //Shrey Dubey
 
 
@@ -16,6 +18,7 @@
 #include<climits>
 #include<bitset>
 #include<cstring>
+#include<numeric>
 
 using namespace std;
 typedef long long ll;
@@ -44,46 +47,66 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define int long long
-#define re cin>>
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
-const ll M = 1e6+100;
 
-int minPatches(vector<int>& nums, int n) {
-        if(n==0)
-            return 0;
-        int ans = 0;
-        long curr = 0;
-        for(int& u: nums)
-        {
-            if(curr>=n)
-                break;
-            while(curr+1<u and curr<n)
-            {
-                ans++;
-                curr += curr + 1;
-            }
-            curr += u;
-        }
-        while(curr<n)
-        {
-            curr += curr+1;
-            ans++;
-        }
-        return ans;
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
     }
+    else{
+        return (ll)a;
+    }
+}
+
+ll flr(ld a){
+    return (ll) a;
+}
+
+
+//code starts here
+
+ll n;
+const ll M = 510;
+
+ll dp[M][(M*(M+1)/2)];
+
+ll recur(ll i, ll sm){
+    if(sm == 0 && i<=n) return 1;
+    if(i == n || sm <= 0) return 0;
+    if(dp[i][sm]!=-1) return dp[i][sm];
+    ll w1 = recur(i+1,sm-i);
+    ll w2 = recur(i+1,sm);
+    dp[i][sm] = (w1+w2)%mod;
+    return dp[i][sm];
+}
+
+void solve(){
+    re n;
+    ll sum = n*(n+1)/2;
+    if(sum%2){
+        pr(0);
+        return;
+    }
+    memset(dp,-1,sizeof(dp));
+    sum/=2;
+    pr(recur(1,sum));
+}
 
 int32_t main(){
-   ll n;
-   re n;
-   ll x; re x;
-   vl vec(n);
-   fo(n) re vec[i];
-   pr(minPatches(vec,n));
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 

@@ -65,10 +65,6 @@ ll extended_euclid(ll a, ll b, ll& x, ll& y) {
     return d;
 }
 
-
-
-
-
 int main(){
     KOBE;
     ll x,y,a,b;

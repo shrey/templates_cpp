@@ -78,9 +78,33 @@ const ll M = 1e5+100;
 vl gr[M];
 ll n,x,y;
 vl deg(M,0);
+vl visited(M,0);
+bool flag = false;
+ll ans;
+
+ll dfs(ll src, ll dist){
+    visited[src] = 1;
+    if(deg[src] == 1){
+        if(dist%2){
+            flag = true;
+        }
+    }
+    ll cnt = 0;
+    for(auto x: gr[src]){
+        if(!visited[x]){
+            dfs(x,dist+1);
+        }
+        if(deg[x] == 1){
+            cnt++;
+        }
+    }
+    // cout<<src<<"()"<<cnt<<"\n";
+    if(cnt) ans -= (cnt-1);
+}
 
 void solve(){
     re n;
+    ans = n-1;
     fo(n-1){
         re x; re y;
         gr[x].pb(y);
@@ -88,14 +112,21 @@ void solve(){
         deg[x]++;
         deg[y]++;
     }
-
+    for(ll i = 1; i<=n; i++){
+        if(!visited[i] && deg[i] == 1){
+            dfs(i,0);
+            break;
+        }
+    }
+    if(flag) cout<<3<<" ";
+    else cout<<1<<" ";
+    cout<<ans<<"\n";
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    t = 1;
     while(t--) solve();
 }
 

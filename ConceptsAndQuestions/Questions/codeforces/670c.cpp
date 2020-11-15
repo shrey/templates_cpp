@@ -73,23 +73,30 @@ class Graph{
             return ans;
         }
 
+        void findDfs(ll curr, ll nope){
+            visited[curr] = true;
+            bool isLeaf = true;
+            for(auto x: gr[curr]){
+                if(!visited[x] && x!=nope){
+                    isLeaf = false;
+                    findDfs(x,nope);
+                }
+            }
+            
+            return;
+        }
         void solve(){
             n1 = LLONG_MAX; n2 = LLONG_MAX; ver = LLONG_MAX;
             dfs(1);
-            // for(int i = 1; i<=n; i++){
-            //     cout<<child[i]<<" ";
-            // }cout<<endl;
-            // cout<<a<<" "<<b<<endl;
+            for(int i = 1; i<=n; i++){
+                cout<<child[i]<<" ";
+            }cout<<endl;
+            cout<<a<<" "<<b<<endl;
             if(n1 == n2){
                 visited.clear();
-                lf1 = a;
-                for(auto x: gr[a]){
-                    if(x!=b){
-                        cout<<a<<" "<<x<<"\n";
-                        cout<<b<<" "<<x<<"\n";
-                        return;
-                    }
-                }
+                findDfs(a,b);
+                cout<<lf1<<" "<<lf2<<"\n";
+                cout<<b<<" "<<lf2<<"\n";
             }
             else{
                 cout<<a<<" "<<b<<"\n";

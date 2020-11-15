@@ -66,7 +66,7 @@ ll flr(ld a){
 ll nm(char a){
     return (a-'a');
 }
-//code starts here
+//code starts her
 const ll M = 30;
 
 void solve(){

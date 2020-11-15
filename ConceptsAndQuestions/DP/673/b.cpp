@@ -19,6 +19,7 @@
 #include<bitset>
 #include<cstring>
 #include<numeric>
+#include<array>
 
 using namespace std;
 typedef long long ll;
@@ -51,7 +52,10 @@ typedef long double ld;
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define nl cout<"\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
 
 ll mod = 1e9 + 7;
 
@@ -71,36 +75,20 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,m;
+string s1,s2;
+
 void solve(){
-    ll n;
-    cin>>n;
-    ll arr[n];
-    fo(n) cin>>arr[i];
-    ll ans = 0;
-    ll i = 1;
-    umap<ll,ll> ncnt;
-    ncnt[0] = 1;
-    ll curlev = 1;
-    while(i<n){
-        ll j = i;
-        while(j<n-1 && arr[j+1]>arr[j]){
-            j++;
-        }
-        // cout<<arr[i]<<" () "<<arr[j]<<" = "<<curlev<<"\n";
-        ncnt[curlev-1]--;
-        ncnt[curlev]+=(j-i+1);
-        if(j<n-1 && ncnt[curlev-1] == 0){
-            curlev++;
-        }
-        i = j+1;
-    }
-    pr(curlev);
+    re n; re m;
+    re s1; re s2;
+
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    cin>>t;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 
@@ -117,9 +105,3 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
-
-/*
-1
-9
-1 8 9 6 7 2 3 5 4
-*/

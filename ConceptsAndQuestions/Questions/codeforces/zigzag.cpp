@@ -35,11 +35,11 @@ using namespace std;
 typedef long long ll;
 int modulo = 1e9 + 7;
 
-int solve(int a[], int n){
-    umap<int,int> freqLeft;
-    int ans = 0;
+ll solve(int a[], int n){
+    umap<ll,ll> freqLeft;
+    ll ans = 0;
     for(int j = 0; j<n; j++){
-        umap<int,int> freqRight;
+        umap<ll,ll> freqRight;
         for(int k = n-1; k>=(j+1); k--){
             ans+=(freqLeft[a[k]]*freqRight[a[j]]);
             freqRight[a[k]]++;

@@ -71,7 +71,6 @@ void solve(){
     cin>>n>>m;
     ll q = (n-m)/(m+1);
     ll rem = (n-m)%(m+1);
-
     ll res = q*(q+1)*(m+1-rem)/2 + (q+1)*(q+2)*rem/2;
     ll ans = (n*(n+1))/2 - res;
     cout<<ans<<"\n";

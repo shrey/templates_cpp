@@ -68,14 +68,22 @@ class Graph{
                 }
             }
         }
-        void solve(){
+        void solve(int p[], int k){
             count(1);
             visited.clear();
             traverse(1);
-            for(int i = 0; i<nodeSides.size(); i++){
-                cout<<nodeSides[i]<<" ";
-            }cout<<endl;
-        }
+            int ans = 0;
+            sort(nodeSides.begin(), nodeSides.end(),greater<int>());
+            sort(p,p+k,greater<int>());
+            int j = 0;
+            if(k>(N-1)){
+                while((k-j)>(N-1)){
+                    ans+=nodeSides[0]*p[j];
+                    j++;
+                }
+            }
+            
+        }       
 };
 
 int main(){
@@ -90,6 +98,6 @@ int main(){
             cin>>x>>y;
             g.addEdge(x,y);
         }
-        g.solve();
+
     }
 }

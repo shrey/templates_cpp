@@ -19,6 +19,7 @@
 #include<bitset>
 #include<cstring>
 #include<numeric>
+#include<array>
 
 using namespace std;
 typedef long long ll;

@@ -19,6 +19,7 @@
 #include<bitset>
 #include<cstring>
 #include<numeric>
+#include<array>
 
 using namespace std;
 typedef long long ll;
@@ -52,7 +53,7 @@ typedef long double ld;
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
 #define nl cout<<"\n"
-#define re(x) cin>>x
+#define re cin >>
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 
@@ -74,33 +75,34 @@ ll flr(ld a){
 
 //code starts here
 
+
+const ll M = 5001;
+ll n,m,dp[M][M] = {0};
+string s1,s2;
+
 void solve(){
-    ll n;
-    re(n);
-    ll arr[n];
-    fo(n) re(arr[i]);
-    ll mxd = arr[0];
-    arr[0] = 0;
-    for(ll i = 1; i<n; i++){
-        // cout<<arr[i-1]<<"()"<<arr[i]<<"\n";
-        //arr[i] value changes to the value that is needed from the left side after
-        if(arr[i]>=arr[i-1]){
-            ll diff = arr[i]-arr[i-1];
-            mxd = min(diff,mxd);
-            arr[i]-=mxd;
-        }
-        else{
-            NO;
-            return;
+    re n; re m;
+    re s1; re s2;
+    ll ans = 0;
+    for(ll i = 1; i<=n; i++){
+        for(ll j = 1; j<=m; j++){
+            dp[i][j] = max(dp[i][j],dp[i-1][j] - 1);
+            dp[i][j] = max(dp[i][j], dp[i][j-1] -1);
+            if(s1[i-1] == s2[j-1]){
+                dp[i][j] = max(dp[i][j],dp[i-1][j-1] + 2);
+                dp[i][j] = max(dp[i][j],(ll)2);
+            }
+            ans = max(ans,dp[i][j]);
         }
     }
-    YES;
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re(t);
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

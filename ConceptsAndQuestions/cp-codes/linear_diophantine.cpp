@@ -70,7 +70,6 @@ bool find_any_solution(int a, int b, int c, int &x0, int &y0, int &g) {
     if (c % g) {
         return false;
     }
-
     x0 *= c / g;
     y0 *= c / g;
     if (a < 0) x0 = -x0;

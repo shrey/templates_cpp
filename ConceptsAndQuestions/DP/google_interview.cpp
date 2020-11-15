@@ -43,6 +43,6 @@ int main(){
     string s1,s2;
     cin>>s1>>s2;
     auto it = s1.find(s2);
-
+    
     cout<<it<<endl;
 }

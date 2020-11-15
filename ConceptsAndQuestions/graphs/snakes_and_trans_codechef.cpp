@@ -36,11 +36,12 @@ typedef long long ll;
 int modulo = 1e9 + 7;
 const int N = 25e4+1;
 int curr = 0;
+int maxPos = 0;
 vector<int> gr[N];
 map<pair<int,int>,int> cord;
-
+umap<int,int> posToVal;
 struct node{
-    int r,c,val;
+    int pos,val;
     bool operator<(const node &k)const{
         return (val<k.val);
     }
@@ -63,7 +64,23 @@ void build_graph(int mat[][1000], int n, int m){
             if(j<m-1){
                 gr[cordVal].pb(cord[mp(i,j+1)]);
             }
-            maxVal = max(maxVal,mat[i][j]);
+            if(mat[i][j]>maxVal){
+                maxVal = mat[i][j];
+                maxPos = cordVal;
+            }
+        }
+    }
+}
+
+void solve(int mat[][1000],int n, int m){
+    priority_queue<node> pq;
+    node curr = {maxPos,posToVal[maxPos]};
+    
+    while(!pq.empty()){
+        node parent = pq.top();
+        pq.pop();
+        for(auto x: gr[parent.pos]){
+            
         }
     }
 }
@@ -78,9 +95,12 @@ int main(){
         for(int i = 0; i<n; i++){
             for(int j = 0; j<m; j++){
                 cin>>mat[i][j];
+                posToVal[curr] = mat[i][j];
                 cord[mp(i,j)] = curr++;
+                
             }
         }
+        
     }
 
 }

@@ -77,7 +77,7 @@ ll flr(ld a){
 ll n,m,q,x,y,w;
 const ll M = 510;
 ll gr[M][M];
-const ll inf = 1e13;
+const ll inf = ;
 
 
 void solve(){

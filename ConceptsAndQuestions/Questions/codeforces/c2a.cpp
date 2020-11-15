@@ -45,5 +45,11 @@ int main(){
         cin>>arr[i];
     }
     cout<<1<<" "<<1<<endl;
+    cout<<(-arr[0])<<endl;
+    cout<<2<<" "<<n<<endl;
+    int num = n-1;
+    for(int i = 1; i<n; i++){
+        
+    }
 
 }

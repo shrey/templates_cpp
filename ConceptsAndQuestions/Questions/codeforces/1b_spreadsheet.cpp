@@ -74,7 +74,7 @@ int main(){
             ll n = s.length();
             string cols = "";
             ll j = s.length()-1;
-            while(s[j]!='C'){
+            while(s[j]!='C' && j>=0){
                 cols+=s[j];
                 j--;
             }
@@ -93,7 +93,7 @@ int main(){
             while(col>0){
                 ll chnum = col/curr;
                 ans+=('A'+(chnum-1));
-                col%=(chnum*curr);
+                col%=(chnum*curr);// div by zero?
                 curr/=26;
             }
             j = 1;

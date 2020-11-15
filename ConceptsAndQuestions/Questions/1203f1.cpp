@@ -107,7 +107,6 @@ int32_t main(){
     }
     sort(neg.begin(),neg.end(),compare);
     for(auto p: neg){
-
         if(p.ff>r){
             NO;
             return 0;

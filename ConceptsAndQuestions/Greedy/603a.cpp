@@ -83,7 +83,9 @@ void solve(){
     memset(dp,1,sizeof(dp));
     string srev = s;
     reverse(srev.begin(),srev.end());
-
+    for(ll i = 1; i<n; i++){
+        dp[i][0] = 
+    }
 }
 
 int32_t main(){

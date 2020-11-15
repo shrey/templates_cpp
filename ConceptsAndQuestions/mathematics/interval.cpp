@@ -96,3 +96,12 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
+
+
+//problem ideas
+//check piegonhole wherever possible
+//there might be many instances of limited answers like 0,1,2 only
+// see suffix and prefix
+//don't be obsessed with binary search
+
+

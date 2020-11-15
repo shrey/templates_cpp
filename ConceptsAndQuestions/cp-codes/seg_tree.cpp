@@ -96,16 +96,8 @@ void update(int v, int tl, int tr, int pos, int new_val) {
     }
 }
 
-void update_rng(int v, int tl, int tr, int l, int r, int add) {
-    if (l > r)
-        return;
-    if (l == tl && r == tr) {
-        t[v] += add;
-    } else {
-        int tm = (tl + tr) / 2;
-        update_rng(v*2, tl, tm, l, min(r, tm), add);
-        update_rng(v*2+1, tm+1, tr, max(l, tm+1), r, add);
-    }
+void updaterange(ll v, ll tl, ll tr, ll l, ll r, ll add){
+    if()
 }
 
 int32_t main(){

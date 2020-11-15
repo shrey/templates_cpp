@@ -43,7 +43,7 @@ int solve(string s, int k){
             level++;
         }
         else if(s[i] == ')'){
-            if(level) level--;
+            level--;
         }
         else{
             if(level == k){

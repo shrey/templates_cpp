@@ -43,7 +43,7 @@ class area{
 int maxNo(int a, int b, int c){
     return max(a,max(b,c));
 }
-
+// dp can be done by storing the last and the current val of A and B 
 int compute(int A, int B, area x, area y, area z, int curr){
     if(A <=0 || B<=0){
         return 0;

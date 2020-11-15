@@ -72,5 +72,4 @@ int main(){
         }
         fo(n) cout<<arr[i]<<" ";cout<<endl;
     }
-
 }

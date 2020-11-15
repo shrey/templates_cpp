@@ -1,0 +1,149 @@
+
+
+//Shrey Dubey
+
+
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<map>
+#include<unordered_map>
+#include<vector>
+#include<set>
+#include<list>
+#include<iomanip>
+#include<queue>
+#include<stack>
+#include <math.h>
+#include<climits>
+#include<bitset>
+#include<cstring>
+#include<numeric>
+#include<array>
+
+using namespace std;
+typedef long long ll;
+typedef long double ld;
+
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
+#define pb push_back
+#define ff first
+#define sec second
+#define umap unordered_map
+#define mp make_pair
+#define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define fo(n) for(ll i = 0; i<n; i++)
+#define fnd(stl, data) find(stl.begin(), stl.end(), data)
+#define forn(x,n) for(ll x = 0; x<n; x++)
+#define imax INT_MAX
+#define lmax LLONG_MAX
+#define imin INT_MIN
+#define lmin LLONG_MIN
+#define vi vector<int>
+#define vl vector<ll>
+#define vp vector<pair<ll,ll> >
+#define vb vector<bool>
+#define pr(t) cout<<t<<"\n"
+#define int long long
+#define ql queue<ll>
+#define qp queue<pair<ll,ll> >
+#define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
+
+ll mod = 1e9 + 7;
+
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
+}
+
+ll flr(ld a){
+    return (ll) a;
+}
+
+
+//code starts here
+
+ll n,m,x,y,w;
+const ll M = 2e5+100;
+const ll inf = 1e15;
+
+
+vl dijkstra(vector<vector<pair<ll,ll> > > &gr, ll src){
+    vl dist(n+1,inf);
+    fo(n+1) dist[i] = inf;
+    set<pair<ll,ll> > s;
+    dist[src] = 0;
+    s.insert(mp(0,src));
+    while(!s.empty()){
+        pll cur = *s.begin();
+        s.erase(s.begin());
+        ll d = cur.ff;
+        ll node = cur.sec;
+        for(auto x: gr[node]){
+            if(d + x.sec < dist[x.ff]){
+                auto f = s.find(mp(dist[x.ff],x.ff));
+                if(f!=s.end()){
+                    s.erase(f);
+                }
+                dist[x.ff] = d + x.sec;
+                s.insert(mp(dist[x.ff],x.ff));
+            }
+        }
+    }
+    return dist;
+}
+
+void solve(){
+    re n; re m;
+    vector<pair<pair<ll,ll>, ll > > e;
+    vector< vp > gr1(n+1);
+    vector< vp > gr2(n+1);
+    fo(m){
+        re x; re y; re w;
+        e.pb(mp(mp(x,y),w));
+        gr1[x].pb(mp(y,w));
+        gr2[y].pb(mp(x,w));
+    }
+    vl dist1 = dijkstra(gr1,1);
+    vl dist2 = dijkstra(gr2,n);
+    ll ans = dist1[n];
+    for(auto x: e){
+        ll cur = x.sec/2 + dist1[x.ff.ff] + dist2[x.ff.sec];
+        ans = min(cur,ans);
+    }
+    pr(ans);
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
+}
+
+
+//common errors
+// row - n, col - m always and loop var
+// see the freq of numbers carefully
+// see if there's array overflow
+// use map for large inputs
+
+
+//problem ideas
+//check piegonhole wherever possible
+//there might be many instances of limited answers like 0,1,2 only
+// see suffix and prefix
+//don't be obsessed with binary search

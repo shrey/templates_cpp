@@ -15,6 +15,7 @@
 #include <math.h>
 #include<climits>
 #include<bitset>
+#include<array>
 #include<cstring>
 
 using namespace std;
@@ -78,12 +79,10 @@ int minPatches(vector<int>& nums, int n) {
     }
 
 int32_t main(){
-   ll n;
-   re n;
-   ll x; re x;
-   vl vec(n);
-   fo(n) re vec[i];
-   pr(minPatches(vec,n));
+   const ll M = 2e6;
+   vector<array<ll,2> > e(2);
+   cin>>e[0][0];
+   cout<<e[0][0]<<"\n";
 }
 
 

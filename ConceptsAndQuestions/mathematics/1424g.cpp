@@ -2,6 +2,7 @@
 
 //Shrey Dubey
 
+
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -15,48 +16,114 @@
 #include<stack>
 #include <math.h>
 #include<climits>
+#include<bitset>
+#include<cstring>
+#include<numeric>
+#include<array>
+
+
 using namespace std;
+typedef long long ll;
+typedef long double ld;
 
-void findMaxGuests(int arrl[], int exit[], int n)
-{
-   sort(arrl, arrl+n);
-   sort(exit, exit+n);
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
+#define pb push_back
+#define ff first
+#define sec second
+#define umap unordered_map
+#define mp make_pair
+#define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define fo(n) for(ll i = 0; i<n; i++)
+#define fnd(stl, data) find(stl.begin(), stl.end(), data)
+#define forn(x,n) for(ll x = 0; x<n; x++)
+#define imax INT_MAX
+#define lmax LLONG_MAX
+#define imin INT_MIN
+#define lmin LLONG_MIN
+#define vi vector<int>
+#define vl vector<ll>
+#define vp vector<pair<ll,ll> >
+#define vb vector<bool>
+#define pr(t) cout<<t<<"\n"
+#define int long long
+#define ql queue<ll>
+#define qp queue<pair<ll,ll> >
+#define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define all(x) x.begin(),x.end()
 
-   int guests_in = 1, max_guests = 1, time = arrl[0];
-   int i = 1, j = 0;
+ll mod = 1e9 + 7;
 
-   while (i < n && j < n)
-   {
-      if (arrl[i] < exit[j])
-      {
-          guests_in++;
-          if (guests_in > max_guests)
-          {
-              max_guests = guests_in;
-              time = arrl[i];
-          }
-          i++;
-      }
-      else
-      {
-          guests_in--;
-          j++;
-      }
-   }
-
-   cout<<time<<" "<<max_guests<<"\n";
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
+    }
+    else{
+        return (ll)a;
+    }
 }
 
-int main()
-{
+ll flr(ld a){
+    return (ll) a;
+}
 
-        int n;
-        cin>>n;
-        int arr[n],arr2[n];
-        for(int i = 0; i<n; i++){
-            cin>>arr[i]>>arr2[i];
+
+
+//code starts here
+
+void solve(){
+    ll n,l,r;
+    map<ll,vl> event;
+    re n;
+    fo(n){
+        re l; re r;
+        event[l].pb(1); event[r].pb(-1);
+    }
+    ll ans = 0;
+    ll year;
+    ll active = 0;
+    for(auto e: event){
+        for(auto oper: e.sec){
+            if(oper == 1){
+                active ++;
+            }else{
+                active--;
+            }
         }
-        findMaxGuests(arr,arr2,n);
-
-    return 0;
+        if(active > ans){
+            ans = active;
+            year = e.ff;
+        }
+    }
+    cout<<year<<" "<<ans<<"\n";
 }
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
+}
+
+
+//common errors
+// row - n, col - m always and loop var
+// see the freq of numbers carefully
+// see if there's array overflow
+// use map for large inputs
+
+
+//problem ideas
+//check piegonhole wherever possible
+//there might be many instances of limited answers like 0,1,2 only
+// see suffix and prefix
+//don't be obsessed with binary search
+// try to find repeating pattern in matrices

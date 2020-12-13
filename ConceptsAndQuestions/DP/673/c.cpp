@@ -1,4 +1,5 @@
- 
+
+
 //Shrey Dubey
 
 
@@ -19,6 +20,7 @@
 #include<cstring>
 #include<numeric>
 #include<array>
+
 
 using namespace std;
 typedef long long ll;
@@ -55,6 +57,7 @@ typedef long double ld;
 #define re cin >>
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
+#define all(x) x.begin(),x.end()
 
 ll mod = 1e9 + 7;
 
@@ -72,47 +75,46 @@ ll flr(ld a){
 }
 
 
+
 //code starts here
-const ll M = 2e5+100;
-ll n,w;
-ll wt[M];
+
+ll k,l,r,t,x,y;
+const ll M = 1e6+100;
+map<ll,ll> dp;
+
+bool recur(ll cur, ll days){
+    if(cur < l || cur > r) return false;
+    // cout<<cur<<"()"<<days<<"\n";s
+    if(days == 0) return true;
+    if(dp[cur]) return true;
+    dp[cur] = 1;
+    bool ans = recur(cur-x,days-1);
+    if(cur + y <= r) ans |= recur(cur+y-x,days-1);
+    return ans;
+}
+
 void solve(){
-    re n; re w;
-    fo(n) re wt[i];
-    vp op;
-    ll mid = (w+1)/2;
-    fo(n){
-        if(wt[i]>=mid && wt[i]<=w){
-            pr(1);
-            pr(i+1);
-            return;
-        }
-        else if(wt[i]<mid){
-            op.pb(mp(wt[i],i));
-        }
+    re k; re l; re r; re t; re x; re y;
+    if(y > x && (k >= x+l || (k + y) <= r)){
+        Yes; return;
     }
-    vl ans;
-    ll sum = 0;
-    sort(op.begin(),op.end());
-    for(ll i = 0; i<op.size(); i++){
-        sum+=op[i].ff;
-        ans.pb(op[i].sec);
-        if(sum>=mid){
-            pr(ans.size());
-            for(auto x: ans){
-                cout<<x+1<<" ";
-            }
-            return;
-        }
+    else if(k > t*(x-y) || (k + y <=r && k + y > t*(x-y))){
+        Yes; return;
     }
-    pr(-1);
+    else if(k > x){
+        No; return;
+    }
+    if(recur(k,t) || recur(k+y,t)){
+        Yes;
+    }
+    else No;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 
@@ -129,3 +131,4 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
+// try to find repeating pattern in matrices

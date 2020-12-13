@@ -21,6 +21,7 @@
 #include<numeric>
 #include<array>
 
+
 using namespace std;
 typedef long long ll;
 typedef long double ld;
@@ -56,6 +57,7 @@ typedef long double ld;
 #define re cin >>
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
+#define all(x) x.begin(),x.end()
 
 ll mod = 1e9 + 7;
 
@@ -73,22 +75,57 @@ ll flr(ld a){
 }
 
 
+
 //code starts here
 
-ll n,m;
-string s1,s2;
+ll n,q;
+const ll M = 1e5+100;
+ll a[M];
+map<ll,bool> op;
+// ll cnt = 0;
+
+void recur(ll s, ll e){
+    // cout<<s<<"()"<<e<<"\n";
+    // cnt++;
+    // if(cnt>5) return;
+    if(s>e) return;
+    ll sum = 0;
+    for(ll i = s; i<=e; i++){
+        sum += a[i];
+    }
+    op[sum] = true;
+    if(s == e) return;
+    ll k = (a[s] + a[e])/2;
+    ll m = -1;
+    for(ll i = s; i<=e; i++){
+        if(a[i]>k){
+            m = i-1;
+            break;
+        }
+    }
+    if(m == -1) return;
+    recur(s,m);
+    recur(m+1,e);
+}
 
 void solve(){
-    re n; re m;
-    re s1; re s2;
-
+    re n; re q;
+    fo(n) re a[i];
+    sort(a,a+n);
+    recur(0,n-1);
+    fo(q){
+        ll x; re x;
+        if(op[x]) Yes;
+        else No;
+    }
+    op.clear();
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
-    t = 1;
+    re t;
+    // t = 1;
     while(t--) solve();
 }
 
@@ -105,3 +142,4 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
+// try to find repeating pattern in matrices

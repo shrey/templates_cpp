@@ -21,6 +21,7 @@
 #include<numeric>
 #include<array>
 
+
 using namespace std;
 typedef long long ll;
 typedef long double ld;
@@ -56,6 +57,7 @@ typedef long double ld;
 #define re cin >>
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
+#define all(x) x.begin(),x.end()
 
 ll mod = 1e9 + 7;
 
@@ -73,36 +75,57 @@ ll flr(ld a){
 }
 
 
+
 //code starts here
 
-
-const ll M = 5001;
-ll n,m,dp[M][M] = {0};
-string s1,s2;
+const ll M = 1e5+100;
 
 void solve(){
-    re n; re m;
-    re s1; re s2;
-    ll ans = 0;
+    ll n,m; re n; re m;
+    ll arr[n+1];
     for(ll i = 1; i<=n; i++){
-        for(ll j = 1; j<=m; j++){
-            dp[i][j] = max(dp[i][j],dp[i-1][j] - 1);
-            dp[i][j] = max(dp[i][j], dp[i][j-1] -1);
-            if(s1[i-1] == s2[j-1]){
-                dp[i][j] = max(dp[i][j],dp[i-1][j-1] + 2);
-                dp[i][j] = max(dp[i][j],(ll)2);
-            }
-            ans = max(ans,dp[i][j]);
+        re arr[i];
+    }
+    bool ls[M] = {false};
+    bool rs[M] = {false};
+    ls[1] = true;
+    for(ll i = 2; i<=n; i++){
+        if(arr[i] > arr[i-1]) ls[i] = ls[i-1];
+        else ls[i] = false;
+    }
+    if(arr[n] == n) rs[n] = true;
+    for(ll i = n-1; i>=0; i--){
+        if(arr[i] == i) rs[i] = rs[i+1];
+        else rs[i] = false;
+    }
+    vector<pair<ll,ld> > op(m);
+    fo(m){
+        re op[i].ff; re op[i].sec;
+    }
+    if(ls[n]){
+        ld ans = 1.0;
+        prDouble(ans);nl;
+        return;
+    }
+    sort(op.begin(),op.end());
+    ld ans = 0, alt = 1.0;
+    for(auto p: op){
+        if(ls[p.ff]) continue;
+        // cout<<p.ff<<"()"<<alt<<"\n";
+        if(p.ff == n || rs[p.ff + 1]){
+            ans += alt*p.sec;
+            alt *= (1-p.sec);
         }
     }
-    pr(ans);
+    if(ans > 1.0) ans = 1.0;
+    prDouble(ans);nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
-    t = 1;
+    re t;
+    // t = 1;
     while(t--) solve();
 }
 
@@ -119,3 +142,4 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
+// try to find repeating pattern in matrices

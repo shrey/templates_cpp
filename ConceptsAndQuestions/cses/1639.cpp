@@ -77,19 +77,38 @@ ll flr(ld a){
 
 string s1,s2;
 ll n,m;
-ll recur(ll i, ll j){
-    if(j == m){
-        
-    }
-    if(s1[i] == s2[j]){
-        
-    }
-}
+const ll inf = 1e15;
+ll dp[5010][5010] = {0};
+// ll recur(ll i, ll j){
+//     if(i == n && j == m) return 0;
+//     if(i == n || j == m) return inf;
+//     ll ans = inf;
+//     if(dp[i][j]!=-1) return dp[i][j];
+//     if(s1[i] == s2[j]){
+//         ans = min(ans,recur(i+1,j+1));
+//     }
+//     else{
+//         ans = min(ans,1+recur(i+1,j+1));
+//     }
+//     ans = min(ans,1 + recur(i+1,j));
+//     ans = min(ans,1 + recur(i,j+1));
+//     return dp[i][j] = ans;
+// }
 
 void solve(){
     re s1; re s2;
     n = s1.length();
     m = s2.length();
+    for(ll i = 0; i<=n; i++){
+        for(ll j = 0; j<=m; j++){
+            if(i == 0) dp[i][j] = j;
+            else if(j == 0) dp[i][j] = i;
+            else{
+                dp[i][j] = min(1 + dp[i-1][j],min(1 + dp[i][j-1],dp[i-1][j-1] + (s1[i-1] != s2[j-1])));
+            }
+        }
+    }
+    pr(dp[n][m]);
 }
 
 int32_t main(){

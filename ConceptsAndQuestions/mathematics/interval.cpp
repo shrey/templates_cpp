@@ -83,8 +83,8 @@ void solve(ll arr[], ll exit[], ll n){
 
 int32_t main(){
     KOBE;
-    ll arr[] = {1, 2, 10, 5, 5};
-    ll exit[] = {4, 5, 12, 9, 12};
+    ll arr[] = {1, 8, 3, 2, 6};
+    ll exit[] = {5, 10, 6, 5, 9};
     ll n = sizeof(arr)/sizeof(ll);
     solve(arr,exit,n);
 
@@ -103,5 +103,3 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
-
-

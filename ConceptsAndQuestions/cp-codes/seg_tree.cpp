@@ -72,6 +72,22 @@ void build(int a[], int v, int tl, int tr) {
     }
 }
 
+// node query(ll v, ll tl, ll tr, ll l, ll r){
+//     if(tr < l || tl > r){
+//         node nn;
+//         return nn;
+//     }
+//     if(tl >= l && tr <= r){
+//         return st[v];
+//     }
+//     ll tm = (tl + tr)/2;
+//     node n1 = query(2*v,tl,tm,l,r);
+//     node n2 = query(2*v+1,tm+1,tr,l,r);
+//     node cur = merge(n1,n2);
+//     return cur;
+// }
+
+
 int sum(int v, int tl, int tr, int l, int r) {
     if (l > r)
         return 0;

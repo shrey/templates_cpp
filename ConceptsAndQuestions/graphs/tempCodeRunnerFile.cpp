@@ -1,1 +1,1 @@
-nl
+recur((pos-1)/2) + recur((pos+1)/2)

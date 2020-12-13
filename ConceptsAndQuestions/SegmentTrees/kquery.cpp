@@ -2,6 +2,7 @@
 
 //Shrey Dubey
 
+
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -15,13 +16,20 @@
 #include<stack>
 #include <math.h>
 #include<climits>
+#include<bitset>
+#include<cstring>
+#include<numeric>
+#include<array>
+
 
 using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-#define YES cout<<"YES"<<"\n"
-#define NO cout<<"NO"<<"\n"
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
@@ -33,14 +41,27 @@ typedef long double ld;
 #define fnd(stl, data) find(stl.begin(), stl.end(), data)
 #define forn(x,n) for(ll x = 0; x<n; x++)
 #define imax INT_MAX
-#define lmax 9223372036854775807
+#define lmax LLONG_MAX
+#define imin INT_MIN
+#define lmin LLONG_MIN
 #define vi vector<int>
 #define vl vector<ll>
+#define vp vector<pair<ll,ll> >
+#define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
+#define ql queue<ll>
+#define qp queue<pair<ll,ll> >
+#define endl "\n"
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define all(x) x.begin(),x.end()
 
 ll mod = 1e9 + 7;
 
-ll cl(double a){
+ll cl(ld a){
     if(a>(ll) a){
         return (ll)a+1;
     }
@@ -49,60 +70,96 @@ ll cl(double a){
     }
 }
 
-const ll M = 2e5+1;
-vl st(M);
-vl arr(M);
-ll n,q;
-ll ans = 0;
-ll buildTree(ll ss, ll se, ll si){
-    if(ss>se) return lmax;
-    if(ss == se){
-        st[si] = arr[ss];
-        return st[si];
-    }
-    ll mid = (ss+se)/2;
-    ll left = buildTree(ss,mid,2*si+1);
-    ll right = buildTree(mid+1,se,2*si+2);
-    st[si] = min(left,right);
-    return st[si];
+ll flr(ld a){
+    return (ll) a;
 }
 
-void qry(ll ss, ll se, ll qs, ll qe, ll si, ll k){
-    // cout<<ss<<" "<<se<<"\n";
-    if(ss>qe || se<qs || ss>se) return;
-    if(ss == se){
-        if(arr[ss]>k){
-            ans++;
-        }
+
+
+//code starts here
+
+const ll M = 3e5+100;
+ll n,q,arr[M];
+// vp op(M);
+vl st(4*M);
+vl b(M,1);
+struct node{
+    ll s,e,k;
+    ll idx;
+};
+
+node qry[M];
+
+bool compare(node &a, node &b){
+    return (a.k<b.k);
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = b[tl];
         return;
     }
-    if(ss>=qs && se<=qe){
-        if(st[si]>k){
-            // cout<<se<<" "<<ss<<"\n";
-            ans+=(se-ss+1);
-            return;
-        }
-    }
-    ll mid = (ss+se)/2;
-    qry(ss,mid,qs,qe,2*si+1,k);
-    qry(mid+1,se,qs,qe,2*si+2,k);
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = st[2*v] + st[2*v+1];
 }
 
-
-int main(){
-    KOBE;
-    cin>>n;
-    fo(n) cin>>arr[i];
-    cin>>q;
-    buildTree(0,n-1,0);
-    while(q--){
-        ans = 0;
-        ll l,r,k;
-        cin>>l>>r>>k;
-        l--; r--;
-        qry(0,n-1,l,r,0,k);
-        cout<<ans<<"\n";
+void update(ll v, ll tl, ll tr, ll pos){
+    if(tl == tr) st[v] = 0;
+    else{
+        ll tm = (tl + tr)/2;
+        if(pos <= tm) update(2*v,tl,tm,pos);
+        else update(2*v+1,tm+1,tr,pos);
+        st[v] = st[2*v] + st[2*v+1];
     }
+}
+
+ll sum(ll v, ll tl, ll tr, ll l, ll r){
+    if(tr<l || tl > r) return 0;
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return sum(2*v,tl,tm,l,r) + sum(2*v+1,tm+1,tr,l,r);
+}
+
+void solve(){
+    re n;
+    vp op(n);
+    fo(n){
+        re op[i].ff;
+        op[i].sec = i;
+    }
+    re q;
+    fo(q){
+        re qry[i].s; re qry[i].e; re qry[i].k;
+        qry[i].idx = i;
+    }
+    ll ans[q+1];
+    sort(op.begin(),op.end());
+    sort(qry,qry+q,compare);
+    // fo(q){
+    //     cout<<qry[i].k<<"()"<<qry[i].s<<"()"<<qry[i].idx<<"\n";
+    // }
+    build(1,0,n-1);
+    ll po = 0;
+    fo(q){
+        ll x = qry[i].k;
+        while(po < n && op[po].ff <= x){
+            update(1,0,n-1,op[po].sec);
+            po++;
+        }
+        ans[qry[i].idx] = sum(1,0,n-1,qry[i].s-1,qry[i].e-1);
+    }
+    fo(q) pr(ans[i]);
+
+}
+
+int32_t main(){
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 
@@ -111,3 +168,11 @@ int main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
+
+
+//problem ideas
+//check piegonhole wherever possible
+//there might be many instances of limited answers like 0,1,2 only
+// see suffix and prefix
+//don't be obsessed with binary search
+// try to find repeating pattern in matrices

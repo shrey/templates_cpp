@@ -1,3 +1,5 @@
+
+
 //Shrey Dubey
 
 
@@ -15,8 +17,10 @@
 #include <math.h>
 #include<climits>
 #include<bitset>
-#include<array>
 #include<cstring>
+#include<numeric>
+#include<array>
+
 
 using namespace std;
 typedef long long ll;
@@ -45,44 +49,55 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
+#define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
-#define int long long
-#define re cin>>
+#define nl cout<<"\n"
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define all(x) x.begin(),x.end()
 
-ll mod = 1e9 + 7;
-const ll M = 1e6+100;
+ll m = 1e9 + 7;
 
-int minPatches(vector<int>& nums, int n) {
-        if(n==0)
-            return 0;
-        int ans = 0;
-        long curr = 0;
-        for(int& u: nums)
-        {
-            if(curr>=n)
-                break;
-            while(curr+1<u and curr<n)
-            {
-                ans++;
-                curr += curr + 1;
-            }
-            curr += u;
-        }
-        while(curr<n)
-        {
-            curr += curr+1;
-            ans++;
-        }
-        return ans;
+ll cl(ld a){
+    if(a>(ll) a){
+        return (ll)a+1;
     }
+    else{
+        return (ll)a;
+    }
+}
+
+ll flr(ld a){
+    return (ll) a;
+}
+
+
+
+//code starts here
+
+void solve(){
+    ll ans = 0;
+    ll n; re n;
+    ll k = sqrt(n);
+    // pr(k);
+    for(ll i = 1; i*i<=n; i++){
+        ans += ((((n/i+1)%m) * ((n/i)%m))%m)/2;
+        ans %= m;
+        ans += (i * ((n/i)%m - k + m))%m;
+        ans %= m;
+    }
+    pr(ans);
+}
 
 int32_t main(){
-   const ll M = 2e6;
-   vector<array<ll,2> > e(2);
-   cin>>e[0][0];
-   cout<<e[0][0]<<"\n";
+    KOBE;
+    ll t;
+    // re t;
+    t = 1;
+    while(t--) solve();
 }
 
 
@@ -98,3 +113,4 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
+// try to find repeating pattern in matrices

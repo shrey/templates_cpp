@@ -78,94 +78,28 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
-}
-
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
-    }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
+    ll n,x;
+    re n; re x;
+    ll a[n+1]; fo(n) re a[i+1];
+    a[0] = 0;
+    ll dp[n+1][3];
+    ll ans = 0;
+    memset(dp,0,sizeof(dp));
     for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
-        }
+        dp[i][0] = max(0ll,max(a[i],a[i] + dp[i-1][0]));
+        dp[i][1] = max(0ll,max(a[i],max(x * a[i], max(x * a[i] + dp[i-1][1],x * a[i] + dp[i-1][0]))));
+        dp[i][2] = max(0ll,max(a[i],max(a[i] + dp[i-1][1],a[i] + dp[i-1][2])));
+        ans = max(ans,max(dp[i][0],max(dp[i][1],dp[i][2])));
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
-    }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
     pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

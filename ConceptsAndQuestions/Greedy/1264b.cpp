@@ -78,94 +78,86 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
+ll a,b,c,d;
 
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
+void prs(ll a, ll b, ll num){
+    bool flag = true;
+    while(num--){
+        if(flag) cout<<a<<" ";
+        else cout<<b<<" ";
+        flag = !flag;
     }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
 }
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
-    }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+    re a; re b; re c; re d;
+    if(a > b){
+        if(a > b+1 || (c || d)){
+            NO;
+            return;
+        }
+        else{
+            bool flag = true;
+            YES;
+            fo(2*a-1){
+                if(flag) cout<<0<<" ";
+                else cout<<1<<" ";
+                flag = !flag;
+            }
+            return;
         }
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
+    if(d > c){
+        if(d > c + 1 || (a || b)){
+            NO;
+            return;
+        }
+        else{
+            YES;
+            bool flag = true;
+            fo(2 * d -1){
+                if(flag) cout<<3<<" ";
+                else cout<<2<<" ";
+                flag = !flag;
+            }
+            return;
         }
     }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
+    vl l1,l2;
+    ll diff = abs((b-a) - (c-d));
+    // cout<<a<<"()"<<b<<"()"<<c<<"()"<<d<<"\n";
+    if(b-a == c-d){
+        YES;
+        prs(0,1,2*a);
+        b-=a;
+        c-=d;
+        prs(2,1,2*c);
+        prs(2,3,2*d);
+    }else if(b-a > c-d && (abs((b-a) - (c-d)) == 1)){
+        YES;
+        prs(1,0,2*a+1);
+        b-=(a+1);
+        c-=d;
+        prs(2,1,2*c);
+        prs(2,3,2*d);
+    }else if(b-a < c-d && (abs((b-a) - (c-d)) == 1)){
+        YES;
+        prs(0,1,2*a);
+        b-=a;
+        c-=d;
+        prs(2,1,2*b);
+        prs(2,3,2*d+1);
+    }else{
+        NO;
+        return;
     }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

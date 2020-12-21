@@ -79,93 +79,84 @@ ll flr(ld a){
 //code starts here
 
 const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
+ll a[M],n;
+vl bt[65];
+
+void comp(ll num, ll ind){
+    ll pos = 0;
+    ll mask = 1;
+    while(mask <= num && pos < 64){
+        if((num & (mask)) != 0) bt[pos].pb(ind);
+        pos++;
+        mask *= 2;
+    }
+}
 
 vl gr[M];
 
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
+ll cyc(ll src){
+    vb visited(n+1,false);
+    vl dist(n+1,0);
+    vl par(n+1,-1);
+    ll ans = 1e15;
+    queue<ll> q;
+    q.push(src);
+    visited[src] = true;
+    par[src] = 0;
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        for(auto x: gr[cur]){
+            if(!visited[x]){
+                dist[x] = dist[cur] + 1;
+                visited[x] = true;
+                par[x] = cur;
+                q.push(x);
+            }
+            else if(par[cur] != x && par[x] != cur){
+                ans = min(ans,dist[x] + dist[cur] + 1);
+                // cout<<cur<<"()"<<x<<"\n";
+            }
+        }
     }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
+    return ans;
 }
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+    re n;
+    fo(n){
+        re a[i];
+        comp(a[i],i+1);
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
+    map<pair<ll,ll>,bool> edge;
+    fo(64){
+        // cout<<i<<"()"<<bt[i].size()<<"\n";
+        if(bt[i].size() > 2){
             // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+            pr(3); return;
         }
+        if(bt[i].size() <= 1) continue;
+        ll x = bt[i][0], y = bt[i][1];
+        if(edge[mp(x,y)]) continue;
+        gr[x].pb(y); gr[y].pb(x);
+        edge[mp(x,y)] = true;
+        edge[mp(y,x)] = true;
     }
 
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
+    ll ans = 1e15;
+    fo(n){
+        if(a[i] == 0) continue;
+        ans = min(ans,cyc(i+1));
     }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
+    ans = (ans == 1e15) ? -1 : ans;
     pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

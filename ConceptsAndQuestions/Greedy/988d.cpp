@@ -78,94 +78,58 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
-}
+ll n;
+const ll M = 2e5+100;
+ll a[M];
+ll mx = 2e9;
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+    re n; fo(n) re a[i];
+    sort(a,a+n);
+    map<ll,ll> freq;
+    fo(n){
+        freq[a[i]]++;
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+    ll sz = 1;
+    ll num = a[0];
+    fo(n){
+        ll cur = a[i];
+        ll op = 1;
+        while(op <= mx){
+            ll f = 0;
+            if(freq[a[i] + op]) f++;
+            if(freq[a[i] + 2*op]) f++;
+            if(f == 2){
+                pr(3);
+                forn(j,3) cout<<a[i] + j*op<<" ";nl;
+                return;
+            }
+            if(f == 1){
+                sz = 2;
+                num = a[i];
+            }
+            op*=2;
         }
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
+    pr(sz);
+    if(sz == 1){
+        pr(num); return;
     }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
+    ll op = 1;
+    while(op <= mx){
+        if(freq[num + op]){
+            cout<<num<<" "<<num + op<<"\n";
+            return;
         }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
+        op *= 2;
     }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

@@ -78,94 +78,97 @@ ll flr(ld a){
 
 //code starts here
 
+ll n,m;
+
 const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
 
-vl gr[M];
+struct qry{
+    ll l,r,q;
+};
 
-bool visited[M] = {false};
-bool mark[M] = {false};
+qry op[M];
+ll pre[M][31] = {0};
 
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
+void comp(ll num, ll l, ll r){
+    ll pos = 0;
+    ll mask = 1;
+    while(pos <= 30){
+        if(num & mask){
+            pre[l][pos] += 1;
+            pre[r+1][pos] -= 1;
+        }
+        pos ++;
+        mask *= 2;
     }
 }
 
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
+
+ll a[M];
+
+vl st(4*M+1);
+
+ll calc(ll i){
+    ll ans = 0;
+    ll cur = 1;
+    for(ll b = 0; b<=30; b++){
+        ans += (pre[i][b] > 0) * cur;
+        cur *= 2;
+    }
+    return ans;
+}
+
+const ll inf = (1<<30) - 1;
+
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return inf;
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return query(2*v,tl,tm,l,r) & query(2*v+1,tm+1,tr,l,r); // change here
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = a[tl];
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = st[2*v] & st[2*v+1]; // change here
 }
 
 void solve(){
-    ll n,m,r,c;
     re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
     fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+        re op[i].l; re op[i].r; re op[i].q;
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
+    fo(m){
+        comp(op[i].q,op[i].l, op[i].r);
+    }
+    forn(pos,31){
+        for(ll i = 1; i<= n; i++){
+            pre[i][pos] += pre[i-1][pos];
+        }
+    }
     for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+        a[i] = calc(i);
+    }
+    build(1,1,n);
+    fo(m){
+        ll cur = query(1,1,n,op[i].l,op[i].r);
+        if(cur != op[i].q){
+            NO; return;
         }
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
-    }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
+    YES;
+    fo(n) cout<<a[i+1]<<" ";nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

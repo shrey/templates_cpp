@@ -78,43 +78,15 @@ ll flr(ld a){
 
 //code starts here
 
-ll k,l,r,t,x,y;
-const ll M = 1e6+100;
-map<ll,ll> dp;
-
-bool recur(ll cur, ll days){
-    if(cur < l || cur > r) return false;
-    // cout<<cur<<"()"<<days<<"\n";s
-    if(days == 0) return true;
-    if(dp[cur]) return true;
-    dp[cur] = 1;
-    bool ans = recur(cur-x,days-1);
-    if(cur + y <= r) ans |= recur(cur+y-x,days-1);
-    return ans;
-}
-
 void solve(){
-    re k; re l; re r; re t; re x; re y;
-    if(y > x && (k >= x+l || (k + y) <= r)){
-        Yes; return;
-    }
-    else if(k > t*(x-y) || (k + y <=r && k + y > t*(x-y))){
-        Yes; return;
-    }
-    else if(k > x){
-        No; return;
-    }
-    if(recur(k,t) || recur(k+y,t)){
-        Yes;
-    }
-    else No;
+
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
-    t = 1;
+    re t;
+    // t = 1;
     while(t--) solve();
 }
 

@@ -78,87 +78,65 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
-}
+const ll M = 4e5+100;
+ll pres[M] = {0};
+ll suff[M] = {0};
+ll pre[M] = {0};
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+    ll n; re n;
+    fo(2*n+1){
+        pre[i] = 0;
+        suff[i] = 0;
+        pres[i] = 0;
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
+    ll a[n]; fo(n) re a[i];
+    multiset<ll> m;
+    multiset<ll,greater<ll> > m2;
+    fo(2*n){
+        m.insert(i+1); m2.insert(i+1);
+    }
+    fo(n){
+        m.erase(m.find(a[i])); m2.erase(m2.find(a[i]));
+    }
+    // pr("here");
+    ll ans = 0;
 
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+    fo(n) pres[a[i]] = 1;
+    for(ll i = 1; i<=2*n; i++){
+        if(!pres[i] && !m.empty() && m.find(i) != m.end()){
+            m.erase(m.find(i));
+        }else if(pres[i]){
+            if(!m.empty() && *m.begin() > i){
+                // cout<<i<<"()\n";
+                m.erase(m.begin());
+                pre[i] = 1;
+            }
+            else{
+                break;
+            }
         }
     }
 
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
+    for(ll i = 2*n; i>=1; i--){
+        if(!pres[i] && !m2.empty() && m2.find(i) != m2.end()){
+            m2.erase(m2.find(i));
+        }else if(pres[i]){
+            if(!m2.empty() && *m2.begin() < i){
+                // cout<<i<<"()\n";
+                m2.erase(m2.begin());
+                suff[i] = 1;
+            }else{
+                break;
+            }
         }
     }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
+    for(ll i = 1; i<=2*n; i++){
+        // if(suff[i] && pre[i]) cout<<i<<" ";
+        ans += (suff[i] && pre[i]);
     }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
+    // nl;
+    pr(ans+1);
 }
 
 int32_t main(){

@@ -78,94 +78,54 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
-}
+const ll M = 1010;
+ll n,m,mat[M][M];
+ll dp[M][M] = {0};
 
 void solve(){
-    ll n,m,r,c;
     re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+    forn(i,n){
+        forn(j,n){
+            char ch; re ch;
+            mat[i][j] = (ch == '*') ? 1 : 0;
+        }
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
+    dp[0][0] = mat[0][0];
+    for(ll i = 0; i<n; i++){
+        for(ll j = 0; j<n; j++){
+            if(i + j == 0) continue;
+            // cout<<i<<"()"<<j<<"\n";
+            if(i == 0){
+                dp[i][j] = dp[i][j-1] + mat[i][j];
+            }
+            else if(j == 0){
+                dp[i][j] = dp[i-1][j] + mat[i][j];
+            }
+            else{
+                dp[i][j] = dp[i-1][j] + dp[i][j-1] + mat[i][j] - dp[i-1][j-1];
+            }
+        }
+    }
+    // forn(i,n){
+    //     forn(j,n) cout<<dp[i][j]<<" ";nl;
     // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
-        }
-    }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
-    }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
+    fo(m){
+        ll x1,x2,y1,y2;
+        re x1; re y1; re x2; re y2;
+        x1--; y1--; x2--; y2--;
+        ll ans = dp[x2][y2];
+        if(x1>0) ans -= dp[x1-1][y2];
+        if(y1>0) ans -= dp[x2][y1-1];
+        if(x1 && y1) ans += dp[x1-1][y1-1];
+        pr(ans);
     }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

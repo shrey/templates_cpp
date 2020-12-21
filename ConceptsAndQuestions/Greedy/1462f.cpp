@@ -49,7 +49,7 @@ typedef long double ld;
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
-#define int long long
+// #define int long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
@@ -78,87 +78,28 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
+const ll M = 4e5+100;
 
-vl gr[M];
 
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
-}
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+    ll n; re n;
+    vp op;
+    ll l,r;
+    vl st; vl en;
+    fo(n){
+        re l; re r;
+        st.pb(-l); en.pb(r);
+        op.pb(mp(l,r));
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
-        }
+    sort(all(st)); sort(all(en));
+    ll ans = lmax;
+    fo(n){
+        ll t1 = (lower_bound(en.begin(),en.end(),op[i].ff)) - en.begin();
+        ll t2 = (lower_bound(st.begin(),st.end(),-op[i].sec)) - st.begin();
+        ans = min(ans,t1+t2);
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
-    }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
     pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
 }
 
 int32_t main(){

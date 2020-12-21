@@ -28,6 +28,7 @@
         "initializer_list": "cpp",
         "iterator": "cpp",
         "string_view": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "functional": "cpp"
     }
 }

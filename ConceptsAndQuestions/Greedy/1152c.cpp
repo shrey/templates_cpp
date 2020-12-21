@@ -78,94 +78,54 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
+ll gcd(ll a, ll b){
+    return (b == 0) ? a : gcd(b,a%b);
 }
+const ll M = 1e6;
 
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
+vl fact;
+
+ll lcm(ll a, ll b){
+    return (a*b/gcd(a,b));
 }
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+    ll a,b;
+    re a; re b;
+    if(a == b){
+        pr(0); return;
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+    ll ans = 0;
+    ll l = lcm(a,b);
+    if(a > b) swap(a,b);
+    ll k = b-a;
+    fact.pb(1);
+    fact.pb(k);
+    for(ll i = 2; i*i <= k; i++){
+        if(k % i == 0){
+            fact.pb(i);
+            if(k/i != i) fact.pb(k/i);
         }
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
+    for(auto q: fact){
+        ll cur = q - a%q;
+        ll temp = lcm(a+cur,b+cur);
+        if(temp < l){
+            l = temp;
+            ans = cur;
+        }
+        else if(temp == l && cur < ans){
+            ans = cur;
         }
     }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
     pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

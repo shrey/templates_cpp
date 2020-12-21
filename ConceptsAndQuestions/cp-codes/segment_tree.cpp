@@ -83,18 +83,6 @@ const ll M = 2e5+100;
 vl st(4*M + 1);
 ll a[M];
 
-void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
-    if(tl > r || tr < l) return;
-    if((tl >= l && tr <= r) || tl == tr){
-        st[v] += change; //change here
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    update_range(2*v,tl,tm,l,r,change);
-    update_range(2*v+1,tm+1,tr,l,r,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
-}
-
 void update(ll v, ll tl, ll tr, ll pos, ll change){
     if(tl == tr){
         st[v] += change; //change here
@@ -121,7 +109,7 @@ void build(ll v, ll tl, ll tr){
     ll tm = (tl + tr)/2;
     build(2*v,tl,tm);
     build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here for min, max, sum query
+    st[v] = st[2*v] + st[2*v+1]; // change here
 }
 
 

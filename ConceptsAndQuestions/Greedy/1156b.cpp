@@ -78,86 +78,42 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
-}
+string s;
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
-    }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+    re s;
+    ll freq[26] = {0};
+    fo(s.length()) freq[s[i]-'a']++;
+    string ans = "";
+    string alt = "";
+    bool flag = false;
+    for(ll i = 0; i<26; i++){
+        if(!flag && freq[i]){
+            forn(j,freq[i]) ans += ('a' + i);
+            flag = true;
+        }
+        else{
+            forn(j,freq[i]) alt += ('a' + i);
+            flag = false;
         }
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
+    if(alt.length()){
+        if(abs(ans[ans.length()-1]-alt[0]) != 1){
+            ans += alt;
+            pr(ans); return;
         }
-    }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
+        else if(abs(ans[0] - alt[alt.length()-1])!=1){
+            alt += ans;
+            pr(alt);
+            return;
         }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
+        else{
+            pr("No answer");
+            return;
+        }
+    }else{
+        pr(ans);
+        return;
     }
 }
 

@@ -78,47 +78,8 @@ ll flr(ld a){
 
 //code starts here
 
-ll n,q;
-const ll M = 1e5+100;
-ll a[M];
-map<ll,bool> op;
-// ll cnt = 0;
-
-void recur(ll s, ll e){
-    // cout<<s<<"()"<<e<<"\n";
-    // cnt++;
-    // if(cnt>5) return;
-    if(s>e) return;
-    ll sum = 0;
-    for(ll i = s; i<=e; i++){
-        sum += a[i];
-    }
-    op[sum] = true;
-    if(s == e) return;
-    ll k = (a[s] + a[e])/2;
-    ll m = -1;
-    for(ll i = s; i<=e; i++){
-        if(a[i]>k){
-            m = i-1;
-            break;
-        }
-    }
-    if(m == -1) return;
-    recur(s,m);
-    recur(m+1,e);
-}
-
 void solve(){
-    re n; re q;
-    fo(n) re a[i];
-    sort(a,a+n);
-    recur(0,n-1);
-    fo(q){
-        ll x; re x;
-        if(op[x]) Yes;
-        else No;
-    }
-    op.clear();
+
 }
 
 int32_t main(){

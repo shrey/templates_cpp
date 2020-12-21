@@ -78,94 +78,66 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
-    }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
-}
+const ll M = 2e5+100;
+ll a[M],n,freq[M+10] = {0};
+bool mark[M] = {0};
+ll dx[] = {-1,0,1};
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
-    }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+    re n; fo(n) re a[i];
+    sort(a,a+n);
+    fo(n) freq[a[i]]++;
+    set<ll> s;
+    for(ll i = 1; i<M; i++){
+        ll k = freq[i];
+        if(k == 0) continue;
+        if(mark[i-1]){
+            if(mark[i]){
+                s.insert(i+1);
+                mark[i+1] = true;
+            }else{
+                // cout<<i<<"()"<<k<<"\n";
+                s.insert(i); mark[i] = true;
+                if(k > 1) s.insert(i+1), mark[i+1] = true;
+            }
+        }
+        else if(mark[i]){
+            s.insert(i+1);
+            mark[i+1] = true;
+        }
+        else{
+            for(ll j = 0; j<min((ll)3,k); j++){
+                mark[i + dx[j]] = true;
+                s.insert(i + dx[j]);
+            }
         }
     }
 
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
+    ll mx = s.size();
+    // while(!s.empty()){
+    //     cout<<*s.begin()<<" ";
+    //     s.erase(s.begin());
+    // }nl;
+    ll i = 1;
+    ll mn = 0;
+    while(i<M){
+        if(freq[i]){
+            i += 3;
+            mn++;
+        }
+        else{
+            i++;
         }
     }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
+    cout<<mn<<" "<<mx<<"\n";
+    // fo(n) cout<<a[i]<<" ";nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

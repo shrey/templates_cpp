@@ -79,93 +79,47 @@ ll flr(ld a){
 //code starts here
 
 const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
-
+ll n,x;
+ll col[M];
 vl gr[M];
-
 bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
+ll dp[M][2] = {0};
 
 void dfs(ll cur){
-    visited[cur] = 1;
-
+    visited[cur] = true;
+    dp[cur][0] = 1 - col[cur];
+    dp[cur][1] = col[cur];
     for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
+        if(visited[x]) continue;
+        dfs(x);
+        ll z = dp[cur][0], o = dp[cur][1];
+        dp[cur][0] = 0; dp[cur][1] = 0;
+        dp[cur][0] = z * dp[x][1];
+        dp[cur][1] = o * dp[x][1];
+        dp[cur][0] %= mod; dp[cur][1] %= mod;
+        dp[cur][0] += z * dp[x][0];
+        dp[cur][1] += z * dp[x][1] + o * dp[x][0];
+        dp[cur][0] %= mod; dp[cur][1] %= mod;
     }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
 }
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
+    re n;
+    fo(n-1){
+        re x;
+        gr[i+1].pb(x);
+        gr[x].pb(i+1);
     }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
-
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
-        }
-    }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
-    }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
+    fo(n) re col[i];
+    dfs(0);
+    pr(dp[0][1]);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

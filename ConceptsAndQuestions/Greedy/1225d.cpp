@@ -78,94 +78,75 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll row[M] = {0};
-ll col[M] = {0};
+const ll M = 2e5+100;
+ll n,k,a[M], freq[M] = {0}, req[M];
+ll mx = 1e5;
 
-vl gr[M];
-
-bool visited[M] = {false};
-bool mark[M] = {false};
-
-ll flag = 1;
-
-void dfs(ll cur){
-    visited[cur] = 1;
-
-    for(auto x: gr[cur]){
-        if(!visited[x]) dfs(x);
+pair<ll,ll> comp(ll num){
+    ll ans = 1;
+    ll req = 1;
+    for(ll i = 2; i*i <= num; i++){
+        if(num % i == 0){
+            ll cnt = 0;
+            while(num % i == 0){
+                cnt ++ ;
+                num /= i;
+            }
+            // cout<<i<<" = "<<cnt<<"\n";
+            cnt = cnt % k;
+            forn(j,cnt) ans *= i;
+            if(cnt) forn(j,k-cnt){
+                req *= i;
+                if(req > mx){
+                    req = 1e15;
+                    break;
+                }
+            }
+        }
     }
-}
-
-void fix(ll cur){
-    if(col[cur] == 0) return;
-    // cout<<"()"<<cur<<"\n";
-    ll temp = row[cur];
-    col[cur] = 0;
-    cur = temp;
-    fix(temp);
+    if(num){
+        ans *= num;
+        forn(j,k-1){
+            req *= num;
+            if(req > mx){
+                req = 1e15;
+                break;
+            }
+        }
+    }
+    return mp(ans,req);
 }
 
 void solve(){
-    ll n,m,r,c;
-    re n; re m;
-    vp op; vp nop;
-    ll cnt = 0;
-    fo(m){
-        re r; re c;
-        if(r == c) continue;
-        row[r] = c;
-        op.pb(mp(r,c));
-        col[c] = r;
-        cnt++;
-    }
-    // for(auto p: op){
-    //     if(!row[op.sec]){
+    re n; re k;
+    fo(n) re a[i];
+    ll ans = 0, z = 0;
 
-    //     }
-    // }
-    for(ll i = 1; i<=n; i++){
-        if(row[i] && !col[i]){
-            // cout<<i<<"\n";
-            // cout<<row[i]<<"()\n";
-            fix(row[i]);
+    fo(n){
+        pll p = comp(a[i]);
+        a[i] = p.ff;
+        freq[a[i]]++;
+        if(a[i] == 1) z++;
+        if(p.sec <= 1e5) req[i] = p.sec;
+        else req[i] = -1;
+    }
+    ans += (z * (z-1))/2;
+    fo(n){
+        if(a[i] == 1 || req[i] == -1) continue;
+        if(freq[req[i]] - (a[i] == req[i])){
+            // cout<<a[i]<<" , "<<req[i]<<"\n";
+            ans += freq[req[i]] - (a[i] == req[i]);
+            freq[a[i]]--;
         }
     }
-
-    for(auto p: op){
-        if(row[p.ff] && col[p.sec]){
-            gr[p.ff].pb(p.sec);
-            gr[p.sec].pb(p.ff);
-            mark[p.ff] = 1;
-            mark[p.sec] = 1;
-
-        }
-    }
-    ll cc = 0;
-    for(ll i = 1; i<=n; i++){
-        if(mark[i] && !visited[i]){
-            // cout<<i<<"()\n";
-            dfs(i);
-            cc++;
-        }
-    }
-    // cout<<cc<<"\n";
-    ll ans = cnt + cc;
     pr(ans);
-    for(ll i = 0; i<=n; i++){
-        visited[i] = false;
-        gr[i].clear();
-        mark[i] = false;
-        row[i] = 0;
-        col[i] = 0;
-    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

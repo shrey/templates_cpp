@@ -59,9 +59,6 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
-// ll dx[] = {1,0,-1,0};
-// ll dy[] = {0,1,0,-1};
-
 ll mod = 1e9 + 7;
 
 ll cl(ld a){
@@ -81,15 +78,65 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll n,m,x,y;
+const ll M = 2e5+100;
+vl gr[M];
+vl tin(M);
+vl tout(M);
+vl p(M,-1);
+vl d(M,0);
+ll T = 0;
 
+void dfs(ll cur, ll dep, ll par){
+    d[cur] = dep;
+    tin[cur] = T++;
+    p[cur] = par;
+    for(auto x: gr[cur]){
+        if(x != par){
+            dfs(x,dep+1,cur);
+        }
+    }
+    tout[cur] = T++;
+}
+
+void solve(){
+    re n; re m;
+    fo(n-1){
+        re x; re y;
+        gr[x].pb(y); gr[y].pb(x);
+    }
+    dfs(1,0,-1);
+    forn(q,m){
+        ll k; re k;
+        vl v(k);
+        fo(k) re v[i];
+        ll u = v[0];
+        fo(k){
+            if(d[v[i]] > d[u]) u = v[i];
+        }
+        fo(k){
+            if(v[i] == u) continue;
+            if(p[v[i]] != -1) v[i] = p[v[i]];
+        }
+        bool flag = true;
+        fo(k){
+            ll cur = v[i];
+            if(tin[cur] <= tin[u] && tout[cur] >= tout[u]) continue;
+            else{
+                flag = false;
+                break;
+            }
+        }
+        if(flag) YES;
+        else NO;
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

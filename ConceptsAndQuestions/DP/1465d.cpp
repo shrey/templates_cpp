@@ -79,9 +79,42 @@ ll flr(ld a){
 //code starts here
 
 string s;
+ll x,y;
+
+ll comp(string &s){
+
+}
+
 
 void solve(){
-    re s;
+    re s; re x; re y;
+    ll n = s.length();
+    string s1 = s, s2 = s;
+    ll ans1 = 0;
+    ll zs = 0, ze = 0, os = 0, oe = 0;
+    for(ll i = 1; i<n; i++){
+        ze += (s[i] == '0');
+        oe += (s[i] == '1');
+    }
+    ll a = 0, b = 0;
+    //maximizing 10 and 01
+    for(ll i = 0; i<n; i++){
+        if(s[i] == '0'){
+            zs++;
+            ze--;
+        }
+        else if(s[i] == '1'){
+            os++;
+            oe--;
+        }
+        else{
+            if(os >= ze){
+                s1[i] = '0';
+            }else{
+                s1[i] = '1';
+            }
+        }
+    }
 }
 
 int32_t main(){

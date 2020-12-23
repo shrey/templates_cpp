@@ -59,9 +59,6 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
-// ll dx[] = {1,0,-1,0};
-// ll dy[] = {0,1,0,-1};
-
 ll mod = 1e9 + 7;
 
 ll cl(ld a){
@@ -81,15 +78,72 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+class node{
+    public:
+        char data;
+        map<char,node*> children;
+        bool terminal;
+        node(char a){
+            data = a;
+            terminal = false;
+        }
+};
 
+class Trie{
+    node* root;
+    public:
+        Trie(){
+            root = new node('\0');
+        }
+        void insert(string w){
+            node* temp = root;
+            for(int i = 0; i < w.length(); i++){
+                if(!temp->children.count(w[i])){
+                    temp->children[w[i]] = new node(w[i]);
+                }
+                temp = temp->children[w[i]];
+            }
+        }
+
+        bool find(string w){
+            node* temp = root;
+            string ans = "";
+            bool flag = false;
+            for(int i = 0; i < w.length(); i++){
+                if(temp->children.count(w[i])){
+                    temp = temp->children[w[i]];
+                }
+                else{
+                    cout<<i<<"\n";
+                    if(flag) return false;
+                    flag = true;
+                }
+            }
+            return true;
+        }
+};
+
+void solve(){
+    ll n,m;
+    re n; re m;
+    Trie tr;
+    string s;
+    fo(n){
+        re s;
+        tr.insert(s);
+    }
+    fo(m){
+        re s;
+        if(tr.find(s)) YES;
+        else NO;
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

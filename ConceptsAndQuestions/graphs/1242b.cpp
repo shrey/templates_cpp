@@ -81,15 +81,53 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+map<pair<ll,ll>,ll > op;
+set<ll> s;
+ll n,m;
+const ll M = 1e5+100;
 
+
+void dfs(ll cur, ll par){
+    s.erase(cur);
+    // cout<<cur<<"()"<<s.size()<<"\n";
+    bool flag = true;
+    if(s.empty()) return;
+    while(flag){
+        flag = false;
+        for(auto x: s){
+            if(!op[mp(cur,x)]){
+                dfs(x,cur);
+                flag = true;
+                break;
+            }
+        }
+    }
+}
+
+void solve(){
+    ll ans = 0;
+    re n; re m;
+    fo(n) s.insert(i+1);
+    fo(m){
+        ll x,y;
+        re x; re y;
+        op[mp(x,y)] = true; op[mp(y,x)] = true;
+    }
+    for(ll i = 1; i<=n; i++){
+        if(!s.empty() && s.find(i)!=s.end()){
+            // cout<<i<<"()()\n";
+            dfs(i,0);
+            ans++;
+        }
+    }
+    pr(ans-1);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

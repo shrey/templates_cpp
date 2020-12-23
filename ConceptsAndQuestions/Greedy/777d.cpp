@@ -81,15 +81,43 @@ ll flr(ld a){
 
 //code starts here
 
+ll n;
+vector<string> vec;
+string s;
 void solve(){
-
+    re n;
+    fo(n){
+        re s;
+        vec.pb(s.substr(1,s.length()-1));
+    }
+    for(ll i = n-2; i>=0; i--){
+        bool flag = false;
+        bool flag2 = false;
+        string s1 = vec[i], s2 = vec[i+1];
+        for(ll j = 0; j<min(s1.length(),s2.length()); j++){
+            if(s2[j] > s1[j]){
+                flag = true;
+                break;
+            }
+            if(s1[j] > s2[j]){
+                flag2 = true;
+                vec[i] = s1.substr(0,j);
+                break;
+            }
+        }
+        if(flag || flag2) continue;
+        if(s1.length() > s2.length()){
+            vec[i] = s1.substr(0,s2.length());
+        }
+    }
+    fo(n) cout<<"#"<<vec[i]<<"\n";
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

@@ -59,9 +59,6 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
-// ll dx[] = {1,0,-1,0};
-// ll dy[] = {0,1,0,-1};
-
 ll mod = 1e9 + 7;
 
 ll cl(ld a){
@@ -81,15 +78,78 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll n,m,r1,c1,r2,c2;
 
+const ll M = 510;
+char mat[M][M];
+bool visited[M][M] = {false};
+
+ll dx[] = {1,0,-1,0};
+ll dy[] = {0,1,0,-1};
+
+bool ok(ll x, ll y){
+    if(x >= 1 && y >= 1 && x <=n && y<= m && mat[x][y] == '.' && !visited[x][y]) return true;
+    return false;
+}
+
+
+bool exists(){
+    qp q;
+    q.push(mp(r1,c1));
+    visited[r1][c1] = true;
+    while(!q.empty()){
+        pll cur = q.front();
+        q.pop();
+        fo(4){
+            ll x = cur.ff + dx[i], y = cur.sec + dy[i];
+            if(x == r2 && y == c2) return true;
+            if(ok(x,y)){
+                q.push(mp(x,y));
+                visited[x][y] = true;
+            }
+        }
+    }
+    return false;
+}
+
+bool is_neighbour(){
+    if(abs(r1 - r2) + abs(c1 - c2) == 1) return true;
+    return false;
+}
+
+void solve(){
+    re n; re m;
+    forn(i,n){
+        forn(j,m){
+            re mat[i+1][j+1];
+        }
+    }
+    re r1; re c1; re r2; re c2;
+    if(exists()){
+        if(mat[r2][c2] == '.'){
+            ll cnt = 0;
+            fo(4){
+                ll x = r2 + dx[i], y = c2 + dy[i];
+                if(x >= 1 && y>= 1 && x<=n && y<=m && mat[x][y] == '.') cnt++;
+            }
+            if(cnt >= 2 || (is_neighbour() && cnt >=1)){
+                YES;
+            }else{
+                NO;
+            }
+        }
+        else{
+            YES;
+        }
+    }
+    else NO;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

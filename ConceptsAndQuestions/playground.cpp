@@ -59,7 +59,10 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
-ll m = 1e9 + 7;
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
+
+ll mod = 1e9 + 7;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -79,17 +82,9 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-    ll ans = 0;
-    ll n; re n;
-    ll k = sqrt(n);
-    // pr(k);
-    for(ll i = 1; i*i<=n; i++){
-        ans += ((((n/i+1)%m) * ((n/i)%m))%m)/2;
-        ans %= m;
-        ans += (i * ((n/i)%m - k + m))%m;
-        ans %= m;
-    }
-    pr(ans);
+    set<ll> m;
+    fo(5) m.insert(5*i);
+    cout<<*m.lower_bound(7)<<" "<<*m.upper_bound(7)<<"\n";
 }
 
 int32_t main(){

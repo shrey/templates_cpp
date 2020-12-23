@@ -62,7 +62,7 @@ typedef long double ld;
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
 
-ll mod = 1e9 + 7;
+ll m = 998244353;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -81,15 +81,94 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll n;
+const ll M = 3e5+100;
+ll fac[M] = {0};
 
+void comp(){
+    fac[0] = 1;
+    for(ll i = 1; i<M; i++){
+        fac[i] = fac[i-1] * i;
+        fac[i] %= m;
+    }
+}
+
+bool compare(pll &a, pll &b){
+    if(a.sec == b.sec){
+        return a.ff < b.ff;
+    }
+    return a.sec < b.sec;
+}
+
+void disp(vp &p){
+    fo(n) cout<<p[i].ff<<" , "<<p[i].sec<<"\n";
+}
+
+void solve(){
+    re n;
+    vp p(n);
+    fo(n){
+        re p[i].ff; re p[i].sec;
+    }
+    sort(p.begin(),p.end());
+    ll a = 1, b = 0, c = 0;
+    ll cur = 0;
+    bool flag = true;
+    for(ll i = 0; i<n; i++){
+        if(i == 0){
+            cur++; continue;
+        }
+        if(p[i].ff == p[i-1].ff){
+            cur++;
+        }else{
+            a *= fac[cur];
+            a %= m;
+            cur = 1;
+        }
+        if(p[i-1].sec > p[i].sec) flag = false;
+    }
+    a*=fac[cur]; a%=m;
+    if(flag){
+        b = 1; cur = 0;
+        for(ll i = 0; i<n; i++){
+            if(i == 0){
+                cur++; continue;
+            }
+            if(p[i].sec == p[i-1].sec && p[i].ff == p[i-1].ff) cur++;
+            else{
+                b *= fac[cur]; b%=m;
+                cur = 1;
+            }
+        }
+        b*=fac[cur]; b%=m;
+    }
+    sort(p.begin(),p.end(),compare);
+    cur = 0;
+    c = 1;
+    for(ll i = 0; i<n; i++){
+        if(i == 0){
+            cur++; continue;
+        }
+        if(p[i].sec == p[i-1].sec) cur++;
+        else{
+            c *= fac[cur]; c%=m;
+            cur = 1;
+        }
+    }
+    c*=fac[cur]; c%=m;
+    // disp(p);
+    // cout<<a<<"()"<<b<<"()"<<c<<"\n";
+    ll op = (a + c - b + m)%m;
+    ll ans = (fac[n] - op + m)%m;
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    comp();
+    t = 1;
     while(t--) solve();
 }
 

@@ -82,14 +82,35 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-
+    ll n,x;
+    re x; re n;
+    multiset<ll,greater<ll> > gap;
+    gap.insert(x);
+    set<ll> pos; set<ll> npos;
+    pos.insert(0);
+    pos.insert(x);
+    npos.insert(0); npos.insert(-x);
+    vl ans(n);
+    fo(n){
+        ll cur; re cur;
+        ll a = *pos.upper_bound(cur);
+        ll b = -1 * *npos.upper_bound(-1*cur);
+        // cout<<a<<"()"<<b<<"\n";
+        pos.insert(cur);
+        npos.insert(-1 * cur);
+        gap.erase(gap.find(abs(b-a)));
+        gap.insert(a - cur);
+        gap.insert(cur - b);
+        ans[i] = *gap.begin();
+    }
+    fo(n) cout<<ans[i]<<" ";nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
+    // re t;
+    t = 1;
     while(t--) solve();
 }
 

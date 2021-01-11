@@ -81,39 +81,28 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 1e5+100;
 
+ll n,k,a[110];
+ll dp[110][M] = {0};
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re k;
+    fo(n) re a[i+1];
+    dp[0][0] = 1;
+    for(ll i = 1; i<=n; i++){
+        ll pre[k+1];
+        pre[0] = dp[i-1][0];
+        for(ll j = 1; j<=k; j++){
+            pre[j] = (pre[j-1] + dp[i-1][j])%mod;
+        }
+        for(ll j = 0; j<=k; j++){
+            ll cur = pre[j];
+            ll op = (j - a[i] - 1) >= 0 ? pre[j-a[i]-1] : 0;
+            dp[i][j] = (cur - op + mod) % mod;
+        }
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    pr(dp[n][k]);
 }
 
 int32_t main(){

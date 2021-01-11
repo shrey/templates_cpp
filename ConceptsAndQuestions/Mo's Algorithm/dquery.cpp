@@ -23,7 +23,7 @@
 
 
 using namespace std;
-typedef long long ll;
+// typedef long long int;
 typedef long double ld;
 
 #define YES cout<<"YES\n"
@@ -37,88 +37,106 @@ typedef long double ld;
 #define umap unordered_map
 #define mp make_pair
 #define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
-#define fo(n) for(ll i = 0; i<n; i++)
+#define fo(n) for(int i = 0; i<n; i++)
 #define fnd(stl, data) find(stl.begin(), stl.end(), data)
-#define forn(x,n) for(ll x = 0; x<n; x++)
+#define forn(x,n) for(int x = 0; x<n; x++)
 #define imax INT_MAX
 #define lmax LLONG_MAX
 #define imin INT_MIN
 #define lmin LLONG_MIN
 #define vi vector<int>
-#define vl vector<ll>
-#define vp vector<pair<ll,ll> >
+#define vl vector<int>
+#define vp vector<pair<int,int> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
-#define int long long
-#define ql queue<ll>
-#define qp queue<pair<ll,ll> >
+// #define int long long
+#define ql queue<int>
+#define qp queue<pair<int,int> >
 #define endl "\n"
 #define nl cout<<"\n"
 #define re cin >>
-#define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define pll pair<int,int>
+#define FOR(a,b) for(int i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
-// ll dx[] = {1,0,-1,0};
-// ll dy[] = {0,1,0,-1};
+// int dx[] = {1,0,-1,0};
+// int dy[] = {0,1,0,-1};
 
-ll mod = 1e9 + 7;
+int mod = 1e9 + 7;
 
-ll cl(ld a){
-    if(a>(ll) a){
-        return (ll)a+1;
+int cl(ld a){
+    if(a>(int) a){
+        return (int)a+1;
     }
     else{
-        return (ll)a;
+        return (int)a;
     }
 }
 
-ll flr(ld a){
-    return (ll) a;
+int flr(ld a){
+    return (int) a;
 }
 
 
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+struct node{
+    int l,r,ind;
+};
 
+int blx = 555;
+const int M = 1e6+100;
+int freq[M] = {0};
+
+bool compare(node &a, node &b){
+    if(a.l/blx == b.l/blx) return a.r < b.r;
+    return a.l/blx < b.l/blx;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    int n; re n;
+    int a[n]; fo(n) re a[i];
+    int t; re t;
+    node q[t];
+    fo(t){
+        re q[i].l; re q[i].r; q[i].ind = i;
+        q[i].l--; q[i].r--;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    sort(q,q+t,compare);
+    int l = 0, r = -1;
+    int ans = 0;
+    int res[t+1];
+    fo(t){
+        int cl = q[i].l, cr = q[i].r;
+        while(r < cr){
+            r++;
+            freq[a[r]]++;
+            if(freq[a[r]] == 1) ans++;
+        }
+        while(l > cl){
+            l--;
+            freq[a[l]]++;
+            if(freq[a[l]] == 1) ans++;
+        }
+        while(l < cl){
+            freq[a[l]]--;
+            if(freq[a[l]] == 0) ans--;
+            l++;
+        }
+        while(r > cr){
+            freq[a[r]]--;
+            if(freq[a[r]] == 0) ans--;
+            r--;
+        }
+        res[q[i].ind] = ans;
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    fo(t) cout<<res[i]<<"\n";
 }
 
 int32_t main(){
     KOBE;
-    ll t;
+    int t;
     t = 1;
     // re t;
     while(t--) solve();

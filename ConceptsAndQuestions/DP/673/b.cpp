@@ -59,6 +59,9 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
+
 ll mod = 1e9 + 7;
 
 ll cl(ld a){
@@ -79,14 +82,14 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-
+    ll n,m;
 }
 
 int32_t main(){
     KOBE;
     ll t;
+    t = 1;
     re t;
-    // t = 1;
     while(t--) solve();
 }
 

@@ -81,46 +81,55 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+ll n;
+const ll M = 2e5+100;
+ll a[M],b[M], pres[M] = {0};
+ll chance = 0;
 
+bool check(){
+    fo(n) pres[a[i]] = 1;
+
+    deque<ll> q;
+    fo(n) q.push_back(b[i]);
+    while(pres[q.back()+1]){
+        a[q.back()+1] = 0; pres[q.front()] = 1;
+        q.push_back(q.back() + 1);
+        q.pop_front();
+        chance++;
+    }
+    ll cur = 1;
+    bool flag = true;
+    while(!q.empty()){
+        if(q.front() != cur){
+            flag = false;
+        }
+        q.pop_front();
+        cur++;
+    }
+    return flag;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
+    re n; fo(n) re a[i]; fo(n) re b[i];
+    if(check()){
+        pr(chance); return;
+    }
+    ll pos[M] = {0};
+    for(ll i = 1; i<=n; i++) pos[b[i-1]] = i;
+    ll curans = pos[1] + 1;
+    for(ll i = 2; i<=n; i++){
+        if(pos[i] <= curans) continue;
+        if(pos[i] - curans >= i - 1) curans = pos[i] - (i - 1) + 1;
+    }
+    pr(curans + n - 1);
 
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
     // re t;
+    t = 1;
     while(t--) solve();
 }
 

@@ -81,80 +81,33 @@ ll flr(ld a){
 
 //code starts here
 
-
-
-ll n,m;
-
-struct edge{
-    ll x,y,w;
-};
-
-
-
 const ll M = 2e5+100;
-edge e[M];
-
 
 vl p(M,0); vl r(M,1);
-ll ans = 0;
+
 ll getp(ll v){
     if(v == p[v]) return v;
     return p[v] = getp(p[v]);
 }
 
-ll sm(ll num){
-    return (num * (num-1)/2);
-}
-
 void unite(ll u, ll v){
     u = getp(u), v = getp(v);
-    // if(u == v) return;
+    if(u == v) return;
     if(r[u] < r[v]) swap(u,v);
-    ans -= sm(r[u]);
-    ans -= sm(r[v]);
     r[u] += r[v];
-    ans += sm(r[u]);
     p[v] = u;
-
 }
 
-bool compare(edge &a, edge &b){
-    return a.w < b.w;
-}
 void solve(){
-    re n; re m;
-    fo(n-1){
-        re e[i].x; re e[i].y; re e[i].w;
-    }
-    sort(e,e+n-1,compare);
-    // fo(n-1){
-    //     cout<<e[i].w<<"()"<<e[i].x<<"()"<<e[i].y<<"\n";
-    // }
-    fo(n+1) p[i] = i;
-    vp qry(m);
-    fo(m){
-        re qry[i].ff;
-        qry[i].sec = i;
-    }
-    vl res(m);
-    sort(qry.begin(),qry.end());
-    ll cur = 0;
-    for(ll i = 0; i<m; i++){
-        while(cur < n-1 && e[cur].w <= qry[i].ff){
-            unite(e[cur].x,e[cur].y);
-            cur++;
-        }
-        // cout<<i<<"()"<<cur<<"\n";
-        res[qry[i].sec] = ans;
-    }
-    fo(m) cout<<res[i]<<" ";nl;
+    //assign value of parent p[i] = i
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
     t = 1;
+    fo(M) p[i] = i;
+    // re t;
     while(t--) solve();
 }
 

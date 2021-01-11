@@ -80,48 +80,25 @@ ll flr(ld a){
 
 
 //code starts here
+// z[i] is the max length such that chars ahead of i match the prefix
 
-vl a[3];
-ll n1,n2,n3;
-
-
-void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+vector<int> z_function(string &s) {   // replace vector<ll> by string to get string
+    int n = (int) s.size();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    return z;
 }
+
 
 int32_t main(){
     KOBE;
-    ll t;
-    t = 1;
-    // re t;
-    while(t--) solve();
 }
 
 

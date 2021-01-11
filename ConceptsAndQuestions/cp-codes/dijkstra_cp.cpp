@@ -19,8 +19,6 @@
 #include<bitset>
 #include<cstring>
 #include<numeric>
-#include<array>
-
 
 using namespace std;
 typedef long long ll;
@@ -57,10 +55,6 @@ typedef long double ld;
 #define re cin >>
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
-#define all(x) x.begin(),x.end()
-
-// ll dx[] = {1,0,-1,0};
-// ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
@@ -78,49 +72,54 @@ ll flr(ld a){
 }
 
 
-
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 2e5+100;
+vp gr[M];
+ll n,m,x,y,w;
+vl dist(M,lmax);
 
+
+void dijkstra(ll src){
+    set<pll> s;
+    fo(M) dist[i] = lmax;
+    s.insert(mp(0,src));
+    dist[src] = 0;
+    while(!s.empty()){
+        pll cur = *s.begin();
+        s.erase(s.begin());
+        ll node = cur.sec;
+        ll d = cur.ff;
+        for(auto x: gr[node]){
+            if(x.sec + d < dist[x.ff]){
+                auto f = s.find(mp(dist[x.ff],x.ff));
+                if(f!=s.end()){
+                    s.erase(f);
+                }
+                dist[x.ff] = x.sec + d;
+                s.insert(mp(dist[x.ff],x.ff));
+            }
+        }
+    }
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re m;
+    fo(m){
+        re x; re y; re w;
+        gr[x].pb(mp(y,w));
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    dijkstra(1);
+    for(ll i = 1; i<=n; i++){
+        cout<<dist[i]<<" ";
+    }nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
     // re t;
+    t = 1;
     while(t--) solve();
 }
 
@@ -137,4 +136,3 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
-// try to find repeating pattern in matrices

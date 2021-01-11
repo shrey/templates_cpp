@@ -81,46 +81,44 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+ll n,m,a,b;
+const ll M = 2e5+100;
+ll s[M];
 
+// bool check(ll ind){
+//     ll diff = abs(b - a);
+//     ll gap;
+//     if(b > a) gap = a - 1;
+//     else if(a > b) gap = n - a;
+//     while(ind > 0){
+//         if(ind < diff && s[ind] <= diff + gap){
+//             ind--;
+//             diff--;
+//             continue;
+//         }
+//         else return false;
+//     }
+//     return true;
+// }
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
+    re n; re m; re a; re b;
+    fo(m) re s[i+1];
+    set<ll> st;
     ll ans = 0;
-    fo(3){
-        ans += s[i];
+    fo(m) st.insert(s[i+1]);
+    while(st.size()){
+        if(b - a == 1){
+            break;
+        }
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
-    // re t;
+    re t;
+    // t = 1;
     while(t--) solve();
 }
 

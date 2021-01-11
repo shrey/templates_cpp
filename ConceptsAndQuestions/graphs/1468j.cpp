@@ -59,6 +59,7 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
+
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
 
@@ -81,46 +82,115 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+struct edges{
+    ll x,y,w;
+};
 
+const ll M = 2e5+100;
+
+vector<edges> e;
+
+// edges e[M];
+
+ll n,m,k;
+
+vl gr[M];
+bool visited[M] = {false};
+vector<int> parent(M); vl rnk(M);
+
+void dfs(ll cur){
+    visited[cur] = true;
+    for(auto x: gr[cur]){
+        if(!visited[x]) dfs(x);
+    }
+}
+
+
+void make_set(ll v) {
+    parent[v] = v;
+    rnk[v] = 0;
+}
+
+ll find_set(ll v) {
+    if (v == parent[v])
+        return v;
+    return parent[v] = find_set(parent[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (rnk[a] < rnk[b])
+            swap(a, b);
+        parent[b] = a;
+        rnk[a] += rnk[b];
+    }
+}
+
+bool compare(edges &a, edges &b){
+    return (a.w < b.w);
+}
+
+ll kruskal(){
+    for (int i = 0; i <= n; i++)
+        make_set(i);
+    sort(e.begin(),e.end(),compare);
+    ll res = 0;
+    for(auto x: e){
+        // cout<<x.x<<"()"<<x.y<<"\n";
+        if(find_set(x.x) != find_set(x.y)){
+            res += max(0ll,x.w - k);
+            union_sets(x.x,x.y);
+        }
+    }
+    return res;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
+    e.clear();
+    re n; re m; re k;
+    for(ll i = 0; i<=n; i++) {
+        gr[i].clear();
+        visited[i] = false;
+        make_set(i);
+    }
+    fo(m){
+        edges cur;
+        re cur.x; re cur.y; re cur.w;
+        e.pb(cur);
+    }
+    ll res = 1e15;
+    fo(m){
+        if(e[i].w <= k){
+            gr[e[i].x].pb(e[i].y);
+            gr[e[i].y].pb(e[i].x);
+        }
+        res = min(res,abs(k - e[i].w));
+    }
+    dfs(1);
+    bool flag = true;
+    for(ll i = 1; i<=n; i++){
+        if(!visited[i]){
+            flag = false;
+            res = 1e15;
+            break;
+        }
+    }
+    if(flag){
+        pr(res);
+        return;
+    }
 
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    ll ans = kruskal();
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
-    // re t;
+    re t;
+    // t = 1;
     while(t--) solve();
 }
 

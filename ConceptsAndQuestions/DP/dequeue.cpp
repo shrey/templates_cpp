@@ -81,39 +81,26 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 3010;
+ll dp[M][M];
+ll n,a[M];
 
+ll recur(ll l, ll r){
+    if(l == r){
+        return a[l];
+    }
+    if(dp[l][r] != -1) return dp[l][r];
+    ll ans = lmin;
+    ans = max(ans,a[l] - recur(l+1,r));
+    ans = max(ans,a[r] - recur(l,r-1));
+    return dp[l][r] = ans;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    memset(dp,-1,sizeof(dp));
+    re n;
+    fo(n) re a[i];
+    pr(recur(0,n-1));
 }
 
 int32_t main(){

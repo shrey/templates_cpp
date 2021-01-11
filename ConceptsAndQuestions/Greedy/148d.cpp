@@ -30,7 +30,7 @@ typedef long double ld;
 #define Yes cout<<"Yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
-#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
+#define prDouble(x) cout<<fixed<<setprecision(9)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
 #define sec second
@@ -80,40 +80,32 @@ ll flr(ld a){
 
 
 //code starts here
+ld w,b;
 
-vl a[3];
-ll n1,n2,n3;
+ld dp[1001][1001];
 
+ld recur(ld w, ld b){       //always call this in princess chance
+    // cout<<w<<"()"<<b<<"\n";
+    if(w <= 0) return 0.0;
+    if(b <= 0) return 1.0;
+    if(w == 1.0 && b == 1.0) return 0.50;
+    ll wi = w, bi = b;
+    // cout<<dp[wi][bi]<<"\n";
+    if(dp[wi][bi] != -1.0) {
+        // pr("here");
+        return dp[wi][bi];
+    }
+    // pr("here");
+    ld p = w/(b + w) + b/(b + w) * (b-1)/(b + w - 1) * ((b-2)/(b + w - 2) * recur(w,b-3) + w/(b + w - 2) * recur(w-1,b-2));
+    return dp[(ll)w][(ll)b] = p;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re w; re b;
+    forn(i,1001){
+        forn(j,1001) dp[i][j] = -1;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    prDouble(recur(w,b));nl;
 }
 
 int32_t main(){

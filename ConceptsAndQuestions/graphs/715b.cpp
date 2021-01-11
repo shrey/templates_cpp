@@ -81,39 +81,50 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
-
+ll n,m,len,s,t;
+const ll M = 1010;
+vp gr[M];
+vector<pair<pair<ll,ll>, ll> > e;
+ll x,y,w;
+const ll inf = 1e15;
+vl dijkstra(ll src){
+    vl dist(n+1,inf);
+    fo(n+1) dist[i] = inf;
+    set<pair<ll,ll> > s;
+    dist[src] = 0;
+    s.insert(mp(0,src));
+    while(!s.empty()){
+        pll cur = *s.begin();
+        s.erase(s.begin());
+        ll d = cur.ff;
+        ll node = cur.sec;
+        for(auto x: gr[node]){
+            if(d + x.sec < dist[x.ff]){
+                auto f = s.find(mp(dist[x.ff],x.ff));
+                if(f!=s.end()){
+                    s.erase(f);
+                }
+                dist[x.ff] = d + x.sec;
+                s.insert(mp(dist[x.ff],x.ff));
+            }
+        }
+    }
+    return dist;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re m; re len ;re s; re t;
+    fo(m){
+        re x; re y; re w;
+        if(w){
+            gr[x].pb(mp(y,w));
+            gr[y].pb(mp(x,w));
+        }
+        else{
+            e.pb(mp(mp(x,y),w));
+        }
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    vl dist = dijkstra(s);
 }
 
 int32_t main(){

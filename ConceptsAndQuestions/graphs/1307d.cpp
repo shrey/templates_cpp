@@ -81,39 +81,64 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 2e5+100;
+ll n,m,k,a[M],x,y;
+vl gr[M];
 
+vl dist(ll src){
+    bool visited[M] = {false};
+    vl dist(n+1,0);
+    queue<ll> q;
+    visited[src] = true;
+    q.push(src);
+    while(!q.empty()){
+        ll cur = q.front(); q.pop();
+        for(auto x: gr[cur]){
+            if(!visited[x]){
+                q.push(x);
+                visited[x] = true;
+                dist[x] = dist[cur] + 1;
+            }
+        }
+    }
+    return dist;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re m; re k;
+    fo(k) re a[i];
+    fo(m){
+        re x; re y;
+        gr[x].pb(y);
+        gr[y].pb(x);
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    vl d1 = dist(1);
+    vl dn = dist(n);
+    vector<pair<pll,ll> > op;
+    // pr(d1[1]);
+    fo(k){
+        op.pb(mp(mp(d1[a[i]],dn[a[i]]),a[i]));
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
+    sort(op.begin(),op.end());
+    // for(auto p: op){
+    //     cout<<p.ff.ff<<" , "<<p.ff.sec<<" , "<<p.sec<<"\n";
+    // }
+    ll mx[op.size()];
+    mx[k-1] = op[k-1].ff.sec;
+    for(ll i = k-2; i>=0; i--){
+        mx[i] = max(mx[i+1],op[i].ff.sec);
     }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
+    ll res = 0;
+    for(ll i = 0; i<k-1; i++){
+        ll y1 = op[i].ff.sec;
+        ll y2 = mx[i+1];
+        // cout<<op[i].sec<<" , "<< min(y1,y2) + 1<<"\n";
+        res = max(res,op[i].ff.ff + min(y1,y2) + 1);
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    // pr(d1[n]);
+    // pr(res);
+    res = min(res,d1[n]);
+    pr(res);
 }
 
 int32_t main(){

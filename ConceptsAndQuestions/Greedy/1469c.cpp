@@ -81,46 +81,38 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
-
-
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
+    ll n,k; re n; re k;
+    ll h[n];
+    fo(n) re h[i];
+    bool flag = true;
+    ll mn = h[0], mx = h[0]; // where they start
+    for(ll i = 1; i<n; i++){
+        mn = max(mn - (k-1),h[i]);
+        mx = min(mx+k-1,h[i] + k - 1);
+        if(h[i] + k - 1 >= mn && h[i]<= mx){
+            continue;
+        }else{
+            flag = false;
+            break;
+        }
+    }
 
+    if(flag){
+        if(h[n-1] >= mn && h[n-1] <= mx){
+            YES;
+        }else{
+            NO;
+        }
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    else NO;
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
-    // re t;
+    re t;
+    // t = 1;
     while(t--) solve();
 }
 

@@ -30,7 +30,7 @@ typedef long double ld;
 #define Yes cout<<"Yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
-#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
+#define prDouble(x) cout<<fixed<<setprecision(14)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
 #define sec second
@@ -81,39 +81,37 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 310;
+ld dp[M][M][M];
+ld n;
+ld freq[4] = {0};
 
+ld recur(ld a, ld b, ld c){
+    // cout<<a<<"()"<<b<<"()"<<c<<"\n";
+    ll ai = a, bi = b, ci = c;
+    if(dp[ai][bi][ci] != -1.0) return dp[ai][bi][ci];
+    ld p0 = (n - (a + b + c))/n;
+    if(p0 == 1) return 0.0;
+    ld p1 = a / n;
+    ld p2 = b/(n), p3 = c/(n);
+    ld ans = p0;
+    if(a)  ans += p1 * recur(a-1,b,c);
+    if(b) ans += p2 * recur(a+1,b-1,c);
+    if(c) ans += p3 * recur(a,b+1,c-1);
+    ans /= (1-p0);
+    return dp[ai][bi][ci] = 1 + ans;
+}
+
+// k = x1 * p(x1) + x2 * p(x2) + x3 * p(x3) + (1 - (pabc)))*(1 + k)
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    forn(i,M) forn(j,M) forn(k,M) dp[i][j][k] = -1.0;
+    re n;
+    fo(n){
+        ll x; re x;
+        freq[x]++;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    prDouble(recur(freq[1],freq[2],freq[3]));
 }
 
 int32_t main(){

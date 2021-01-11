@@ -81,46 +81,77 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 2e5+100;
+ll n,m,x,y;
+vl gr[M];
+const ll inf = 1e15;
+vl dist(M,inf);
+vl par_dist(M,-1);
+vb vis(M,false);
+ll dp[M] = {0};
 
+void bfs(){
+    queue<ll> q;
+    q.push(1);
+    vb visited(n+1,0);
+    dist[1] = 0;
+    visited[1] = true;
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        for(auto x: gr[cur]){
+            if(!visited[x]){
+                q.push(x);
+                visited[x] = true;
+                dist[x] = dist[cur] + 1;
+            }
+        }
+    }
+}
+
+map<pll, bool> edges;
+
+void dfs(ll src){
+    vis[src] = true;
+    dp[src] = dist[src];
+    // cout<<src<<"()\n";
+    for(auto x: gr[src]){
+        if(!vis[x] && dist[x] > dist[src]){
+            dfs(x);
+        }
+        if(dist[x] > dist[src]){
+            dp[src] = min(dp[x],dp[src]);
+        }else{
+            dp[src] = min(dp[src],dist[x]);
+        }
+    }
+
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re m;
+    fo(n+1){
+        gr[i].clear();
+        dist[i] = inf;
+        par_dist[i] = -1;
+        vis[i] = false;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    fo(m){
+        re x; re y;
+        gr[x].pb(y);
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    bfs();
+    // fo(n) cout<<dist[i+1]<<" ";nl;
+    dp[1] = 0;
+    dfs(1);
+    fo(n) cout<<min(dp[i+1],dist[i+1])<<" ";nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

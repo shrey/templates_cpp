@@ -81,46 +81,61 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 3e5+100;
+vl gr[M];
+ll n,m,x,y;
+vl col(M,-1);
 
+void dfs(ll cur, ll flag){
+    col[cur] = flag;
+    flag ^= 1;
+    for(auto x: gr[cur]){
+        if(col[x] == 1){
+            col[cur] = 0;
+            flag = 1;
+            break;
+        }
+    }
+    // cout<<cur<<" , "<<flag<<"\n";
+    for(auto x: gr[cur]){
+        if(col[x] == -1){
+            dfs(x,flag);
+        }
+    }
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re m;
+    fo(n+1){
+        gr[i].clear();
+        col[i] = -1;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    fo(m){
+        re x; re y;
+        gr[x].pb(y);
+        gr[y].pb(x);
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
+    dfs(1,1);
+    vl ans;
+    for(ll i = 1; i<=n; i++){
+        if(col[i] == -1){
+            NO;
+            return;
+        }
+        if(col[i] == 1){
+            ans.pb(i);
+        }
     }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    YES;
+    pr(ans.size());
+    for(auto x: ans) cout<<x<<" ";nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

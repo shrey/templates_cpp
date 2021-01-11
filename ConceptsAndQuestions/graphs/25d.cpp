@@ -81,39 +81,48 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 1010;
 
+vl p(M,0); vl r(M,1);
 
+ll getp(ll v){
+    if(v == p[v]) return v;
+    return p[v] = getp(p[v]);
+}
+
+void unite(ll u, ll v){
+    u = getp(u), v = getp(v);
+    if(u == v) return;
+    if(r[u] < r[v]) swap(u,v);
+    r[u] += r[v];
+    p[v] = u;
+}
+ll x,y;
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    ll n; re n;
+    vp nw,del;
+    fo(n+1) p[i] = i;
+    fo(n-1){
+        re x; re y;
+        if(getp(x) == getp(y)){
+            // cout<<x<<"()"<<y<<"\n";
+            del.pb(mp(x,y));
+        }else{
+            unite(x,y);
+        }
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    for(ll i = 1; i<=n; i++){
+        for(ll j = i+1; j<=n; j++){
+            if(getp(i) != getp(j)){
+                nw.pb(mp(i,j));
+                unite(i,j);
+            }
+        }
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
+    pr(del.size());
+    fo(del.size()){
+        cout<<del[i].ff<<" "<<del[i].sec<<" "<<nw[i].ff<<" "<<nw[i].sec<<"\n";
     }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
 }
 
 int32_t main(){

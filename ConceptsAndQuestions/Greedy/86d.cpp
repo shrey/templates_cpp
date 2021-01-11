@@ -23,7 +23,7 @@
 
 
 using namespace std;
-typedef long long ll;
+typedef int ll;
 typedef long double ld;
 
 #define YES cout<<"YES\n"
@@ -81,39 +81,63 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+struct node{
+    ll l, r, ind;
+};
+
+bool compare(node &a, node &b){
+    if(a.l/1000 == b.l/1000) return a.r < b.r;
+    return a.l/1000 < b.l/1000;
+}
+
+const ll M = 2e5+100;
+const ll MX = 1e6+100;
+ll a[M],n,t;
+ll freq[MX] = {0};
 
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re t;
+    fo(n) re a[i];
+    ll l = 0, r = -1;
+    vector<node> q(t);
+    fo(t){
+        re q[i].l; re q[i].r;
+        q[i].ind = i;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
     ll ans = 0;
-    fo(3){
-        ans += s[i];
+    sort(q.begin(),q.end(),compare);
+    ll res[t+1];
+    fo(t){
+        ll cl = q[i].l, cr = q[i].r;
+        cr--; cl--;
+        while(r < cr){
+            r++;
+            ans -= freq[a[r]]*freq[a[r]]*a[r];
+            freq[a[r]]++;
+            ans += freq[a[r]] * freq[a[r]]*a[r];
+        }
+        while(l > cl){
+            l--;
+            ans-=freq[a[l]]*freq[a[l]]*a[l];
+            freq[a[l]]++;
+            ans += freq[a[l]]*freq[a[l]]*a[l];
+        }
+        while(l < cl){
+            ans-=freq[a[l]]*freq[a[l]]*a[l];
+            freq[a[l]]--;
+            ans += freq[a[l]]*freq[a[l]]*a[l];
+            l++;
+        }
+        while(r > cr){
+            ans -= freq[a[r]]*freq[a[r]]*a[r];
+            freq[a[r]]--;
+            ans += freq[a[r]] * freq[a[r]]*a[r];
+            r--;
+        }
+        res[q[i].ind] = ans;
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    fo(t) cout<<res[i]<<"\n";
 }
 
 int32_t main(){

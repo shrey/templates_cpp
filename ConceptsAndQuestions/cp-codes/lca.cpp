@@ -44,29 +44,33 @@ typedef long double ld;
 #define lmax LLONG_MAX
 #define imin INT_MIN
 #define lmin LLONG_MIN
-#define vi vector<int>
+#define vi vector<ll>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
-#define int long long
+#define ll long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
 #define nl cout<<"\n"
 #define re cin >>
 #define pll pair<ll,ll>
-#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define FOR(gr,b) for(ll i = gr; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
+
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
-ll cl(ld a){
-    if(a>(ll) a){
-        return (ll)a+1;
+ll cl(ld gr){
+    if(gr>(ll) gr){
+        return (ll)gr+1;
     }
     else{
-        return (ll)a;
+        return (ll)gr;
     }
 }
 
@@ -77,92 +81,74 @@ ll flr(ld a){
 
 
 //code starts here
-const ll M = 1010;
-vl euler,first(M),st(4*M+1),height(M);
-vb visited(M,false);
-vl gr[M];
-ll inf = 1e15;
-ll n,m,x;
+const ll M = 1e5+100;
 
-void dfs(ll cur, ll ht){
-    // cout<<"()"<<cur<<"\n";
-    visited[cur] = true;
-    height[cur] = ht;
-    first[cur] = euler.size();
-    euler.pb(cur);
-    for(auto x: gr[cur]){
-        if(!visited[x]){
-            dfs(x,ht+1);
-            euler.pb(cur);
+
+ll par[LG][M],level[M],tot[M];
+ll c[M];
+ll n,x,y;
+vl gr[M];
+
+
+void dfs(ll k,ll parent,ll d){
+    par[0][k]=parent;
+    level[k]=d;
+    tot[k]=1;
+    for(auto it:gr[k])
+    {
+        if(it==parent)
+            continue;
+        dfs(it,k,d+1);
+        tot[k]+=tot[it];
+    }
+}
+
+
+void precompute(){
+  for(ll i=1;i<LG;i++){
+    for(ll j=1;j<=n;j++){
+      if(par[i-1][j])
+          par[i][j]=par[i-1][par[i-1][j]];
+    }
+  }
+}
+
+
+ll lca(ll u, ll v)
+{
+    if(level[u]<level[v])
+        swap(u,v);
+    ll diff=level[u]-level[v];
+    for(ll i=LG-1;i>=0;i--){
+        if((1ll<<i) & diff){
+            u=par[i][u];
         }
     }
-}
-
-void build(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st[v] = euler[tl];
-        return;
+    if(u==v)
+        return u;
+    for(ll i=LG-1;i>=0;i--){
+        if(par[i][u] && par[i][u]!=par[i][v]){
+            u=par[i][u];
+            v=par[i][v];
+        }
     }
-    ll tm = (tl + tr)/2;
-    build(2*v,tl,tm);
-    build(2*v+1,tm+1,tr);
-    ll l = st[2*v], r = st[2*v+1];
-    st[v] = height[l]<height[r]? l : r;
-}
-
-ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return -1;
-    if(tl >= l && tr <= r) return st[v];
-    ll tm = (tl + tr)/2;
-    ll left = query(2*v,tl,tm,l,r);
-    ll right = query(2*v+1,tm+1,tr,l,r);
-    if(left == -1) return right;
-    if(right == -1) return left;
-    return height[left]<height[right]? left : right;
+    return par[0][u];
 }
 
 void solve(){
-    fo(M) gr[i].clear();
-    fo(M) visited[i] = false;
-    euler.clear();
-    re n;
-    // cout<<"()"<<n;nl;
-    for(ll i = 1; i<=n; i++){
-        re m;
-        for(ll j = 0; j<m; j++){
-            re x;
-            gr[i].pb(x);
-        }
-    }
-    dfs(1,0);
-    // pr("here");
-    // fo(euler.size()) cout<<euler[i]<<" ";nl;
-    ll sz = euler.size();
-    build(1,0,sz-1);
-    // pr("here");
-    re m;
-    // pr("now");
-    fo(m){
-        ll l,r;
-        re l; re r;
-        l = first[l]; r = first[r];
-        if(l > r) swap(l,r);
-        pr(query(1,0,sz-1,l,r));
-    }
-    // for(ll i = 1; i<=n; i++){
-    //     cout<<i<<" = "<<height[i]<<"\n";
-    // }
+    //take input from graph first, then
+
+    dfs(1,0,0); //call this
+    precompute(); //then call this, now we can use lca
+
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    re t;
-    // t = 1;
-    fo(t){
-        cout<<"Case "<<i+1<<":\n";
-        solve();
-    }
+    t = 1;
+    // re t;
+    while(t--) solve();
 }
 
 
@@ -179,18 +165,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-/*
-
-1
-7
-3 2 3 4
-0
-3 5 6 7
-0
-0
-0
-0
-2
-4 2
-7 5
-*/

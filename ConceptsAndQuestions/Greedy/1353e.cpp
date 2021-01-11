@@ -81,46 +81,50 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
-
+ll n,k;
+string s;
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re k;
+    re s;
+    ll ones = 0;
+    fo(n) ones += (s[i] == '1');
+    ll freq[n];
+    freq[n-1] = (s[n-1] == '1');
+    for(ll i = n-1; i>=0; i--){
+        freq[i] = (s[i] == '1');
+        if(n-i > k) freq[i] += freq[i + k];
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    // fo(n) cout<<freq[i]<<" ";nl;
+    ll mv[n];
+    for(ll i = n-1; i>=0; i--){
+        if(s[i] == '1'){
+            ll cur = 0;
+            if(n-1 >= i + k) cur += mv[i+k];
+            mv[i] = min(freq[i],cur);
+            // if(i == 3) cout<<cur<<"()\n";
+        }else{
+            ll cur = 1;
+            if(n-1 >= i + k){
+                cur += mv[i+k];
+            }
+            mv[i] = min(freq[i],cur);
+        }
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
+    ll ans = lmax;
+    for(ll i = 0; i<n; i++){
+        ll cur = mv[i] + (ones - freq[i]);
+        ans = min(ans,cur);
     }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    // pr(mv[3]);
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

@@ -62,7 +62,7 @@ typedef long double ld;
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
 
-ll mod = 1e9 + 7;
+ll p = 1e9 + 7;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -81,39 +81,42 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
-
+ll comp(ll num){
+    ll ans = 0;
+    ll mask = 1;
+    ll cur = 0;
+    ll flag = 1, ev = 0, od = 0;
+    while(cur + mask <= num){
+        // cout<<cur<<" , "<<mask<<"\n";
+        if(flag){
+            od += mask%p;
+            od %= p;
+        }else{
+            ev += mask%p;
+            ev %= p;
+        }
+        cur = (cur + mask);
+        mask *= 2;
+        flag ^= 1;
+    }
+    if(flag){
+        od += (num - cur)%p;
+    }else{
+        ev += (num - cur)%p;
+    }
+    od %= p; ev %=p;
+    // cout<<od<<"()"<<ev<<"\n";
+    ans = ((od%p)*(od%p)) + ((ev%p) * ((ev+1)%p))%p;
+    return ans%p;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    ll l,r;
+    re l; re r;
+    ll ans = (comp(r) - comp(l-1));
+    ans = (ans + p)%p;
+    pr(ans);
+    // re l; pr(comp(l));
 }
 
 int32_t main(){

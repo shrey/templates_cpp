@@ -81,46 +81,83 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 2e6+100;
 
+vl st(4*M + 1);
+ll a[M];
+
+void update(ll v, ll tl, ll tr, ll pos, ll change){
+    if(tl == tr){
+        st[v] += change; //change here
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    if(pos <= tm) update(2*v,tl,tm,pos,change);
+    else update(2*v + 1,tm+1,tr,pos,change);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
+
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 0;
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
+}
+
+// void build(ll v, ll tl, ll tr){
+//     if(tl == tr){
+//         st[v] = a[tl];
+//         return;
+//     }
+//     ll tm = (tl + tr)/2;
+//     build(2*v,tl,tm);
+//     build(2*v+1,tm+1,tr);
+//     st[v] = st[2*v] + st[2*v+1]; // change here
+// }
+
+vector<int> z_function(string &s) {   // replace vector<ll> by string to get string
+    int n = (int) s.size();
+    vector<int> z(2*n+1);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
+    }
+    return z;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
+    string s; re s;
+    vl zs = z_function(s);
     ll ans = 0;
-    fo(3){
-        ans += s[i];
+    ll n = s.length();
+    vl z = z_function(s);
+    for(ll i = 1; i<n; i++){
+        update(1,0,n,z[i],1);
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    for(ll i = n-1; i>1; i--){
+        if(z[i] != n-i) continue;
+        ll p1 = query(1,0,n,0,n);
+        ll p2 = query(1,0,n,0,z[i]-1);
+        if(p1 - p2 >= 2){
+            ans = max(ans,z[i]);
+        }
+        update(1,0,n,z[i],-1);
+    }
+    if(!ans){
+        pr("Just a legend"); return;
+    }
+    pr(s.substr(0,ans));
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
     // re t;
+    t = 1;
     while(t--) solve();
 }
 

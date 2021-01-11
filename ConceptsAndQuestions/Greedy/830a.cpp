@@ -81,39 +81,24 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
-
-
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    ll n,k,p;
+    re n; re k; re p;
+    ll a[n],b[k];
+    fo(n) re a[i]; fo(k) re b[i];
+    sort(a,a+n); sort(b,b+k);
+    ll ans = 1e15;
+    // fo(n) cout<<a[i]<<" ";nl;s
+    // fo(k) cout<<b[i]<<" "; nl;
+    for(ll i = 0; i<=k-n; i++){
+        ll cur = 0;
+        for(ll j = 0; j<n; j++){
+            cur = max(cur,abs(a[j] - b[i+j]) + abs(p - b[i+j]));
+        }
+        // cout<<i<<"()"<<cur<<"\n";
+        ans = min(ans,cur);
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    pr(ans);
 }
 
 int32_t main(){

@@ -81,46 +81,31 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
-
-
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    ll n; re n;
+    vp res;
+    ld cur = n;
+    for(ll i = n-1; i>=3; i--){
+        ll temp = cl((ld)cur/(ld)i);
+        if(cl((ld)i/(ld)temp) == 1){
+            res.pb(mp(n,i));
+            cur = temp;
+        }
+        res.pb(mp(i,n));
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    while(cur > 1){
+        res.pb(mp(n,2));
+        cur /= 2.00;
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    cout<<res.size()<<"\n";
+    for(auto p: res) cout<<p.ff<<" "<<p.sec<<"\n";
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
-    // re t;
+    re t;
+    // t = 1;
     while(t--) solve();
 }
 

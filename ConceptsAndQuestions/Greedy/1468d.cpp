@@ -81,46 +81,54 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 2e5+100;
+ll s[M];
 
+ll n,m,a,b;
+bool check(ll pos){
+    ll diff = abs(b - a);
+    ll t = diff;
+    if(diff > pos){
+        if(a > b){
+            t += (n - a);
+        }else{
+            t += (a - 1);
+        }
+    }
+    // if(pos == 1) cout<<t<<"()\n";
+    while(pos > 0){
+        if(s[pos] >= t) return false;
+        t--;
+        pos--;
+    }
+    return true;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
+    re n; re m; re a; re b;
+    fo(m) re s[i+1];
+    sort(s+1,s+m+1);
+    // fo(m) cout<<s[i+1]<<" ";nl;
     ll ans = 0;
-    fo(3){
-        ans += s[i];
+    ll s = 0, e = m;
+    while(s <= e){
+        // cout<<s<<"()"<<e<<"\n";
+        ll mid = (s+e)/2;
+        if(check(mid)){
+            ans = mid;
+            s = mid+1;
+        }else{
+            e = mid-1;
+        }
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

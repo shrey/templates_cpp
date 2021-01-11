@@ -81,39 +81,60 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+string s;
+ll n,k;
+vp st[26];
+const ll M = 101;
+ll dp[M][27][M];
+char a,b;
+ll x;
+ll mat[27][27] = {0}, inf = -1e15;
 
+ll recur(ll i, ll ch, ll k){
+    if(i == s.length()) return 0;
+    if(dp[i][ch][k] != -1) return dp[i][ch][k];
+    ll ans = inf;
+    ans = mat[ch][s[i]-'a'] + recur(i+1,s[i]-'a',k);
+    if(k){
+        forn(j, 26){
+            if(j != s[i]-'a'){
+                ll cur = mat[ch][j] + recur(i+1,j,k-1);
+                ans = max(ans,cur);
+            }
+        }
+    }
+    return dp[i][ch][k] = ans;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    memset(dp,inf,sizeof(dp));
+    re s; re k;
+    re n;
+    fo(n){
+        re a; re b; re x;
+        mat[a-'a'][b-'a'] = x;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    dp[0][26][k] = 0;
+    for(ll i = 0; i<s.length(); i++){
+        for(ll j = 0; j<=k; j++){
+            for(ll l = 0; l<=26; l++){
+                ll ch = s[i] - 'a';
+                if(dp[i][l][j] == inf) continue;
+                dp[i+1][ch][j] = max(dp[i+1][ch][j], dp[i][l][j] + mat[l][ch]);
+                if(j != 0){
+                    forn(p,26){
+                        dp[i+1][p][j-1] = max(dp[i+1][p][j-1],dp[i][l][j] + mat[l][p]);
+                    }
+                }
+            }
+        }
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
+    ll ans = inf;
+    n = s.length();
+    forn(i,26){
+        forn(j,k+1) ans = max(ans,dp[n+1][i][j]);
     }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    pr(ans);
 }
 
 int32_t main(){

@@ -81,46 +81,43 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+ll n;
+const ll M = 2e5+100;
+vp gr[M];
+ll dp[M] = {0};
+bool visited[M] = {false};
+ll mx = 0;
 
+void dfs1(ll cur, ll par, ll dist){
+    mx = max(dist,mx);
+    // cout<<cur<<"\n";
+    for(auto x: gr[cur]){
+        if(x.ff!=par){
+            dfs1(x.ff,cur,dist + x.sec);
+        }
+    }
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n;
+    ll tot = 0;
+    fo(n-1){
+        ll x,y,w;
+        re x; re y; re w;
+        gr[x].pb(mp(y,w));
+        gr[y].pb(mp(x,w));
+        tot += w;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    dfs1(1,0,0);
+    ll ans = mx + 2*(tot - mx);
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
     // re t;
+    t = 1;
     while(t--) solve();
 }
 

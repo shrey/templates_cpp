@@ -81,39 +81,63 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+ll n,tme;
+vp op;
+vl res;
 
+ll check(ll num){
+    res.clear();
+    multiset<pair<pair<ll,ll> ,ll> > m;
+    for(ll i = 0; i<op.size(); i++){
+        auto p = op[i];
+        if(p.ff >= num){
+            m.insert(mp(mp(p.sec,p.ff),i));
+        }
+    }
+    if(m.size() < num) return -1;
+    ll ans = 0;
+    auto cur = *m.begin();
+    ll t = 0;
+    while(res.size() < num){
+        ans++;
+        t += cur.ff.ff;
+        res.pb(cur.sec+1);
+        m.erase(*m.begin());
+        cur = *m.begin();
+    }
+    if(t > tme){
+        // cout<<num<<"()\n";
+        // cout<<t<<"\n";
+        res.clear();
+        return -1;
+    }
+    return ans;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re tme;
+    ll s = 0, e = n;
+    op.resize(n);
+    fo(n){
+        re op[i].ff; re op[i].sec;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
     ll ans = 0;
-    fo(3){
-        ans += s[i];
+    ll score = 0;
+    vl fin;
+    while(s <= e){
+        ll mid = (s+e)>>1;
+        // cout<<s<<"()"<<e<<"\n";
+        if(check(mid) != -1){
+            s = mid+1;
+            fin = res;
+        }
+        else{
+            e = mid - 1;
+        }
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    cout<<fin.size()<<"\n";
+    cout<<fin.size()<<"\n";
+    for(auto x: fin) cout<<x<<" "; nl;
 }
 
 int32_t main(){

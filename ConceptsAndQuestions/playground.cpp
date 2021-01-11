@@ -81,10 +81,23 @@ ll flr(ld a){
 
 //code starts here
 
+class Compare{
+    public:
+        bool operator() (pll &a, pll &b){
+            if(a.ff == b.ff){
+                return a.sec > b.sec;
+            }
+            return a.ff < b.ff;
+        }
+};
+
+priority_queue<pair<ll,ll>,vp,Compare> pq;
+
 void solve(){
-    set<ll> m;
-    fo(5) m.insert(5*i);
-    cout<<*m.lower_bound(7)<<" "<<*m.upper_bound(7)<<"\n";
+   set<ll,greater<ll> > e1,o1;
+   e1.insert(2);
+   e1.insert(3);
+   cout<<*e1.begin()<<"\n";
 }
 
 int32_t main(){

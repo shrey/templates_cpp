@@ -19,6 +19,8 @@
 #include<bitset>
 #include<cstring>
 #include<numeric>
+#include<array>
+
 
 using namespace std;
 typedef long long ll;
@@ -52,7 +54,13 @@ typedef long double ld;
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
 #define nl cout<<"\n"
-#define re(x) cin>>x
+#define re cin >>
+#define pll pair<ll,ll>
+#define FOR(a,b) for(ll i = a; i<=b; i++)
+#define all(x) x.begin(),x.end()
+
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
@@ -70,41 +78,83 @@ ll flr(ld a){
 }
 
 
+
 //code starts here
 
+ll n;
 const ll M = 1010;
-ll arr[M],n;
+ll a[M];
+ll dp[M][M];
+const ll inf = 1e15;
 
+ll recur(ll pos, ll idx){
+    if(pos >= n) return dp[pos][idx] = 0;
+    if(idx >= n) return dp[pos][idx] = a[pos];
+    if(dp[pos][idx] != -1) return dp[pos][idx];
+    ll ans = inf;
+    // ans = min(ans,a[pos] + recur(idx,idx+1));
+    ans = min(ans,max(a[pos],a[idx]) + recur(idx+1,idx+2));
+    if(idx < n-1) ans = min(ans,max(a[pos],a[idx+1]) + recur(idx,idx + 2));
+    if(idx < n-1) ans = min(ans,max(a[idx],a[idx+1]) + recur(pos,idx+2));
+    return dp[pos][idx] = ans;
+}
+
+vp res;
+
+
+ll dir[] = {-1,0,1};
+
+void path(ll pos, ll idx){
+    if(pos >= n) return;
+    if(idx >= n) {
+        res.pb(mp(pos,-1));
+        return;
+    }
+    // cout<<pos<<"()"<<idx<<"\n";
+    ll dist[3];
+    dist[0] = (idx < n-1) ? max(a[idx],a[idx+1]) + dp[pos][idx+2] : inf;
+    dist[1] = max(a[pos],a[idx]) + dp[idx+1][idx+2];
+    dist[2] = (idx < n-1) ? dp[idx][idx+2] + max(a[pos],a[idx+1]) : inf;
+    // if(pos == 0) cout<<dist[0]<<" , "<<dist[1]<<" , "<<dist[2]<<"\n";
+    ll ans = min(dist[0],min(dist[1],dist[2]));
+    fo(3){
+        if(dist[i] == ans){
+            if(i == 0){
+                res.pb(mp(idx,idx+1));
+                path(pos,idx+2);
+            }
+            else if(i == 1){
+                res.pb(mp(pos,idx));
+                path(idx+1,idx+2);
+            }
+            else{
+                res.pb(mp(pos,idx+1));
+                path(idx,idx+2);
+            }
+            break;
+        }
+    }
+}
 
 void solve(){
-    map<ll,vl> freq;
-    fo(n){
-        freq[arr[i]].pb(i+1);
-    }
-    sort(arr,arr+n);
-    ll ans = 0;
-    ll i = n-1;
-    while(i>=0){
-        ans+=arr[i];
-        i-=2;
-    }
-    pr(ans);
-    i = n-1;
-    while(i>=0){
-        cout<<freq[arr[i]][freq[arr[i]].size()-1]<<" ";
-        freq[arr[i]].pop_back();
-        if(i-1>=0) cout<<freq[arr[i-1]][freq[arr[i-1]].size()-1]<<" ";
-        freq[arr[i-1]].pop_back();
+    re n;
+    fo(n) re a[i];
+    memset(dp,-1,sizeof(dp));
+    pr(recur(0,1));
+    path(0,1);
+    for(auto x: res){
+        cout<<x.ff+1<<" ";
+        if(x.sec != -1) cout<<x.sec+1;
         nl;
-        i-=2;
     }
 }
 
 int32_t main(){
     KOBE;
-    re(n);
-    fo(n) re(arr[i]);
-    solve();
+    ll t;
+    t = 1;
+    // re t;
+    while(t--) solve();
 }
 
 
@@ -120,3 +170,4 @@ int32_t main(){
 //there might be many instances of limited answers like 0,1,2 only
 // see suffix and prefix
 //don't be obsessed with binary search
+// try to find repeating pattern in matrices

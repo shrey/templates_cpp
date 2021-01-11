@@ -81,39 +81,52 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+const ll M = 1e5+100;
+ll n,m,k,a,b,c;
+vp gr[M];
+const ll inf = 9e15;
 
+
+void dijkstra(ll src){
+    vector<vl> dist(M, vl(k,inf));
+    // fo(M) dist[i] = lmax;
+    priority_queue <
+	  pair<int,int>,
+	  vector<pair<int,int> >,
+	  greater<pair<int,int> >
+	> pq;
+    pq.push(mp(0,src));
+    // dist[src][k-1] = 0;
+    // fo(k) dist[src][i] = 0;
+    while(!pq.empty()){
+        pll cur = pq.top();
+        pq.pop();
+        ll node = cur.sec;
+        ll d = cur.ff;
+        if(dist[node][k-1] < d) continue;
+        for(auto x: gr[node]){
+            if(x.sec + d < dist[x.ff][k-1]){
+                // auto f = s.find(mp(dist[x.ff][k-1],x.ff));
+                // if(f!=s.end()){
+                //     s.erase(f);
+                // }
+                // if(x.ff == 4) cout<<x.sec + d<<"()\n";
+                dist[x.ff][k-1] = x.sec + d;
+                pq.push(mp(dist[x.ff][k-1],x.ff));
+                sort(all(dist[x.ff]));
+            }
+        }
+    }
+    for(auto x: dist[n]) cout<<x<<" "; nl;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re m; re k;
+    fo(m){
+        re a; re b; re c;
+        gr[a].pb(mp(b,c));
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    dijkstra(1);
 }
 
 int32_t main(){

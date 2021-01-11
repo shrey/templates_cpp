@@ -81,46 +81,39 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+ll n,k,m;
 
+const ll M = 2e5+100;
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
+    re n; re k; re m;
+    ll b[m]; fo(m) re b[i];
+    if((n-m)%(k-1)){
+        NO;
+        return;
+    }
+    ll freq[n+1];
+    fo(n+1) freq[i] = 1;
+    fo(m) freq[b[i]] = 0;
+    for(ll i = 2; i<=n; i++){
+        freq[i] += freq[i-1];
+    }
 
+    freq[0] = 0;
+    for(ll i = 0; i<m; i++){
+        if(freq[b[i]-1] >= (k-1)/2 && freq[n] - freq[b[i]] >= (k-1)/2){
+            YES;
+            return;
+        }
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    NO;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

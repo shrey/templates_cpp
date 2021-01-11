@@ -81,46 +81,55 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+vector<int> z_function(vector<ll> &s) { // z[i] is the max length such that chars ahead of i match the prefix
+    int n = (int) s.size();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
+    }
+    return z;
+}
 
+vl conv(vl &vec){
+    ll n = vec.size();
+    vl cur;
+    for(ll i = 1; i<n; i++){
+        cur.pb(vec[i] - vec[i-1]);
+    }
+    return cur;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    ll n,w;
+    re n; re w;
+    vl a(n); vl b(w);
+    fo(n) re a[i];
+    fo(w) re b[i];
+    if(w == 1){
+        pr(n); return;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
+    vl arr = conv(a); vl barr = conv(b);
+    vl op;
+    for(auto x: barr) op.pb(x);
+    for(auto x: arr) op.pb(x);
+    vl zfn = z_function(op);
     ll ans = 0;
-    fo(3){
-        ans += s[i];
+    for(ll i = barr.size(); i<zfn.size(); i++){
+        if(zfn[i] >= barr.size()) ans++;
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
     // re t;
+    t = 1;
     while(t--) solve();
 }
 

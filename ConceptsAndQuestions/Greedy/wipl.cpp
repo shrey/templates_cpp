@@ -80,47 +80,39 @@ ll flr(ld a){
 
 
 //code starts here
-
-vl a[3];
-ll n1,n2,n3;
-
+ll n,k;
+const ll M = 4010;
+ll a[M],dp[M][M];
+ll inf = 1e15;
+ll recur(ll i, ll h1, ll tot){
+    ll h2 = tot - h1;
+    // cout<<i<<" , "<<h1<<" , "<<a[i]<<"\n";
+    if(h1 >= k && h2 >= k) return 0;
+    if(i == n) return inf;
+    if(dp[i][h1] != -1) return dp[i][h1];
+    ll ans = inf;
+    if(h1 < k)
+        ans = min(ans,1 + recur(i+1,h1+a[i],tot+a[i]));
+    if(h2 < k)
+        ans = min(ans,1 + recur(i+1,h1,tot+a[i]));
+    return dp[i][h1] = ans;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    re n; re k;
+    fo(n) re a[i];
+    memset(dp,-1,sizeof(dp));
+    sort(a,a+n, greater<ll>());
+    ll ans = recur(0,0,0);
+    if(ans >= inf) pr(-1);
+    else pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

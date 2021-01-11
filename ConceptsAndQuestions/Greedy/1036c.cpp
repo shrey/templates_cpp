@@ -81,46 +81,44 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
-
+ll comp(ll num){
+    ll ans = 0;
+    string s = to_string(num);
+    ll dig = s.length();
+    ans += ((dig-1) * (dig-2) * (dig-3) * 9 * 9 * 9) / 6 + ((dig - 1) * (dig - 2) * 9 *9) / 2 + (dig-1) * 9;
+    ans += (s[0]-'1')*((dig - 1) * (dig - 2) * 9 *9 / 2 + (dig-1) * 9 + 1);
+    //fixing greatest digit to it's value
+    ll j = 1;
+    while(j < dig && s[j] == '0') j++;
+    if(j == dig) ans++;
+    else{
+        ll cur = s[j] - '0';
+        ans += (cur-1) * ((dig-j-1) * 9 + 1);
+        ans += ((dig-j-1) * (dig - j - 2) * 9 * 9)/2 + (dig - j - 1) * 9 + 1;
+        //fix j to greatest digit
+        ll k = j + 1;
+        while(k < dig && s[k] == '0') k++;
+        if(k == dig) ans++;
+        else{
+            cur = s[k] - '0';
+            ans += cur;
+            ans += (dig - k - 1) * 9 + 1;
+        }
+    }
+    return ans;
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
-    }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
-    }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
-    ll ans = 0;
-    fo(3){
-        ans += s[i];
-    }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    ll a,b;
+    re b; re a;
+    pr(comp(a) - comp(b-1));
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

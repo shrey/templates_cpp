@@ -81,39 +81,71 @@ ll flr(ld a){
 
 //code starts here
 
-vl a[3];
-ll n1,n2,n3;
+ll n,m,T,x,y,w;
+const ll M = 5010;
+vp gr[M];
+ll dp[M][M]; //min time required from i to n using k edges
+ll inf = 1e15;
+vl res;
 
+ll dfs(ll cur, ll cnt){
+    if(cur == n && cnt == 1) return 0;
+    if(cur == n || cnt <= 1) return inf;
+    if(dp[cur][cnt] != -1) return dp[cur][cnt];
+    // cout<<cur<<" , "<<cnt<<" = "<<"\n";
+    ll ans = inf;
+    for(auto x: gr[cur]){
+        ll t = dfs(x.ff,cnt-1);
+        if(t != inf) ans = min(ans,t + x.sec);
+    }
+    return dp[cur][cnt] = ans;
+}
+
+void dfs2(ll cur, ll cnt){
+    if(cur == n){
+        // res.pb(n);
+        return;
+    }
+    ll mn = inf;
+    ll idx = -1;
+    for(auto x: gr[cur]){
+        if(dp[x.ff][cnt-1] != -1 && dp[x.ff][cnt-1] + x.sec == dp[cur][cnt]){
+            res.pb(x.ff);
+            dfs2(x.ff,cnt-1);
+            return;
+        }
+    }
+    // if(idx == -1){
+    //     cout<<cur<<"()"<<cnt<<"\n";
+    //     return;
+    // }
+    // res.pb(idx);
+    // dfs2(idx,cnt-1);
+}
 
 void solve(){
-    re n1; re n2; re n3;
-    ll x;
-    ll s[3] = {0};
-    fo(n1){
-        re x;
-        a[0].pb(x);
-        s[0] += x;
-
+    re n; re m; re T;
+    // memset(dp,inf,sizeof(dp));
+    forn(i,M){
+        forn(j,M)dp[i][j] = -1;
     }
-    fo(n2){
-        re x; a[1].pb(x);
-        s[1] += x;
-
+    dp[n][1] = 0;
+    fo(m){
+        re x; re y; re w;
+        gr[x].pb(mp(y,w));
     }
-    fo(n3){
-        re x; a[2].pb(x);
-        s[2] += x;
-
-    }
-    fo(3) sort(all(a[i]));
-    // ll mx = max(s[0],max(s[1],s[2]));
     ll ans = 0;
-    fo(3){
-        ans += s[i];
+    for(ll i = 1; i<=n; i++){
+        ll t = dfs(1,i);
+        // cout<<i<<" , "<<t<<"\n";
+        if(t <= T){
+            ans = i;
+        }
     }
-    // pr(ans); pr(mn);
-    ll cur = min(s[0],min(s[1],min(s[2],min(a[0][0] + a[1][0],min(a[1][0] + a[2][0],a[2][0] + a[0][0])))));
-    pr(ans - 2 * cur);
+    pr(ans);
+    res.pb(1);
+    dfs2(1,ans);
+    for(auto x: res) cout<<x<<" ";nl;
 }
 
 int32_t main(){

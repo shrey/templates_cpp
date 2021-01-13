@@ -19,6 +19,7 @@
 #include<bitset>
 #include<cstring>
 #include<numeric>
+#include<sstream>
 #include<array>
 
 
@@ -74,19 +75,18 @@ ll flr(ld a){
     return (ll) a;
 }
 
-
-
 //code starts here
 
 const ll M = 2e5+100;
 
 vl st(4*M + 1);
 vl lazy(4*M + 1,0);
-ll a[M];
+ll a[M],n;
+const ll inf = 1e15;
 
 void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
     if(lazy[v] != 0){
-        st[v] += (tr-tl+1) * lazy[v];
+        st[v] += lazy[v];
         if(tl != tr){
             lazy[2*v] += lazy[v];
             lazy[2*v+1] += lazy[v];
@@ -95,7 +95,7 @@ void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
     }
     if(tl > r || tr < l) return;
     if((tl >= l && tr <= r) || tl == tr){
-        st[v] += (tr-tl+1)*change; //change here in rmq to st[v] += change as only change is added to the max or min number
+        st[v] += change; //change here
         if(tr != tl){
             lazy[2*v] += change;
             lazy[2*v+1] += change;
@@ -105,24 +105,14 @@ void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
     ll tm = (tl + tr)/2;
     update_range(2*v,tl,tm,l,r,change);
     update_range(2*v+1,tm+1,tr,l,r,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
+    st[v] = min(st[2*v] , st[2*v+1]); //change here
 }
 
-void update(ll v, ll tl, ll tr, ll pos, ll change){
-    if(tl == tr){
-        st[v] += change; //change here
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    if(pos <= tm) update(2*v,tl,tm,pos,change);
-    else update(2*v + 1,tm+1,tr,pos,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
-}
 
 ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
+    if(tl > r || tr < l) return inf;
     if(lazy[v]){
-        st[v] += (tr-tl+1)*lazy[v];
+        st[v] += lazy[v];
         if(tl != tr){
             lazy[2*v] += lazy[v];
             lazy[2*v+1] += lazy[v];
@@ -131,7 +121,7 @@ ll query(ll v, ll tl, ll tr, ll l, ll r){
     }
     if(tl >= l && tr <= r) return st[v];
     ll tm = (tl + tr)/2;
-    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
+    return min(query(2*v,tl,tm,l,r) , query(2*v+1,tm+1,tr,l,r)); // change here
 }
 
 void build(ll v, ll tl, ll tr){
@@ -142,18 +132,58 @@ void build(ll v, ll tl, ll tr){
     ll tm = (tl + tr)/2;
     build(2*v,tl,tm);
     build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here for min, max, sum query
+    st[v] = min(st[2*v] , st[2*v+1]); // change here for min, max, sum query
 }
 
 
 void solve(){
-    ll n = 8;
-    fo(n) a[i] = i+1;
+    re n;
+    fo(n) re a[i];
     build(1,0,n-1);
-    update_range(1,0,n-1,4,6,5);
-    pr(query(1,0,n-1,5,7));
-    // pr(update)
-
+    // pr(query(1,0,n-1,0,n-1));
+    ll q; re q;
+    cin.ignore();
+    string s,wrd;
+    while(q--){
+        getline(cin,s);
+        // cout<<"here , "<<s<<"\n";
+        ll l,r,val;
+        l = r = val = -inf;
+        stringstream S(s);
+        ll cnt = 0;
+        while(S>>wrd){
+            // cout<<wrd<<"()\n";
+            if(cnt == 0){
+                l = stoll(wrd);
+                cnt++;
+            }
+            else if(cnt == 1){
+                r = stoll(wrd);
+                cnt++;
+            }
+            else if(cnt == 2){
+                val = stoll(wrd);
+                cnt++;
+            }
+        }
+        // cout<<l<<" , "<<r<<" , "<<val<<"\n";
+        if(val != -inf){
+            // pr("upd");
+            if(r >= l){
+                update_range(1,0,n-1,l,r,val);
+            }else{
+                update_range(1,0,n-1,l,n-1,val); update_range(1,0,n-1,0,r,val);
+            }
+        }else{
+            // pr("qry");
+            if(r >= l){
+                pr(query(1,0,n-1,l,r));
+            }
+            else{
+                pr(min(query(1,0,n-1,l,n-1),query(1,0,n-1,0,r)));
+            }
+        }
+    }
 }
 
 int32_t main(){

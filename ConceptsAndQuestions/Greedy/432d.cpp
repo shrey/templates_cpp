@@ -81,56 +81,51 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
-    ll n,m; re n; re m;
-    ll a[m]; fo(m) re a[i];
-    // sort(a,a+m);
-    multiset<ll> st;
-    fo(m) st.insert(a[i]);
-    ll i = 0;
-    ll ans = 0;
-    ll mask = 1;
-    while(n >= mask){
-        if(n & mask){
-            // cout<<mask<<"\n";
-            map<ll,ll> freq;
-            while(!st.empty() && *st.begin() < mask){
-                ll cur = *st.begin();
-                freq[cur]++;
-                st.erase(st.begin());
-                if(freq[cur] == 2){
-                    freq[cur] = 0;
-                    st.insert(2 * cur);
-                }
-            }
-            if(st.empty()){
-                pr(-1);
-                return;
-            }
-            if(*st.begin() == mask){
-                st.erase(st.begin());
-            }else{
-                ll cur = *st.begin();
-                st.erase(st.begin());
-                while(cur > mask){
-                    ans++;
-                    cur /= 2;
-                    st.insert(cur);
-                }
-            }
-            // cout<<mask<<"()"<<i<<"\n";
-        }
-        i++;
-        mask *= 2;
+vector<int> z_function(string &s) {   // replace vector<ll> by string to get string
+    int n = (int) s.size();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
     }
-    pr(ans);
+    return z;
+}
+
+
+void solve(){
+    string s;
+    re s;
+    vl z = z_function(s);
+    vp ans;
+    ll n = s.length();
+    ll freq[100009] = {0};
+    const ll M = 1e5+9;
+    for(ll i = 1; i<s.length(); i++){
+        freq[z[i]]++;
+        // cout<<z[i]<<"\n";
+    }
+    for(ll i = M-2; i>=0; i--) freq[i] += freq[i+1];
+    fo(M) if(freq[i]) freq[i]++;
+    for(ll i = n-1; i>0; i--){
+        if(i + z[i] == n){
+            ans.pb(mp(z[i],freq[z[i]]));
+        }
+    }
+    ans.pb(mp(n,1));
+    sort(ans.begin(),ans.end());
+    pr(ans.size());
+    for(auto p: ans) cout<<p.ff<<" "<<p.sec<<"\n";
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

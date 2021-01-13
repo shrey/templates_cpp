@@ -82,46 +82,55 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-    ll n,m; re n; re m;
-    ll a[m]; fo(m) re a[i];
-    // sort(a,a+m);
-    multiset<ll> st;
-    fo(m) st.insert(a[i]);
-    ll i = 0;
+    ll n; re n;
     ll ans = 0;
-    ll mask = 1;
-    while(n >= mask){
-        if(n & mask){
-            // cout<<mask<<"\n";
-            map<ll,ll> freq;
-            while(!st.empty() && *st.begin() < mask){
-                ll cur = *st.begin();
-                freq[cur]++;
-                st.erase(st.begin());
-                if(freq[cur] == 2){
-                    freq[cur] = 0;
-                    st.insert(2 * cur);
-                }
+    map<ll,ll> freq;
+    vp cords[n];
+    fo(n){
+        ll m; re m;
+        ll a[m];
+        forn(j,m){
+            re a[j];
+            if(a[j]>0){
+                cords[i].pb(mp(a[j],1));
             }
-            if(st.empty()){
-                pr(-1);
-                return;
-            }
-            if(*st.begin() == mask){
-                st.erase(st.begin());
-            }else{
-                ll cur = *st.begin();
-                st.erase(st.begin());
-                while(cur > mask){
-                    ans++;
-                    cur /= 2;
-                    st.insert(cur);
-                }
-            }
-            // cout<<mask<<"()"<<i<<"\n";
+            else cords[i].pb(mp(abs(a[j]),-1));
+            freq[abs(a[j])]++;
         }
-        i++;
-        mask *= 2;
+        sort(all(cords[i]));
+    }
+    fo(n){
+        ll pos = 0, neg = 0;
+        for(auto p: cords[i]){
+            if(p.sec == 1) pos++;
+            else neg++;
+        }
+        for(ll j = 0; j<cords[i].size(); j++){
+            ll tot = freq[cords[i][j].ff];
+            // if(j < cords[i].size()-1 && cords[i][j+1].ff == cords[i][j].ff) tot--;
+            auto p = cords[i][j];
+            if(tot > 1){
+                if(p.sec == 1){
+                    pos--;
+                    ans += pos;
+                }else{
+                    neg--;
+                    ans += neg;
+                }
+            }else{
+                if(p.sec == 1){
+                    ans += neg;
+                    pos--;
+                }
+                else{
+                    neg--;
+                    ans += pos;
+                }
+            }
+        }
+    }
+    for(auto x: freq){
+        if(x.sec > 1) ans++;
     }
     pr(ans);
 }

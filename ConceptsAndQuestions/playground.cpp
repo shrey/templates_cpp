@@ -74,6 +74,9 @@ ll cl(ld a){
 }
 
 ll flr(ld a){
+    if(a < 0.0){
+        return (ll) a - 1;
+    }
     return (ll) a;
 }
 
@@ -94,10 +97,7 @@ class Compare{
 priority_queue<pair<ll,ll>,vp,Compare> pq;
 
 void solve(){
-   set<ll,greater<ll> > e1,o1;
-   e1.insert(2);
-   e1.insert(3);
-   cout<<*e1.begin()<<"\n";
+    pr(cl(-4.9));
 }
 
 int32_t main(){

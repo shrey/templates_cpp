@@ -74,10 +74,11 @@ ll cl(ld a){
 }
 
 ll flr(ld a){
+    if(a < 0.0){
+        return (ll) a - 1;
+    }
     return (ll) a;
 }
-
-
 
 //code starts here
 

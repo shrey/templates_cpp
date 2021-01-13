@@ -80,50 +80,63 @@ ll flr(ld a){
 
 
 //code starts here
+const ll M = (1<<20) + 1;
+ll dp[M];
+void recur(ll cur, ll idx){
+    if(dp[cur] != -1 || cur == 0) return;
+    dp[cur] = idx;
+    for(ll i = 0; i<20; i++){
+        if((cur & (1<<i))){
+            ll temp = (cur ^ (1<<i));
+            recur(temp,idx);
+        }
+    }
+}
 
 void solve(){
-    ll n,m; re n; re m;
-    ll a[m]; fo(m) re a[i];
-    // sort(a,a+m);
-    multiset<ll> st;
-    fo(m) st.insert(a[i]);
-    ll i = 0;
-    ll ans = 0;
-    ll mask = 1;
-    while(n >= mask){
-        if(n & mask){
-            // cout<<mask<<"\n";
-            map<ll,ll> freq;
-            while(!st.empty() && *st.begin() < mask){
-                ll cur = *st.begin();
-                freq[cur]++;
-                st.erase(st.begin());
-                if(freq[cur] == 2){
-                    freq[cur] = 0;
-                    st.insert(2 * cur);
-                }
-            }
-            if(st.empty()){
-                pr(-1);
-                return;
-            }
-            if(*st.begin() == mask){
-                st.erase(st.begin());
-            }else{
-                ll cur = *st.begin();
-                st.erase(st.begin());
-                while(cur > mask){
-                    ans++;
-                    cur /= 2;
-                    st.insert(cur);
-                }
-            }
-            // cout<<mask<<"()"<<i<<"\n";
+    ll n,k; re n; re k;
+    string s; re s;
+    string p[k];
+    memset(dp,-1,sizeof(dp));
+    fo(k){
+        re p[i];
+        ll mask = 0;
+        forn(j,p[i].length()){
+            mask |= 1<<(p[i][j] - 'a');
         }
-        i++;
-        mask *= 2;
+        dp[mask] = i+1;
     }
-    pr(ans);
+    for(ll i = 0; i<M; i++){
+        if(dp[i] != -1){
+            for(ll j = 0; j<20; j++){
+                if(((1<<j)&i)){
+                    ll temp = (1<<j) ^ i;
+                    recur(temp,dp[i]);
+                }
+            }
+        }
+    }
+    // pr("here");
+    vl res(n);
+    ll i = 0, prev = 0;
+    while(i < n){
+        ll cur = 0;
+        cur |= 1<<(s[i] - 'a');
+        while(i < n && dp[cur] != -1){
+            i++;
+            if(i < n) cur |= (1 << (s[i]-'a'));
+        }
+        if(i != n){
+            cur ^= (1 <<(s[i]-'a'));
+        }
+        while(prev < i){
+            res[prev] = dp[cur];
+            prev++;
+        }
+        prev = i;
+    }
+    fo(n) cout<<res[i]<<" ";nl;
+
 }
 
 int32_t main(){

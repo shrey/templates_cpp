@@ -80,34 +80,47 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n,k; re n; re k;
+    k%=n;
+    vl ans;
+    ll mark[n+1];
+    fo(n+1) mark[i] = false;
+    ll i = k;
+    set<ll> s;
+    fo(n) s.insert(i+1);
+    if(n == 1){
+        cout<<1<<"\n";
+        return;
+    }
+    while(s.size()){
+        ans.pb(i+1);
+        mark[i] = true;
+        s.erase(i+1);
+        ll cnt = 0;
+        if(s.size() == 0) break;
+        k%=s.size();
+        if(s.size() == k){
+            break;
+        }
+        while(cnt != k+1){
+            if(!mark[i]) cnt++;
+            if(cnt == k+1) break;
+            i = (i+1)%n;
+        }
+
+    }
+    // while(s.size()){
+    //     if(!mark[i]){
+    //         ans.pb(i+1);
+    //         s.erase(i+1);
+    //         mark[i] = true;
+    //     }
+    //     i = (i+1)%n;
+    // }
+    for(auto x: ans) cout<<x<<" "; nl;
 }
 
 int32_t main(){

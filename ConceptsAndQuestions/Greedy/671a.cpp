@@ -56,6 +56,7 @@ typedef long double ld;
 #define nl cout<<"\n"
 #define re cin >>
 #define pll pair<ll,ll>
+#define pdd pair<ld,ld>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
@@ -80,34 +81,73 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+pair<ld,ld> a,b,t;
+const ll M = 1e5+100;
+ll n;
+vector<pair<ld,ld> > pos;
+
+ld d(pdd &a1, pdd &b1){
+    ld k = (a1.ff-b1.ff)*(a1.ff-b1.ff) + (a1.sec-b1.sec)*(a1.sec-b1.sec);
+    return sqrt(k);
+}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re a.ff; re a.sec;
+    re b.ff; re b.sec;
+    re t.ff; re t.sec;
+    re n;
+    pos.resize(n);
+    fo(n){
+        re pos[i].ff; re pos[i].sec;
+    }
+    ld dist = 0.0;
+    fo(n){
+        dist += 2*d(pos[i],t);
+    }
+    vector<pair<ld,ll> > f1;
+    vector<pair<ld,ll> > f2;
+    umap<ll,ld> op;
+    umap<ll,ld> op2;
+    fo(n){
+        ld cur = d(pos[i],a) - d(pos[i],t);
+        op[i] = cur;
+        f1.pb(mp(cur,i));
+        cur = d(pos[i],b) - d(pos[i],t);
+        op2[i] = cur;
+        f2.pb(mp(cur,i));
+    }
+    sort(f1.begin(),f1.end());
+    sort(f2.begin(),f2.end());
+
+    // cout<<dist<<"()()\n";
+    ld ans = 1e15;
+    fo(n){
+        ld cur = dist + op[i];
+        ans = min(ans,cur);
+        if(f2[0].sec == i){
+            if(n>1){
+                cur += f2[1].ff;
+                ans = min(ans,cur);
+            }
+        }else{
+            cur += f2[0].ff;
+            ans = min(ans,cur);
+        }
+        cur = dist + op2[i];
+        ans = min(ans,cur);
+        if(f1[0].sec == i){
+            if(n>1){
+                cur += f1[1].ff;
+                ans = min(ans,cur);
+            }
+        }else{
+            cur += f1[0].ff;
+            ans = min(ans,cur);
+        }
+    }
+    prDouble(ans); nl;
 }
 
 int32_t main(){

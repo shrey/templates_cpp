@@ -80,34 +80,59 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+const ll M = 2e6+100;
+pll dp[M];
+bool vis[M] = {false};
+ll n,x;
+ll w[30];
+ll mx;
+const ll inf = 1e15;
+
+pll mn(pll &a, pll &b){
+    if(a.ff < b.ff) return a;
+    else if(b.ff < a.ff) return b;
+    else{
+        return (a.sec < b.sec)? a : b;
+    }
+}
+
+ll cnt = 0;
+
+pll recur(ll mask){
+    // cnt++;
+    // if(cnt > 20) return mp(0,0);
+    if(mask == mx) return mp(1,0);
+    if(vis[mask]) return dp[mask];
+    vis[mask] = true;
+    // cout<<mask<<"()\n";
+    pll ans = mp(inf,inf);
+    for(ll i = 0; i<n; i++){
+        if(((1<<i)&mask) == 0){
+            ll cmask = mask + (1<<i);
+            pll opt = recur(cmask);
+            ll sz = opt.ff;
+            if(opt.sec + w[i] > x){
+                opt.ff++;
+                opt.sec = w[i];
+            }
+            else opt.sec += w[i];
+            ans = mn(ans,opt);
+        }
+    }
+    return dp[mask] = ans;
+}
+
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n; re x;
+    fo(n) re w[i];
+    mx = (1<<n) - 1;
+    // memset(dp,-1,sizeof(dp));
+    sort(w,w+n,greater<ll>());
+    // fo(n) cout<<w[i]<<" ";nl;
+    pr(recur(0).ff);
 }
 
 int32_t main(){

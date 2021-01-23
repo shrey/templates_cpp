@@ -80,34 +80,76 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+vp comp(ll num){
+    vp facts;
+    for(ll i = 2; i*i <= num; i++){
+        if(num % i == 0){
+            ll cnt = 0;
+            while(num > 0 && num%i == 0) num/=i, cnt++;
+            facts.pb(mp(i,cnt));
+        }
+    }
+    if(num > 1) facts.pb(mp(num,1));
+    return facts;
+}
+
+bool check(vp &op, vl &cur){
+    map<ll,ll> freq;
+    for(auto x: cur){
+        ll num = x;
+        for(ll i = 2; i*i <= num; i++){
+            if(num % i == 0){
+                ll cnt = 0;
+                while(num > 0 && num % i == 0) cnt++, num/=i;
+                freq[i] += cnt;
+            }
+        }
+        if(num > 1) freq[num]++;
+    }
+    for(auto x: op){
+        if(freq[x.ff] < x.sec) return false;
+    }
+    return true;
+}
+
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n,p; re n; re p;
+    // ll a[n]; fo(n) re a[i];
+    ll a[n]; fo(n) re a[i];
+    sort(a,a+n);
+    ll pre[4010] = {0};
+    fo(n) pre[a[i]]++;
+    for(ll i = 1; i<=4000; i++){
+        pre[i] += pre[i-1];
+    }
+    // for(ll i = 1; i<=10; i++) cout<<pre[i]<<" "; nl;
+    vp op = comp(p);
+    // for(auto p: op) cout<<p.ff<<" () "<<p.sec<<"\n";
+    vl res;
+    for(ll x = 1; x<=2000; x++){
+        ll mrk = 0;
+        bool flag = true;
+        vl f;
+        for(ll i = 0; i<n; i++){
+            ll fact = (pre[x + mrk] - mrk);
+            // if(x == 2) cout<<fact<<"()"<<mrk<<"\n";
+            if(fact <= 0){
+                flag = false;
+                break;
+            }
+            f.pb(fact);
+            mrk++;
+        }
+        if(!flag) continue;
+        if(!check(op,f)){
+            res.pb(x);
+        }
+    }
+    pr(res.size());
+    for(auto x: res) cout<<x<<" "; nl;
 }
 
 int32_t main(){

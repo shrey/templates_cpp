@@ -80,34 +80,59 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+ll n,k;
+const ll M = 1e5+100;
+// ll a[M];
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n; re k;
+    vp dist(n);
+    fo(n){
+        re dist[i].ff;
+        dist[i].sec = i+1;
+    }
+    sort(dist.begin(),dist.end());
+    vl prev;
+    prev.pb(dist[0].sec);
+    if(dist[1].ff == dist[0].ff || (dist[0].ff != 0)){
+        pr(-1);
+        return;
+    }
+    vp edges;
+
+    ll i = 1;
+    while(i < n){
+        if(dist[i].ff - dist[i-1].ff > 1){
+            pr(-1);
+            // cout<<dist[i-1].ff<<"\n";
+            return;
+        }
+        ll d = dist[i].ff;
+        ll j = i;
+        ll mx = (i == 1) ? k : k-1;
+        while(i < n && dist[i].ff == d) i++;
+        i--;
+        ll sz = i - j + 1;
+        if(sz > prev.size() * mx){
+            pr(-1);
+            return;
+        }
+        ll k = 0;
+        vl nw;
+        while(j <= i){
+            nw.pb(dist[j].sec);
+            edges.pb(mp(prev[k],dist[j].sec));
+            j++;
+            k = (k + 1)%prev.size();
+        }
+        prev.clear();
+        forn(k,nw.size()) prev.pb(nw[k]);
+        i++;
+    }
+    pr(edges.size());
+    for(auto e: edges) cout<<e.ff<<" "<<e.sec<<"\n";
 }
 
 int32_t main(){

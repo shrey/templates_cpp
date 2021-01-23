@@ -1,1 +1,6 @@
-recur((pos-1)/2) + recur((pos+1)/2)
+forn(i,n){
+    //     forn(j,m){
+    //         if(v0[i][j]) cout<<1<<" ";
+    //         else cout<<0<<" ";
+    //     }nl;
+    // }

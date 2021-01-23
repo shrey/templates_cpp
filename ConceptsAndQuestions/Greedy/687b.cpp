@@ -80,34 +80,56 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+map<ll,ll> freq;
+
+void comp(ll num){
+    for(ll i = 2; i*i <= num; i++){
+        if(num % i == 0){
+            ll cnt = 0;
+            while(num > 0 && num % i == 0){
+                cnt++;
+                num/=i;
+            }
+            freq[i] = max(freq[i],cnt);
+        }
+    }
+    if(num > 1) freq[num] = max(freq[num],1ll);
+}
+
+bool check(ll num){
+    vp op;
+    for(ll i = 2; i*i <= num; i++){
+        if(num % i == 0){
+            ll cnt = 0;
+            while(num > 0 && num % i == 0){
+                cnt++;
+                num/=i;
+            }
+            op.pb(mp(i,cnt));
+        }
+    }
+    if(num > 1) op.pb(mp(num,1));
+    for(auto x: op){
+        if(x.sec > freq[x.ff]) return false;
+    }
+    return true;
+}
+
+ll gcd(ll a, ll b){ return ((b == 0)? a : gcd(b,a%b)); }
+ll lcm(ll a, ll b){ return (a*b / gcd(a,b));}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n,k;
+    re n; re k;
+    ll cur = 1;
+    fo(n){
+        ll x; re x;
+        cur = gcd(k,lcm(cur,x));
+    }
+    if(cur == k) Yes;
+    else No;
 }
 
 int32_t main(){

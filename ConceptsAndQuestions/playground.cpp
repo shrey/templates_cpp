@@ -96,8 +96,19 @@ class Compare{
 
 priority_queue<pair<ll,ll>,vp,Compare> pq;
 
+vector< vb > f(){
+    ll n = 2, m = 3;
+    vector<vector<bool> > vis(n,vb(m,false));
+    return vis;
+}
+
 void solve(){
-    pr(cl(-4.9));
+    ll num = 128 ^ 6;
+    map<ll,ll> m;
+    m[0]++;
+    m[0]--;
+    // m.erase(0);
+    pr(m.size());
 }
 
 int32_t main(){

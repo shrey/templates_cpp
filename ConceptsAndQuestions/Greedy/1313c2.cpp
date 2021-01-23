@@ -80,34 +80,66 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+const ll M = 5e5+100;
+ll n,a[M];
+
+
+vl st(4*M + 1);
+
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return M-1;
+    if(tl >= l && tr <= r) {
+        // cout<<tl<<"()"<<tr<<"()"<<st[v]<<"\n";
+        return st[v];
+    }
+    ll tm = (tl + tr)/2;
+    ll i1 = query(2*v,tl,tm,l,r), i2 = query(2*v+1,tm+1,tr,l,r);
+    ll ans = (a[i1] < a[i2]) ? i1 : i2;
+    // cout<<tl<<"()"<<tr<<"()"<<i1<<"()"<<a[i2]<<"\n";
+    return ans;
+
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = tl;
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = a[st[2*v]] < a[st[2*v+1]] ? st[2*v] : st[2*v+1]; // change here
+}
+
+ll recur(ll s, ll e){
+    if(s > e) return 0;
+    if(s == e) return a[s];
+    // cout<<s<<"()"<<e<<"\n";
+    ll minpos = query(1,0,n-1,s,e);
+
+    // cout<<minpos<<"()\n";
+    ll a1 = (minpos-s+1) * a[minpos] + recur(minpos + 1, e);
+    ll a2 = (e-minpos+1) * a[minpos] + recur(s,minpos-1);
+    // cout<<s<<"()"<<e<<" , "<<minpos<<"\n";
+    if(a1 > a2){
+        for(ll i = s; i<=minpos; i++) a[i] = a[minpos];
+    }else{
+        for(ll i = minpos; i<=e; i++) a[i] = a[minpos];
+    }
+    return max(a1,a2);
+}
+
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n;\
+    a[M-1] = 1e15;
+    fo(n) re a[i];
+    build(1,0,n-1);
+    (recur(0,n-1));
+    fo(n) cout<<a[i]<<" ";nl;
+    // pr(query(1,0,n-1,0,n-2));
 }
 
 int32_t main(){

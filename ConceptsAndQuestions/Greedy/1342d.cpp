@@ -80,34 +80,35 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
+ll cdiv(ll num, ll d){
+    if(num % d == 0) return num/d;
+    return num/d + 1;
 }
 
 //code starts here
 
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n,k;
+    re n; re k;
+    ll m[n],c[k];
+    fo(n) re m[i]; fo(k) re c[i+1];
+    sort(m,m+n);
+    ll suff = 1;
+    ll ans = 0;
+    for(ll i = n-1; i>=0; i--){
+        ll cur = cdiv(suff,c[m[i]]);
+        ans = max(ans,cur);
+        suff++;
+    }
+    vector < vl > res(ans);
+    for(ll i = 0; i<n; i++){
+        res[i%ans].pb(m[i]);
+    }
+    pr(ans);
+    for(auto vec: res){
+        cout<<vec.size()<<" ";
+        for(auto x: vec) cout<<x<<" ";nl;
+    }
 }
 
 int32_t main(){

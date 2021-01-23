@@ -23,7 +23,7 @@
 
 
 using namespace std;
-typedef long long ll;
+typedef int ll;
 typedef long double ld;
 
 #define YES cout<<"YES\n"
@@ -80,34 +80,39 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+ll inf = INT_MAX;
+
+ll dp[5000][5000][2];
+
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n; re n;
+    ll c[n];
+    fo(n) re c[i];
+    forn(i,n){
+        forn(j,n){
+            dp[i][j][0] = dp[i][j][1] = inf;
+        }
+    }
+    fo(n){
+        dp[i][i][0] = dp[i][i][1] = 0;
+    }
+    for(ll r = 0; r < n; r++){
+        for(ll l = r; l>=0; l--){
+            for(ll k = 0; k<2; k++){
+                ll op = (k == 0) ? c[l] : c[r];
+                if(l){
+                    dp[l-1][r][0] = min(dp[l-1][r][0],dp[l][r][k] + (c[l-1] != op));
+                }
+                if(r < n-1){
+                    dp[l][r+1][1] = min(dp[l][r+1][1],dp[l][r][k] + (c[r+1] != op));
+                }
+            }
+        }
+    }
+    pr(min(dp[0][n-1][0],dp[0][n-1][1]));
 }
 
 int32_t main(){

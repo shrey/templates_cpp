@@ -80,41 +80,73 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+vl ord;
+const ll M = 2e5+100;
+vl gr[M];
+ll n,m,v,x,y;
+bool vis[M] = {false};
+vp e;
+
+void dfs(ll cur){
+    vis[cur] = true;
+    for(auto x: gr[cur]){
+        if(!vis[x]) dfs(x);
+    }
+    ord.pb(cur);
+}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n; re m;
+    fo(n+1){
+        gr[i].clear();
+        vis[i] = false;
+    }
+    ord.clear();
+    e.clear();
+    fo(m){
+        re v; re x; re y;
+        if(v == 1){
+            gr[x].pb(y);
+        }
+        e.pb(mp(x,y));
+
+    }
+    for(ll i = 1; i<=n; i++) if(!vis[i]) dfs(i);
+    reverse(ord.begin(),ord.end());
+    ll pos[n+1];
+    for(ll i = 0; i<n; i++){
+        pos[ord[i]] = i;
+    }
+    bool flag = false;
+    for(ll i = 1; i<=n; i++){
+        for(auto x: gr[i]){
+            if(pos[x] < pos[i]){
+                flag = true;
+                break;
+            }
+        }
+    }
+    if(flag){
+        NO;
+        return;
+    }
+    YES;
+    for(auto p: e){
+        if(pos[p.ff] < pos[p.sec]){
+            cout<<p.ff<<" "<<p.sec<<"\n";
+        }else{
+            cout<<p.sec<<" "<<p.ff<<"\n";
+        }
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

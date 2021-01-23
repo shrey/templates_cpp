@@ -80,41 +80,48 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+const ll M = 1e5+100;
+vl gr[M];
+ll c[M],n,m,x,y;
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n; re m;
+    set<ll> tot;
+    fo(n){
+        re c[i+1];
+        tot.insert(c[i+1]);
+    }
+    fo(m){
+        re x; re y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    map<ll,set<ll> > op;
+    for(ll i = 1; i<=n; i++){
+        for(auto x: gr[i]){
+            if(c[x] != c[i]){
+                op[c[i]].insert(c[x]);
+            }
+        }
+    }
+    ll cnt = op[*tot.begin()].size();
+    ll ans = *tot.begin();
+    for(auto p: tot){
+        if(op[p].size() > cnt){
+            cnt = op[p].size();
+            ans = p;
+        }
+    }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    // re t;s
     while(t--) solve();
 }
 

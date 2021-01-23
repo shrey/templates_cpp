@@ -80,34 +80,56 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n,k;
+    re n; re k;
+    ll a[n]; fo(n) re a[i];
+    set<ll> pos; set< ll, greater<ll> > nums;
+    ll p[n+1];
+    fo(n){
+        pos.insert(i+1);
+        nums.insert(i+1);
+        p[a[i]] = i+1;
+    }
+    vl res(n+1);
+    ll flag = 0;
+    // bool temp = false;
+    while(!nums.empty()){
+        ll tp = *nums.begin();
+        // pr(tp);
+        // nums.erase(nums.begin());
+        ll op = p[tp];
+        // cout<<op<<"()()\n";
+        res[op] = flag;
+        //delete lower and upper
+        ll cnt = 0;
+        auto it = pos.find(op);
+        // it--;
+        vl rem;
+
+        fo(k+1){
+            // cout<<"()"<<*it<<"\n";
+            rem.pb(*it);
+            if(it == pos.begin()) break;
+            it--;
+        }
+        it = pos.find(op);
+        fo(k+1){
+            if(it == pos.end()) break;
+            // cout<<*it<<"()\n";
+            rem.pb(*it);
+            it++;
+        }
+        for(auto x: rem){
+            res[x] = flag;
+            pos.erase(x);
+            nums.erase(a[x-1]);
+        }
+        flag ^= 1;
+    }
+    fo(n) cout<<res[i+1]+1; nl;
 }
 
 int32_t main(){

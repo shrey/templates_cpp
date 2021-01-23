@@ -80,41 +80,101 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+const ll M = 2e5+100;
+vp a;
+ll l,r,n,s;
+
+ll c1(ll num){
+    ll cnt1 = 0, cnt2 = 0;
+    for(auto x: a){
+        if(x.ff > num) cnt1++;
+        if(x.sec < num) cnt2++;
+    }
+    ll mx = (n-1)/2;
+    if(cnt1 > mx) return 1;
+    if(cnt2 > mx) return -1;
+    return 0;
+}
+
+bool check(ll num){
+    ll s1 = 0, s2 = 0, c1 = 0, c2 = 0;
+    // multiset< pll > m;
+    // fo(a.size()) m.insert(mp(a[i].ff,a[i].sec));
+    // for(auto x: m){
+    //     if(x.ff > num){
+    //         s1 += x.ff;
+    //         c1++; m.erase(m.find(x));
+    //     }
+    //     else if(x.sec < num){
+    //         s2 += x.ff;
+    //         c2++; m.erase(m.find(x));
+    //     }
+    //     if(m.empty()) break;
+    // }
+    multiset< pll > m;
+    for(auto x: a){
+        if(x.ff > num){
+            c1++;
+            s1 += x.ff;
+        }else if(x.sec < num){
+            c2++;
+            s2 += x.ff;
+        }else{
+            m.insert(x);
+        }
+    }
+    ll ans = s1 + s2 + ((n-1)/2 - c1) * num + num;
+    ll rem = (n-1)/2 - c2;
+    while(rem--){
+        auto p = *m.begin();
+        m.erase(m.begin());
+        ans += p.ff;
+    }
+    return (ans <= s);
+}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n; re s;
+    fo(n){
+        re l; re r;
+        a.pb(mp(l,r));
+    }
+    ll s = 0, e = 1e9;
+    ll ans = 0;
+    while(s <= e){
+        ll mid = (s+e)>>1;
+        // if ranges starting from <= mid are less than (n-1)/2 + 1 then s = mid+1
+        // if ranges ending greater than equal to mid are less than (n-1)/2 then e = mid-1
+        // cout<<s<<"()"<<e<<"\n";
+        ll op = c1(mid);
+        if(op!=0){
+            if(op == 1){
+                s = mid+1;
+            }
+            else{
+                e = mid-1;
+            }
+            continue;
+        }
+        if(check(mid)){
+            ans = max(ans,mid);
+            s = mid+1;
+        }
+        else{
+            e = mid-1;
+        }
+    }
+    pr(ans);
+    a.clear();
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

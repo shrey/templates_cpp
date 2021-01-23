@@ -80,34 +80,52 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+void bin(ll num){
+    ll mask = 1;
+    string ans;
+    while(mask <= num){
+        if(num&mask) ans += '1';
+        else ans += '0';
+        mask*=2;
+    }
+    reverse(ans.begin(),ans.end());
+    pr(ans);
+}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    cout<<"? ";
+    fo(100) cout<<i+1<<" ";nl;
+    cout.flush();
+    ll cur;
+    cin>>cur;
+    ll ans = 0;
+    if(cur >= (1<<7)){
+        ll mask = 1;
+        fo(7){
+            if(cur & mask){
+                cur ^= mask;
+            }
+            mask *= 2;
+        }
+        ans |= cur;
+    }
+    cout<<"? ";
+    for(ll i = 1; i<=100; i++){
+        ll num = i<<7;
+        cout<<num<<" ";
+    }nl;
+    cout.flush();
+    cin>>cur;
+    for(ll i = 7; i<=13; i++){
+        if(cur & (1<<i)){
+            cur ^= (1<<i);
+        }
+    }
+    // pr(cur);
+    ans |= cur;
+    cout<<"! "<<ans<<"\n";
 }
 
 int32_t main(){

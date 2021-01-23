@@ -80,34 +80,44 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n; re n;
+    ll a[n]; fo(n) re a[i];
+    ll ans = 0;
+    ll ind = -1;
+    for(ll i = 0; i<n; i++){
+        ll cur = a[i];
+        ll mn = a[i];
+        for(ll j = i+1; j<n; j++){
+            cur += min(mn,a[j]);
+            mn = min(mn,a[j]);
+        }
+        mn = a[i];
+        for(ll j = i-1; j>=0; j--){
+            cur += min(mn,a[j]);
+            mn = min(mn,a[j]);
+        }
+        if(cur > ans){
+            ind = i;
+            ans = cur;
+        }
+    }
+    ll i = ind;
+    ll mn = a[i];
+    for(ll j = i+1; j<n; j++){
+        // cur += min(mn,a[j]);
+        mn = min(mn,a[j]);
+        a[j] = mn;
+    }
+    mn = a[i];
+    for(ll j = i-1; j>=0; j--){
+        // cur += min(mn,a[j]);
+        mn = min(mn,a[j]);
+        a[j] = mn;
+    }
+    fo(n) cout<<a[i]<<" ";nl;
 }
 
 int32_t main(){

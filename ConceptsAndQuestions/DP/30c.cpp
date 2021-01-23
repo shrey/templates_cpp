@@ -80,34 +80,58 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+ld dp[1010];
+ll n;
+vector<pair<pair<ll,ld> , pll > > op;
+
+ld d(ll x1, ll y1, ll x2, ll y2){
+    ld cur = (x1-x2) * (x1-x2) + (y1 - y2) * (y1-y2);
+    return sqrt(cur);
+}
+
+// ld recur(ll i, ll prev){
+//     if(i == n) return 0.0;
+//     if(dp[i][prev] != -1.0) return dp[i][prev];
+//     ll x1 = op[prev].sec.ff, y1 = op[prev].sec.sec, t1 = op[prev].ff.ff;
+//     ll x2 = op[i].sec.ff, y2 = op[i].sec.sec, t2 = op[i].ff.ff;
+//     ld tme = t2 - t1;
+//     ld need = d(x1,y1,x2,y2);
+//     ld ans = 0;
+//     if(tme >= need){
+//         ans = op[i].ff.sec + recur(i+1,i);
+//     }
+//     ans = max(ans,recur(i+1,prev));
+//     return dp[i][prev] = ans;
+// }
+
+bool compare(pair<pair<ll,ld>, pll > &a, pair<pair<ll,ld> , pll > &b){
+    return a.ff.ff<b.ff.ff;
+}
+
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n;
+    op.resize(n);
+    fo(n){
+        re op[i].sec.ff; re op[i].sec.sec; re op[i].ff.ff; re op[i].ff.sec;
+    }
+    sort(op.begin(),op.end(),compare);
+    forn(i,1000) dp[i] = 0.0;
+    ld ans = 0.0;
+    for(ll i = 0; i<n; i++){
+        dp[i] = op[i].ff.sec;
+        for(ll j = 0; j<i; j++){
+            ld need = d(op[i].sec.ff,op[i].sec.sec,op[j].sec.ff,op[j].sec.sec);
+            ld tme = op[i].ff.ff - op[j].ff.ff;
+            if(tme >= need){
+                dp[i] = max(dp[j] + op[i].ff.sec,dp[i]);
+            }
+        }
+        ans = max(ans,dp[i]);
+    }
+    prDouble(ans); nl;
 }
 
 int32_t main(){

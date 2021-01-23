@@ -80,34 +80,55 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+const ll M = 3e5+100;
+ll n,m,a[M][10];
+
+ll i1 = 1, i2 = 1;
+bool check(ll num){
+    map<ll,ll> freq;
+    for(ll i = 0; i<n; i++){
+        ll cur = 0;
+        for(ll j = 0; j<m; j++){
+            if(a[i][j] >= num) cur |= (1<<j);
+        }
+        freq[cur] = i+1;
+    }
+    ll mx = (1<<m);
+    // pr(mx);
+    for(ll i = 0; i<=mx; i++){
+        if(freq[i]){
+            if(i == mx-1) return true;
+            for(ll j = 0; j<=mx; j++){
+                if((i | j) == mx-1 && i != j && freq[j]){
+                    i1 = freq[i], i2 = freq[j];
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n; re m;
+    forn(i,n){
+        forn(j,m) re a[i][j];
+    }
+    ll s = 0, e = 1e9;
+    ll ans = 0;
+    while(s <= e){
+        ll mid = (s+e)>>1;
+        // cout<<s<<"()"<<e<<"\n";
+        if(check(mid)){
+            ans = mid;
+            s = mid+1;
+        }else{
+            e = mid-1;
+        }
+    }
+    cout<<i1<<" "<<i2<<"\n";
 }
 
 int32_t main(){

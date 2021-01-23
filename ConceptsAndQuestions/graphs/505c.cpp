@@ -80,34 +80,45 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+ll n,d,x;
+const ll M = 3e4+2;
+ll dp1[M][310];
+ll dp2[M][310];
+ll gems[M] = {0};
+
+ll recur(ll i, ll j){
+    if(i >= M) return 0;
+    // cout<<i<<"()"<<j<<"\n";
+    ll ans;
+    if(j < 0){
+        if(dp2[i][abs(j)] != -1) return dp2[i][abs(j)];
+        ans = recur(i+d+j+1,j+1);
+        if(i + d + j > 0) ans = max(ans,recur(i + d + j,j));
+        if(d + j - 1 > 0) ans = max(ans,recur(i+d+j-1,j-1));
+        ans += gems[i];
+        return dp2[i][abs(j)] = ans;
+    }else{
+        if(dp1[i][j] != -1) return dp1[i][j];
+        ans = recur(i+d+j+1,j+1);
+        if(i + d + j > 0) ans = max(ans,recur(i + d + j,j));
+        if(d + j - 1 > 0) ans = max(ans,recur(i+d+j-1,j-1));
+        ans += gems[i];
+        return dp1[i][j] = ans;
+    }
+}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    memset(dp1,-1,sizeof(dp1));
+    memset(dp2,-1,sizeof(dp2));
+    re n; re d;
+    fo(n){
+        re x;
+        gems[x]++;
+    }
+    // pr(gems[24]);
+    pr(recur(d,0));
 }
 
 int32_t main(){

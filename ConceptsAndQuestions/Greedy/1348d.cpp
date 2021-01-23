@@ -80,41 +80,40 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
+ll ud(ll x, ll y){
+    if(x % y == 0) return x/y;
+    return x/y+1;
 }
 
 //code starts here
 
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    ll n; re n;
+    ll diff = 2, pdiff = 1;
+    ll cur = 1;
+    vl ans;
+    while(cur + 2*diff <= n){
+        cur += diff;
+        ans.pb(diff/2);
+        pdiff = diff;
+        diff *= 2;
+    }
+    if(n <= cur + 2*pdiff) ans.pb(n - (cur + pdiff));
+    else{
+        ll num = (n-cur)/2;
+        ll num2 = ud(n-cur,2);
+        ans.pb(num-pdiff);
+        ans.pb(num2-num);
+    }
+    pr(ans.size());
+    for(auto x: ans) cout<<x<<" "; nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

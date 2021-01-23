@@ -80,34 +80,83 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+ll n,m;
+vector< vl > mat;
+
+bool ok(ll x, ll y){
+    if(x >= 0 && x<n && y>=0 && y<m && mat[x][y] == 0) return true;
+    return false;
+}
+
+vector<vector<bool> > bfs(ll a, ll b, ll op){
+    queue< pll > q;
+    q.push(mp(a,b));
+    vector<vector<bool> > vis(n,vb(m,false));
+    vis[a][b] = true;
+    while(!q.empty()){
+        pll cur = q.front();
+        q.pop();
+        ll x = cur.ff, y = cur.sec;
+        if(ok(x+op,y) && !vis[x+op][y]){
+            vis[x+op][y] = true;
+            q.push(mp(x+op,y));
+        }
+        if(ok(x,y+op) && !vis[x][y+op]){
+            vis[x][y+op] = true;
+            q.push(mp(x,y+op));
+        }
+    }
+    return vis;
+}
+
+const ll M = 1e4+100;
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n; re m;
+    // pr("here");
+    mat.resize(n);
+    fo(n) mat[i].resize(m);
+    forn(i,n){
+        forn(j,m){
+            char ch; re ch;
+            if(ch == '.'){
+                mat[i][j] = 0;
+            }else{
+                mat[i][j] = 1;
+            }
+        }
+    }
+    // pr("here");
+    vector< vb > v0 = bfs(0,0,1);
+    vector< vb > vn = bfs(n-1,m-1,-1);
+    // forn(i,n){
+    //     forn(j,m){
+    //         if(v0[i][j]) cout<<1<<" ";
+    //         else cout<<0<<" ";
+    //     }nl;
+    // }
+    if(!v0[n-1][m-1]){
+        pr(0);
+        return;
+    }
+    // pr("here");
+    vp dist[n+m];
+    for(ll i = 0; i<n; i++){
+        for(ll j = 0; j<m; j++){
+            ll curdist = i + j;
+            if(v0[i][j] && vn[i][j]) dist[curdist].pb(mp(i,j));
+        }
+    }
+    for(ll d = 1; d<n+m-2; d++){
+        if(dist[d].size() < 2){
+            // cout<<dist[d][0].ff<<"()"<<dist[d][0].sec<<"\n";
+            // cout<<d<<"()\n";
+            pr(1);
+            return;
+        }
+    }
+    pr(2);
 }
 
 int32_t main(){

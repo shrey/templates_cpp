@@ -80,41 +80,81 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll mx = 1e18;
-
-map<ll,ll> dp;
-
-ll recur(ll x, ll y){
-    if(x == y) return 0;
-    if(x >= y) return x-y;
-    if(dp.count(y)){
-        return dp.at(y);
-    }
-    if(y == 1) return 1;
-    // cout<<x<<"()"<<y<<"\n";
-    ll ans;
-    if(y%2 == 1){
-        ans = 1 + min(recur(x,y+1),recur(x,y-1));
-    }
-    else{
-        ans = 1 + min(recur(x,y/2),y-x-1);
-    }
-    dp[y] = ans;
-    return ans;
-}
-
 //code starts here
 
+ll n;
+
+bool check(vl &a){
+    ll n = a.size();
+    for(ll i = 0; i<n-1; i++){
+        if(a[i] < 0) return false;
+        a[i+1] -= a[i];
+    }
+    if(a[n-1] == 0) return true;
+    else return false;
+}
+
 void solve(){
-    ll x,y; re x; re y;
-    pr(recur(x,y));
+    re n;
+    vl a(n);
+    fo(n) re a[i];
+    vl pref(n),suff(n);
+    vl b = a;
+    if(check(b)){
+        YES;
+        return;
+    }
+    b = a;
+    swap(b[0],b[1]);
+    if(check(b)){
+        YES;
+        return;
+    }
+    b = a;
+    swap(b[n-1],b[n-2]);
+    if(check(b)){
+        YES;
+        return;
+    }
+    b = a;
+    pref[0] = a[0];
+    for(ll i = 1; i<n; i++){
+        if(b[i] < b[i-1] || pref[i-1] == -1){
+            pref[i] = -1;
+        }else{
+            b[i] -= b[i-1];
+            b[i-1] = 0;
+            pref[i] = b[i];
+        }
+    }
+    b = a;
+    suff[n-1] = b[n-1];
+    for(ll i = n-2; i>=0; i--){
+        if(b[i] < b[i+1] || suff[i+1] == -1){
+            suff[i] = -1;
+        }else{
+            b[i] -= b[i+1];
+            b[i+1] = 0;
+            suff[i] = b[i];
+        }
+    }
+    for(ll i = 1; i<n-2; i++){
+        vl v;
+        v.pb(pref[i-1]); v.pb(a[i]); v.pb(a[i+1]); v.pb(suff[i+2]);
+        swap(v[1],v[2]);
+        if(check(v)){
+            YES;
+            return;
+        }
+    }
+    NO;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

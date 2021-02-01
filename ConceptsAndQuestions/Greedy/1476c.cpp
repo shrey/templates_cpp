@@ -82,72 +82,35 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 3e5+100;
-
-vl st(4*M + 1);
-ll a[M];
-
-void update(ll v, ll tl, ll tr, ll pos, ll change){
-    if(tl == tr){
-        st[v] += change; //change here
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    if(pos <= tm) update(2*v,tl,tm,pos,change);
-    else update(2*v + 1,tm+1,tr,pos,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
-}
-
-ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
-    if(tl >= l && tr <= r) return st[v];
-    ll tm = (tl + tr)/2;
-    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
-}
-
-void build(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st[v] = a[tl];
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    build(2*v,tl,tm);
-    build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here
-}
-
 void solve(){
     ll n; re n;
-    ll arr[n];
-    fo(n) re arr[i];
+    ll a[n],b[n],c[n];
+    fo(n) re c[i];
+    fo(n) re a[i];
+    fo(n) re b[i];
     ll ans = 0;
-    fo(n) a[i] = 1;
-    build(1,0,n-1);
-    fo(n){
-        if(arr[i] != 0){
-            ll cur = query(1,0,n-1,0,arr[i]-1);
-            ans += cur;
-            // cout<<cur<<"()\n";
-        }
-        update(1,0,n-1,arr[i],-1);
-        // cout<<query(1,0,n-1,0,3)<<"()()\n";
+    ll prev = abs(a[1]-b[1]) + 2;
+    for(ll i = 1; i<n; i++){
+        ll cur = prev + c[i] - 1;
+        // cout<<i<<"()"<<prev<<"()"<<cur<<"\n";
+        ans = max(ans,cur);
+        if(i == n-1) break;
+        ll p1 = prev;
+        if(a[i+1] > b[i+1]) p1 += c[i] - a[i+1] + b[i+1] - 1;
+        else p1 += c[i] - b[i+1] + a[i+1] - 1;
+        ll p2 = abs(b[i+1] - a[i+1]);
+        if(a[i+1] == b[i+1]) prev = 0;
+        else prev = max(p1,p2);
+        prev += 2;
     }
     pr(ans);
-    ll pos = 0;
-    fo(n-1){
-        ans -= arr[pos];
-        ans += (n-arr[pos]-1);
-        pos++;
-        pr(ans);
-    }
-
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

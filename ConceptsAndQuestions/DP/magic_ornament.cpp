@@ -82,65 +82,78 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 3e5+100;
+const ll M = 1e5+100;
+const ll mx = 18;
+const ll ep = 1<<17;
+ll tot;
+ll dp[ep][18];
+ll dist[mx][mx],c[mx],n,m,k,x,y;
+vl gr[M];
 
-vl st(4*M + 1);
-ll a[M];
-
-void update(ll v, ll tl, ll tr, ll pos, ll change){
-    if(tl == tr){
-        st[v] += change; //change here
-        return;
+void bfs(ll src, ll idx){
+    bool visited[M] = {false};
+    ll d[M];
+    fo(M) d[i] = 1e15;
+    ql q;
+    q.push(src);
+    d[src] = 0;
+    visited[src] = true;
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        for(auto x: gr[cur]){
+            if(!visited[x]){
+                visited[x] = true;
+                q.push(x);
+                d[x] = d[cur] + 1;
+            }
+        }
     }
-    ll tm = (tl + tr)/2;
-    if(pos <= tm) update(2*v,tl,tm,pos,change);
-    else update(2*v + 1,tm+1,tr,pos,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
+    forn(i,k){
+        dist[idx][i] = d[c[i]];
+        dist[i][idx] = d[c[i]];
+        // cout<<idx<<"()"<<i<<" "<<dist[idx][i]<<"\n";
+    }
 }
 
-ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
-    if(tl >= l && tr <= r) return st[v];
-    ll tm = (tl + tr)/2;
-    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
-}
-
-void build(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st[v] = a[tl];
-        return;
+ll recur(ll mask, ll i){
+    if(mask == (tot)) return 0;
+    if(dp[mask][i] != -1) return dp[mask][i];
+    ll ans = 1e15;
+    forn(j,k){
+        if((mask & (1<<j)) == 0){
+            ll cmask = mask | (1<<j);
+            ll cur = dist[i][j] + recur(cmask,j);
+            ans = min(ans,cur);
+        }
     }
-    ll tm = (tl + tr)/2;
-    build(2*v,tl,tm);
-    build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here
+    // cout<<mask<<"()()"<<i<<" = "<<ans<<"\n";
+    return dp[mask][i] = ans;
 }
 
 void solve(){
-    ll n; re n;
-    ll arr[n];
-    fo(n) re arr[i];
-    ll ans = 0;
-    fo(n) a[i] = 1;
-    build(1,0,n-1);
-    fo(n){
-        if(arr[i] != 0){
-            ll cur = query(1,0,n-1,0,arr[i]-1);
-            ans += cur;
-            // cout<<cur<<"()\n";
-        }
-        update(1,0,n-1,arr[i],-1);
-        // cout<<query(1,0,n-1,0,3)<<"()()\n";
+    re n; re m;
+    fo(m){
+        re x; re y;
+        gr[x].pb(y);
+        gr[y].pb(x);
+    }
+    re k;
+    fo(k) re c[i];
+    fo(k) bfs(c[i],i);
+    tot = 1<<k;
+    tot--;
+    memset(dp,-1,sizeof(dp));
+    ll ans = 1e15;
+    fo(k){
+        ll mask = 1<<i;
+        ans = min(ans,1 + recur(mask,i));
+    }
+    if(ans >= 1e14){
+        pr(-1);
+        return;
     }
     pr(ans);
-    ll pos = 0;
-    fo(n-1){
-        ans -= arr[pos];
-        ans += (n-arr[pos]-1);
-        pos++;
-        pr(ans);
-    }
-
 }
 
 int32_t main(){

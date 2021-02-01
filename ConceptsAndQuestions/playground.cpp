@@ -103,12 +103,10 @@ vector< vb > f(){
 }
 
 void solve(){
-    ll num = 128 ^ 6;
-    map<ll,ll> m;
-    m[0]++;
-    m[0]--;
-    // m.erase(0);
-    pr(m.size());
+    multiset<ll> m;
+    m.insert(1);
+    m.insert(2);
+    if(m.find(2) != m.end()) YES;
 }
 
 int32_t main(){

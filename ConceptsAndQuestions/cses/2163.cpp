@@ -84,11 +84,11 @@ ll flr(ld a){
 
 void solve(){
     ll n,k; re n; re k;
-    k%=n;
+    ll cur = k%n;
     vl ans;
     ll mark[n+1];
     fo(n+1) mark[i] = false;
-    ll i = k;
+    ll i = cur;
     set<ll> s;
     fo(n) s.insert(i+1);
     if(n == 1){
@@ -99,18 +99,16 @@ void solve(){
         ans.pb(i+1);
         mark[i] = true;
         s.erase(i+1);
+        if(s.size() == 0) break;
+        cur = k%s.size();
+        // cout<<i<<"()"<<k<<"\n";
         ll cnt = 0;
         if(s.size() == 0) break;
-        k%=s.size();
-        if(s.size() == k){
-            break;
-        }
-        while(cnt != k+1){
+        while(cnt != cur+1){
             if(!mark[i]) cnt++;
-            if(cnt == k+1) break;
+            if(cnt == cur+1) break;
             i = (i+1)%n;
         }
-
     }
     // while(s.size()){
     //     if(!mark[i]){

@@ -82,65 +82,61 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 3e5+100;
+ll n;
 
-vl st(4*M + 1);
-ll a[M];
-
-void update(ll v, ll tl, ll tr, ll pos, ll change){
-    if(tl == tr){
-        st[v] += change; //change here
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    if(pos <= tm) update(2*v,tl,tm,pos,change);
-    else update(2*v + 1,tm+1,tr,pos,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
-}
-
-ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
-    if(tl >= l && tr <= r) return st[v];
-    ll tm = (tl + tr)/2;
-    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
-}
-
-void build(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st[v] = a[tl];
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    build(2*v,tl,tm);
-    build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here
+ll d(pll a, pll b){
+    return (abs(a.ff - b.ff) + abs(a.sec - b.sec));
 }
 
 void solve(){
-    ll n; re n;
-    ll arr[n];
-    fo(n) re arr[i];
-    ll ans = 0;
-    fo(n) a[i] = 1;
-    build(1,0,n-1);
+    re n;
+    vp pos(n);
+    bool mark[n+1];
     fo(n){
-        if(arr[i] != 0){
-            ll cur = query(1,0,n-1,0,arr[i]-1);
-            ans += cur;
-            // cout<<cur<<"()\n";
+        re pos[i].ff; re pos[i].sec;
+        mark[i] = false;
+    }
+    multiset< pll > m;
+    vl c(n);
+    vl k(n);
+    fo(n){
+        re c[i];
+        m.insert(mp(c[i],i));
+    }
+    vp con;
+    vl par(n,-1);
+    vl pw;
+    ll ans = 0;
+    fo(n) re k[i];
+    while(!m.empty()){
+        pll cur = *m.begin();
+        m.erase(m.begin());
+        ll cost = cur.ff;
+        fo(n){
+            if(i != cur.sec){
+                ll op = (k[i] + k[cur.sec])*(d(pos[cur.sec],pos[i]));
+                if(op < c[i]){
+                    par[i] = cur.sec;
+                    auto it = m.find(mp(c[i],i));
+                    if(it == m.end()) continue;
+                    m.erase(m.find(mp(c[i],i)));
+                    c[i] = op;
+                    m.insert(mp(c[i],i));
+                }
+            }
         }
-        update(1,0,n-1,arr[i],-1);
-        // cout<<query(1,0,n-1,0,3)<<"()()\n";
+        if(par[cur.sec] == -1){
+            pw.pb(cur.sec+1);
+        }else{
+            con.pb(mp(cur.sec+1,par[cur.sec]+1));
+        }
+        ans += cost;
     }
     pr(ans);
-    ll pos = 0;
-    fo(n-1){
-        ans -= arr[pos];
-        ans += (n-arr[pos]-1);
-        pos++;
-        pr(ans);
-    }
-
+    pr(pw.size());
+    for(auto x: pw) cout<<x<<" "; nl;
+    pr(con.size());
+    for(auto x: con) cout<<x.ff<<" "<<x.sec<<"\n";
 }
 
 int32_t main(){

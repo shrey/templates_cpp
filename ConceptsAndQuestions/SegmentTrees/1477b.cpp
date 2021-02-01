@@ -82,10 +82,38 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 3e5+100;
 
-vl st(4*M + 1);
-ll a[M];
+const ll M = 2e5+100;
+vl st;
+vl lazy;
+ll n,q,a[M],b[M];
+char ch;
+
+
+
+void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
+    if(lazy[v] != -1){
+        st[v] = (tr-tl+1) * lazy[v];
+        if(tl != tr){
+            lazy[2*v] = lazy[v];
+            lazy[2*v+1] = lazy[v];
+        }
+        lazy[v] = -1;
+    }
+    if(tl > r || tr < l) return;
+    if((tl >= l && tr <= r) || tl == tr){
+        st[v] = (tr-tl+1)*change; //change here in rmq to st[v] += change as only change is added to the max or min number
+        if(tr != tl){
+            lazy[2*v] = change;
+            lazy[2*v+1] = change;
+        }
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    update_range(2*v,tl,tm,l,r,change);
+    update_range(2*v+1,tm+1,tr,l,r,change);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
 
 void update(ll v, ll tl, ll tr, ll pos, ll change){
     if(tl == tr){
@@ -100,6 +128,14 @@ void update(ll v, ll tl, ll tr, ll pos, ll change){
 
 ll query(ll v, ll tl, ll tr, ll l, ll r){
     if(tl > r || tr < l) return 0;
+    if(lazy[v] != -1){
+        st[v] = (tr-tl+1)*lazy[v];
+        if(tl != tr){
+            lazy[2*v] = lazy[v];
+            lazy[2*v+1] = lazy[v];
+        }
+        lazy[v] = -1;
+    }
     if(tl >= l && tr <= r) return st[v];
     ll tm = (tl + tr)/2;
     return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
@@ -113,41 +149,61 @@ void build(ll v, ll tl, ll tr){
     ll tm = (tl + tr)/2;
     build(2*v,tl,tm);
     build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here
+    st[v] = st[2*v] + st[2*v+1]; // change here for min, max, sum query
 }
 
-void solve(){
-    ll n; re n;
-    ll arr[n];
-    fo(n) re arr[i];
-    ll ans = 0;
-    fo(n) a[i] = 1;
-    build(1,0,n-1);
-    fo(n){
-        if(arr[i] != 0){
-            ll cur = query(1,0,n-1,0,arr[i]-1);
-            ans += cur;
-            // cout<<cur<<"()\n";
-        }
-        update(1,0,n-1,arr[i],-1);
-        // cout<<query(1,0,n-1,0,3)<<"()()\n";
-    }
-    pr(ans);
-    ll pos = 0;
-    fo(n-1){
-        ans -= arr[pos];
-        ans += (n-arr[pos]-1);
-        pos++;
-        pr(ans);
-    }
 
+
+
+void solve(){
+    st.clear();
+    lazy.clear();
+    re n; re q;
+    fo(n){
+        re ch;
+        b[i] = ch - '0';
+    }
+    fo(n){
+        re ch;
+        a[i] = ch - '0';
+    }
+    vp qry(q);
+    // pr("here");
+    fo(q){
+        re qry[i].ff; re qry[i].sec;
+    }
+    st.assign(4*n+1,0);
+    lazy.assign(4*n+1,-1);
+    build(1,0,n-1);
+    for(ll i = q-1; i>=0; i--){
+        ll l = qry[i].ff, r = qry[i].sec;
+        l--; r--;
+        ll op = query(1,0,n-1,l,r);
+        if(2 * op == (r-l+1)){
+            NO;
+            return;
+        }
+        if(2*op > r-l+1){
+             update_range(1,0,n-1,l,r,1);
+        }else{
+            update_range(1,0,n-1,l,r,0);
+        }
+    }
+    fo(n){
+        ll cur = query(1,0,n-1,i,i);
+        if(cur != b[i]){
+            NO;
+            return;
+        }
+    }
+    YES;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

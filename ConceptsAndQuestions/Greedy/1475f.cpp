@@ -82,72 +82,53 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 3e5+100;
-
-vl st(4*M + 1);
-ll a[M];
-
-void update(ll v, ll tl, ll tr, ll pos, ll change){
-    if(tl == tr){
-        st[v] += change; //change here
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    if(pos <= tm) update(2*v,tl,tm,pos,change);
-    else update(2*v + 1,tm+1,tr,pos,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
-}
-
-ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
-    if(tl >= l && tr <= r) return st[v];
-    ll tm = (tl + tr)/2;
-    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
-}
-
-void build(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st[v] = a[tl];
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    build(2*v,tl,tm);
-    build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here
-}
-
 void solve(){
     ll n; re n;
-    ll arr[n];
-    fo(n) re arr[i];
-    ll ans = 0;
-    fo(n) a[i] = 1;
-    build(1,0,n-1);
-    fo(n){
-        if(arr[i] != 0){
-            ll cur = query(1,0,n-1,0,arr[i]-1);
-            ans += cur;
-            // cout<<cur<<"()\n";
+    ll m1[n][n],m2[n][n];
+    forn(i,n){
+        forn(j,n){
+            char ch;
+            re ch;
+            m1[i][j] = ch - '0';
         }
-        update(1,0,n-1,arr[i],-1);
-        // cout<<query(1,0,n-1,0,3)<<"()()\n";
     }
-    pr(ans);
-    ll pos = 0;
-    fo(n-1){
-        ans -= arr[pos];
-        ans += (n-arr[pos]-1);
-        pos++;
-        pr(ans);
+    forn(i,n){
+        forn(j,n){
+            char ch;
+            re ch;
+            m2[i][j] = ch - '0';
+        }
     }
-
+    for(ll i = 0; i<n; i++){
+        if(m1[i][0] != m2[i][0]){
+            forn(j,n){
+                m1[i][j] = m1[i][j] ^ 1;
+            }
+        }
+    }
+    for(ll j = 0; j<n; j++){
+        if(m1[0][j] != m2[0][j]){
+            forn(i,n){
+                m1[i][j] = m1[i][j] ^ 1;
+            }
+        }
+    }
+    forn(i,n){
+        forn(j,n){
+            if(m1[i][j] != m2[i][j]){
+                NO;
+                return;
+            }
+        }
+    }
+    YES;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

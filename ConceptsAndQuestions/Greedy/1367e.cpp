@@ -82,72 +82,42 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 3e5+100;
+ll gcd(ll a, ll b) {return ((b == 0) ? a : gcd(b,a%b));}
 
-vl st(4*M + 1);
-ll a[M];
-
-void update(ll v, ll tl, ll tr, ll pos, ll change){
-    if(tl == tr){
-        st[v] += change; //change here
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    if(pos <= tm) update(2*v,tl,tm,pos,change);
-    else update(2*v + 1,tm+1,tr,pos,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
-}
-
-ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
-    if(tl >= l && tr <= r) return st[v];
-    ll tm = (tl + tr)/2;
-    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
-}
-
-void build(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st[v] = a[tl];
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    build(2*v,tl,tm);
-    build(2*v+1,tm+1,tr);
-    st[v] = st[2*v] + st[2*v+1]; // change here
-}
+ll n,k;
 
 void solve(){
-    ll n; re n;
-    ll arr[n];
-    fo(n) re arr[i];
-    ll ans = 0;
-    fo(n) a[i] = 1;
-    build(1,0,n-1);
-    fo(n){
-        if(arr[i] != 0){
-            ll cur = query(1,0,n-1,0,arr[i]-1);
-            ans += cur;
-            // cout<<cur<<"()\n";
+    re n; re k;
+    string s; re s;
+    ll freq[26] = {0};
+    ll res = 0;
+    for(char ch: s) freq[ch-'a']++;
+    for(ll i = 1; i<=n; i++){
+        if(i == k){
+            res = max(res,k);
+            continue;
         }
-        update(1,0,n-1,arr[i],-1);
-        // cout<<query(1,0,n-1,0,3)<<"()()\n";
+        ll ck = k;
+        if(i < k){
+            ck %= i;
+        }
+        ll f = gcd(i,ck);
+        ll cnt = i / f;
+        ll cur = 0;
+        forn(j,26){
+            if(freq[j] >= cnt) cur += freq[j]/cnt;
+        }
+        // if(i == 10) cout<<cur<<"()"<<cnt<<"\n";
+        if(cur >= f) res = max(res,i);
     }
-    pr(ans);
-    ll pos = 0;
-    fo(n-1){
-        ans -= arr[pos];
-        ans += (n-arr[pos]-1);
-        pos++;
-        pr(ans);
-    }
-
+    pr(res);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

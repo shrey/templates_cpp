@@ -111,6 +111,7 @@ void solve(){
         if(b - a == 1){
             break;
         }
+        
     }
 }
 

@@ -82,77 +82,57 @@ ll flr(ld a){
 
 //code starts here
 
-ll n,m,q;
-vp pos;
+ll n,m,x,y,w;
+const ll M = 2010;
+ll mat[M][M];
+vp gr[M];
+
+ll dijkstra(ll src){
+    vl dist(n+1,1e15);
+    set<pll> s;
+    for(auto x: gr[src]){
+        dist[x.ff] = x.sec;
+        s.insert(mp(x.sec,x.ff));
+    }
+    while(!s.empty()){
+        pll cur = *s.begin();
+        s.erase(s.begin());
+        ll node = cur.sec;
+        ll d = cur.ff;
+        for(auto x: gr[node]){
+            if(x.sec + d < dist[x.ff]){
+                auto f = s.find(mp(dist[x.ff],x.ff));
+                if(f!=s.end()){
+                    s.erase(f);
+                }
+                dist[x.ff] = x.sec + d;
+                s.insert(mp(dist[x.ff],x.ff));
+            }
+        }
+    }
+    return dist[src];
+}
+
 
 void solve(){
-    re n;
-    pos.resize(n);
-    fo(n){
-        re pos[i].ff; re pos[i].sec;
-    }
-    re m;
-    pll x = mp(1,0);
-    pll y = mp(1,0);
-    vp oper(m);
+    re n; re m;
+    memset(mat,-1,sizeof(mat));
     fo(m){
-        re oper[i].ff;
-        if(oper[i].ff == 3 || oper[i].ff == 4){
-            re oper[i].sec;
+        re x; re y; re w;
+        if(mat[x][y] == -1) mat[x][y] = w;
+        else mat[x][y] = min(mat[x][y],w);
+    }
+    for(ll i = 1; i<=n; i++){
+        for(ll j = 1; j<=n; j++){
+            if(j != i && mat[i][j] != -1) gr[i].pb(mp(j,mat[i][j]));
         }
     }
-    re q;
-    vector<pair<pll,ll> > qry(q);
-    fo(q){
-        re qry[i].ff.ff; re qry[i].ff.sec;
-        qry[i].sec = i;
+    for(ll i = 1; i<=n; i++){
+        ll cur = dijkstra(i);
+        if(mat[i][i] != -1) cur = min(cur,mat[i][i]);
+        if(cur == 1e15) pr(-1);
+        else pr(cur);
     }
-    sort(qry.begin(),qry.end());
-    vp ans(q);
-    bool swp = false;
-    ll a = 0;
-    fo(q){
-        ll curop = qry[i].ff.ff;
-        ll posn = qry[i].ff.second;
-        posn--;
-        ll idx = qry[i].sec;
-        // cout<<curop<<"()"<<posn<<"\n";
-        while(a != curop){
-            ll op = oper[a].ff;
-            if(op == 1){
-                auto temp = x;
-                x = y;
-                y = temp;
-                y.ff *= -1;
-                y.sec *= -1;
-                swp = !swp;
-            }else if(op == 2){
-                auto temp = x;
-                x = y;
-                y = temp;
-                x.ff *= -1;
-                x.sec *= -1;
-                swp = !swp;
-            }else if(op == 4){
-                ll p = oper[a].sec;
-                y.sec = 2*p-y.second;
-                y.ff *= -1;
-            }else{
-                ll p = oper[a].sec;
-                x.sec = 2*p-x.sec;
-                x.ff *= -1;
-            }
-            a++;
-        }
-        ll xp = pos[posn].ff, yp = pos[posn].sec;
-        if(swp){
-            swap(xp,yp);
-        }
-        xp *= x.ff; xp += x.sec;
-        yp *= y.ff; yp += y.sec;
-        ans[idx] = mp(xp,yp);
-    }
-    for(auto p: ans) cout<<p.ff<<" "<<p.sec<<"\n";
 }
 
 int32_t main(){
@@ -177,19 +157,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-1 2
-4
-1
-3 3
-2
-4 2
-5
-0 1
-1 1
-2 1
-3 1
-4 1
-*/

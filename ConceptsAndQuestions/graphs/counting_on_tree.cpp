@@ -91,7 +91,7 @@ void dfs(ll cur){
     for(auto x: gr[cur]){
         if(visited[x]) continue;
         dfs(x);
-
+    
     }
 }
 

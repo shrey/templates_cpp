@@ -88,6 +88,7 @@ void solve(){
     re n;
     re s;
     ll ans = (n * (n-1));
+    
 }
 
 int32_t main(){

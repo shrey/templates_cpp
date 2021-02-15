@@ -66,7 +66,7 @@ class Graph{
         set<pair<int,T> > s;
 
         dist[src] = 0;
-        s.insert(mp(0,src));
+    s.insert(mp(0,src));
         while(!s.empty()){
             //find the pair at front
             auto p = *(s.begin());

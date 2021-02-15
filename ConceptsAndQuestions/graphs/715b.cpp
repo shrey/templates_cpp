@@ -125,6 +125,10 @@ void solve(){
         }
     }
     vl dist = dijkstra(s);
+    if(dist[t] <= len){
+        NO;
+        return;
+    }
 }
 
 int32_t main(){

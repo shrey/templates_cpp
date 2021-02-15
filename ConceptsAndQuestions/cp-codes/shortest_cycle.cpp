@@ -94,7 +94,7 @@ void comp(ll num, ll ind){
 
 vl gr[M];
 
-// run this function for all verticesO(n^2)
+// run this function for all vertices T.C - O(n^2)
 
 ll cyc(ll src){
     vb visited(n+1,false);

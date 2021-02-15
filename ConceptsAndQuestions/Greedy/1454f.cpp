@@ -114,7 +114,7 @@ void solve(){
         if(max_pos[cur] == 0) max_pos[cur] = i;
     }
     for(ll i = 1; i<=n; i++){
-
+        
     }
 }
 

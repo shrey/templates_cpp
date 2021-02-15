@@ -82,15 +82,47 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+const ll M = 3e5+100;
+vp gr[M];
+ll n,m,x,y,w;
+vector< pll > e[M];
+ll dp[M];
 
+bool comp(pair<pll,ll> &a, pair<pll,ll> &b){
+    return a.sec < b.sec;
+}
+
+void solve(){
+    re n; re m;
+    fo(m){
+        re x; re y; re w;
+        e[w].pb(mp(x,y));
+    }
+    fo(M) dp[i] = 0;
+    vl temp(M,0);
+    for(ll i = 1; i<M; i++){
+        for(auto cur: e[i]){
+            temp[cur.sec] = 0;
+        }
+        for(auto cur: e[i]){
+            temp[cur.sec] = max(temp[cur.sec],dp[cur.ff] + 1);
+        }
+        for(auto cur: e[i]){
+            dp[cur.sec] = max(dp[cur.sec],temp[cur.sec]);
+        }
+    }
+    ll ans = 0;
+    for(ll i = 1; i<=n; i++){
+        ans = max(ans,dp[i]);
+    }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

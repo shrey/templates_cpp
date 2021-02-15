@@ -103,10 +103,16 @@ vector< vb > f(){
 }
 
 void solve(){
-    multiset<ll> m;
-    m.insert(1);
-    m.insert(2);
-    if(m.find(2) != m.end()) YES;
+    ll x; re x;
+    ll num; re num;
+    for(ll i = 1; i<=32; i++){
+        ll cur =  x + i*i*i*i;
+        if(cur % num == 0){
+            pr(cur);
+            return;
+        }
+    }
+    NO;
 }
 
 int32_t main(){

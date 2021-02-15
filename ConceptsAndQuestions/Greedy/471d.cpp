@@ -80,8 +80,9 @@ ll flr(ld a){
 
 
 //code starts here
+// z[i] is the max length such that chars ahead of i match the prefix
 
-vector<int> z_function(vector<ll> &s) { // z[i] is the max length such that chars ahead of i match the prefix
+vector<int> z_function(vector<ll> &s) {   // replace vector<ll> by string to get string 
     int n = (int) s.size();
     vector<int> z(n);
     for (int i = 1, l = 0, r = 0; i < n; ++i) {

@@ -79,7 +79,7 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-
+    
 }
 
 int32_t main(){

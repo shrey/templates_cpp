@@ -102,7 +102,7 @@ ld recur(ld a, ld b, ld c){
     return dp[ai][bi][ci] = 1 + ans;
 }
 
-// k = x1 * p(x1) + x2 * p(x2) + x3 * p(x3) + (1 - (pabc)))*(1 + k)
+// k = x1 * p(x1) + x2 * p(x2) + x3 * p(x3) + (1 - (pabc)))*(1 + k
 
 void solve(){
     forn(i,M) forn(j,M) forn(k,M) dp[i][j][k] = -1.0;

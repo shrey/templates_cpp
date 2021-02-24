@@ -81,56 +81,26 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
-    }
+const ll M = 1e6+100;
+ll p[M],n;
+
+vl vals;
+ll cc(ll num){ //this returns the converted cordinate of the value
+    ll idx = lower_bound(vals.begin(),vals.end(),num) - vals.begin();
+    return idx;
 }
 
 void solve(){
-    par[1] = 0;
-    vl ans;
-    re n; re m;
-    fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+    re n;
+    fo(n){
+        re p[i];
+        vals.pb(p[i]);
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
-    }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    sort(all(vals));
+    vals.erase(unique(vals.begin(),vals.end()),vals.end());
+    // cc(x) returns the cordinate of x
+
 }
 
 int32_t main(){

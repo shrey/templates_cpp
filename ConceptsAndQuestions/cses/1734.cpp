@@ -81,56 +81,72 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
-    }
+vl vals;
+const ll M = 2e5+100;
+ll a[M];
+ll freq[M] = {0};
+
+ll cc(ll num){ //this returns the converted cordinate of the value
+    ll idx = lower_bound(vals.begin(),vals.end(),num) - vals.begin();
+    return idx;
 }
 
+struct node{
+    ll l, r, ind;
+};
+
+bool compare(node &a, node &b){
+    if(a.l/1000 == b.l/1000) return a.r < b.r;
+    return a.l/1000 < b.l/1000;
+}
+
+
 void solve(){
-    par[1] = 0;
-    vl ans;
-    re n; re m;
-    fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+    ll n,q;
+    re n; re q;
+    fo(n){
+        re a[i];
+        vals.pb(a[i]);
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
+    sort(all(vals));
+    vals.resize(unique(all(vals)) - vals.begin());
+    fo(n) a[i] = cc(a[i]);
+    vector<node> qry(q);
+    fo(q){
+        re qry[i].l; re qry[i].r;
+        qry[i].ind = i;
     }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    sort(all(qry),compare);
+    vl ans(q);
+    ll l = 0, r = -1;
+    ll cur = 0;
+    fo(q){
+        ll cl = qry[i].l, cr = qry[i].r;
+        cr--, cl--;
+        while(r < cr){
+            r++;
+            freq[a[r]]++;
+            if(freq[a[r]] == 1) cur++;
+        }
+        while(l > cl){
+            l--;
+            freq[a[l]]++;
+            if(freq[a[l]] == 1) cur++;
+        }
+        while(l < cl){
+            freq[a[l]]--;
+            if(freq[a[l]] == 0) cur--;
+            l++;
+        }
+        while(r > cr){
+            freq[a[r]]--;
+            if(freq[a[r]] == 0) cur--;
+            r--;
+        }
+        ans[qry[i].ind] = cur;
+    }
+    fo(q) cout<<ans[i]<<"\n";
 }
 
 int32_t main(){

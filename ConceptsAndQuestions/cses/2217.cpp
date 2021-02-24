@@ -81,56 +81,57 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
-    }
-}
+const ll M = 2e5+100;
+ll dp[M] = {0};
 
 void solve(){
-    par[1] = 0;
-    vl ans;
-    re n; re m;
-    fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+    ll n,m; re n; re m;
+    ll a[n]; fo(n) re a[i];
+    ll pos[n+2];
+    pos[n+1] = 1e15;
+    for(ll i = n-1; i>=0; i--){
+        pos[a[i]] = i;
+        ll x = a[i];
+        if(dp[x+1]){
+            dp[x] = dp[x+1] + 1;
+        }else{
+            dp[x] = 1;
+        }
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
+    ll ans = 1;
+    ll i = 1;
+    pos[0] = -1e15;
+    while(i < n){
+        if(pos[i] < pos[i+1]){
+            i++;
+        }else{
+            ans++;
+            i++;
+        }
     }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    // pr(ans);
+    forn(k,m){
+        ll x,y; re x; re y;
+        if(y < x) swap(x,y);
+        x--, y--;
+        ll n1 = a[x], n2 = a[y];
+        // cout<<n1<<"()"<<n2<<"\n";
+        swap(a[x],a[y]);
+        ll prev = pos[n2-1];
+        bool f1 = false, f2 = false;
+        if(pos[n1-1] < pos[n1]) f1 = true;
+        if(pos[n2+1] > pos[n2]) f2 = true;
+        if(prev < pos[n2] && x <= prev) ans++;
+        pos[n2] = x;
+        ll nxt = pos[n1+1];
+        if(nxt > pos[n1] && y >= nxt) ans++;
+        pos[n1] = y;
+        if(!f1 && pos[n1-1] < pos[n1]) ans--;
+        if(!f2 && pos[n2+1] > pos[n2]) ans--;
+        if(!f1 && !f2 && n1-n2 == 1) ans++;
+        pr(ans);
+    }
 }
 
 int32_t main(){

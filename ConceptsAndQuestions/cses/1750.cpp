@@ -44,12 +44,12 @@ typedef long double ld;
 #define lmax LLONG_MAX
 #define imin INT_MIN
 #define lmin LLONG_MIN
-#define vi vector<int>
+#define vi vector<ll>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
-#define int long long
+#define ll long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
@@ -81,56 +81,45 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
-    }
-}
+ll n,q,x,y;
+const ll M = 2e5 + 5; const ll mxe = 30;
+// vl gr[M];
+ll up[M][mxe];
+// bool vis[M];
+
+// void dfs(ll cur, ll p) { // keep track of current node and its parent node
+//     up[cur][0] = p; // mark the parent in the array
+//     vis[cur] = 1; // mark the node as visited
+//     for(ll x: gr[cur]) if(!vis[x]) dfs(x,cur); // visit all unvisited children
+// }
 
 void solve(){
-    par[1] = 0;
-    vl ans;
-    re n; re m;
-    fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+    //take the input
+    re n; re q;
+    memset(up,-1,sizeof(up));
+    fo(n){
+        // re x; re y;
+        // gr[x].pb(y);
+        // gr[y].pb(x);
+        re up[i+1][0]; //did this for a qn, change it to take edge input
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
+    // dfs(1,-1); //use it when performing on normal graph
+    for(ll l = 1; l<mxe; l++){
+        for(ll i = 1; i<=n; i++){
+            if(up[i][l-1] != -1) up[i][l] = up[up[i][l-1]][l-1];
+        }
     }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    fo(q){
+        ll k;
+        re x; re k;
+        for(ll l = 0; l<mxe; l++){
+            if(x != -1 && (k & (1<<l))){
+                x = up[x][l];
+            }
+        }
+        pr(x);
+    }
 }
 
 int32_t main(){

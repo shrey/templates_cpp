@@ -81,57 +81,56 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
-    }
+ll n,m,x,y;
+const ll M = 2e5+100;
+vl gr[M];
+
+
+vl p(M,0); vl r(M,1);
+
+ll getp(ll v){
+    if(v == p[v]) return v;
+    return p[v] = getp(p[v]);
 }
+
+void unite(ll u, ll v){
+    u = getp(u), v = getp(v);
+    if(u == v) return;
+    if(r[u] < r[v]) swap(u,v);
+    r[u] += r[v];
+    p[v] = u;
+}
+
+bool vis[M] = {false};
+
+// ll dfs(ll cur){
+//     ll ans = 1;
+//     for(auto x: gr[cur]){
+//         if(!vis[x]) ans += dfs(x);
+//     }
+//     return ans;
+// }
 
 void solve(){
-    par[1] = 0;
-    vl ans;
     re n; re m;
+    for(ll i = 1; i<=n; i++) p[i] = i;
+    multiset<ll,greater<ll> > s;
+    fo(n) s.insert(1);
+
     fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+        re x; re y;
+        ll pa = getp(x), pb = getp(y);
+        if(pa != pb){
+            s.erase(s.find(r[pa]));
+            s.erase(s.find(r[pb]));
+            unite(x,y);
+            s.insert(r[getp(x)]);
+        }
+        cout<<s.size()<<" "<<*s.begin()<<"\n";
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
-    }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
 }
+
 
 int32_t main(){
     KOBE;

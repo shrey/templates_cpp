@@ -81,56 +81,63 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
+const ll M = 2e5+100;;
+vl gr[M], gr2[M];
+ll n,m,x,y;
+vl scc;
+vl order;
+vector < vl > op;
+bool visited[M] = {false};
+map<pll,bool> ed;
+
+void dfs(ll cur){
+    visited[cur] = true;
+    for(auto x: gr[cur]){
+        if(!visited[x]) dfs(x);
+    }
+    order.pb(cur);
+}
+
+void dfs2(ll cur){
+    visited[cur] = true;
+    scc.pb(cur);
+    for(auto x: gr2[cur]){
+        if(!visited[x]){
+            dfs2(x);
         }
     }
 }
 
 void solve(){
-    par[1] = 0;
-    vl ans;
     re n; re m;
     fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+        re x; re y;
+        gr[x].pb(y);
+        ed[mp(x,y)] = true;
+        gr2[y].pb(x);
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
+    FOR(1,n){
+        if(!visited[i]){
+            dfs(i);
+        }
     }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    FOR(1,n) visited[i] = false;
+    ll cnt = 1;
+    // for(auto x: order) cout<<x<<" "; nl;
+    ll pos[n+1];
+    for(ll i = n-1; i>=0; i--){
+        // cout<<order[i]<<"()";
+        if(!visited[order[i]]){
+            dfs2(order[i]);
+            for(auto x: scc) pos[x] = cnt;
+            scc.clear();
+            cnt++;
+        }
+    }
+    cnt--;
+    cout<<cnt<<"\n";
+    FOR(1,n) cout<<pos[i]<<" "; nl;
 }
 
 int32_t main(){

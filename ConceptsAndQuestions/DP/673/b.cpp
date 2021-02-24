@@ -82,64 +82,30 @@ ll flr(ld a){
 
 //code starts here
 
-ll n,m,x,y,w;
-const ll M = 2010;
-ll mat[M][M];
-vp gr[M];
-
-ll dijkstra(ll src){
-    vl dist(n+1,1e15);
-    set<pll> s;
-    for(auto x: gr[src]){
-        dist[x.ff] = x.sec;
-        s.insert(mp(x.sec,x.ff));
-    }
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
-    }
-    return dist[src];
-}
-
-
 void solve(){
-    re n; re m;
-    memset(mat,-1,sizeof(mat));
-    fo(m){
-        re x; re y; re w;
-        if(mat[x][y] == -1) mat[x][y] = w;
-        else mat[x][y] = min(mat[x][y],w);
+    ll n1; re n1;
+    ll cnt = 0;
+    for(ll i = 1; i<=sqrt(n1); i++){
+        ll m = i, n = i-1;
+        ll c = m*m + n*n;
+        ll b = 2*m*n;
+        ll a = m*m - n*n;
+        // cout<<a<<"()"<<b<<"()"<<c<<"\n";
+        if(c <= n1 && a > 0 && b > 0) cnt++;
+        // m = i, n = i+1;
+        // c = m*m + n*n;
+        // b = 2*m*n;
+        // a = c*c - b*b;
+        // if(c <= n && a > 0 && b > 0) cnt++;
     }
-    for(ll i = 1; i<=n; i++){
-        for(ll j = 1; j<=n; j++){
-            if(j != i && mat[i][j] != -1) gr[i].pb(mp(j,mat[i][j]));
-        }
-    }
-    for(ll i = 1; i<=n; i++){
-        ll cur = dijkstra(i);
-        if(mat[i][i] != -1) cur = min(cur,mat[i][i]);
-        if(cur == 1e15) pr(-1);
-        else pr(cur);
-    }
+    pr(cnt);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

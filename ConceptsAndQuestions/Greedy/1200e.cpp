@@ -46,6 +46,7 @@ typedef long double ld;
 #define lmin LLONG_MIN
 #define vi vector<int>
 #define vl vector<ll>
+#define vs vector<string>
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
@@ -81,56 +82,54 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
+vector<int> z_function(string &s) {   // replace vector<ll> by string to get string
+    int n = (int) s.size();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
     }
+    return z;
 }
 
+
 void solve(){
-    par[1] = 0;
-    vl ans;
-    re n; re m;
-    fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+    ll n; re n;
+    vs a(n);
+    fo(n) re a[i];
+    string ans = "";
+    ans += a[0];
+    for(ll i = 1; i<n; i++){
+        string s1 = "";
+        if(a[i].length() >= ans.length()){
+            s1 = a[i] + ans;
+        }else{
+            s1 = a[i] + ans.substr(ans.length()-a[i].length(),a[i].length());
+        }
+        // cout<<i<<" , "<<s1<<"\n";
+        vl z = z_function(s1);
+        // if(i == 3){
+        //     for(auto x: z) cout<<x<<" "; nl;
+        // }
+        bool flag = false;
+        for(ll j = a[i].length(); j<z.size(); j++){
+            if(z[j] == z.size()-j){
+                // pr("here");
+                if(z[j] < a[i].length()){
+                    ans += a[i].substr(z[j],a[i].length()-z[j]);
+                }
+                flag = true;
+                break;
+            }
+        }
+        if(!flag) ans += a[i];
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
-    }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    pr(ans);
 }
 
 int32_t main(){

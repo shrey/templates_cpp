@@ -81,56 +81,65 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
-    }
-}
+const ll M = 2e5+100;
+ll n,m,x,k,y, c[M],d[M];
+ll mark[M] = {0};
+ll idx[M];
 
 void solve(){
-    par[1] = 0;
-    vl ans;
     re n; re m;
-    fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+    re x; re k; re y;
+    memset(idx,-1,sizeof(idx));
+    bool flag = true;
+    fo(n){
+        re c[i];
+        idx[c[i]] = i;
     }
-    dijkstra(1);
-    if(dist[n] == inf){
+    vl op;
+    op.pb(-1);
+    fo(m){
+        re d[i];
+        mark[d[i]] = 1;
+        if(idx[d[i]] == -1 || (i > 0 && idx[d[i-1]] > idx[d[i]])){
+            flag = false;
+        }
+        op.pb(idx[d[i]]);
+    }
+    op.pb(n);
+    // pr("here");
+    // for(auto x: op) cout<<x<<" "; nl;
+    if(!flag){
         pr(-1);
         return;
     }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    ll i = 0;
+    ll ans = 0;
+    while(i < op.size() - 1){
+        ll a = op[i] == -1 ? 0 : c[op[i]];
+        ll b = op[i+1] == n ? 0 : c[op[i+1]];
+        ll cnt = op[i+1] - op[i] - 1;
+        // cout<<a<<"()"<<b<<"()"<<cnt<<"\n";
+        ll mx = 0;
+        for(ll j = op[i]+1; j<op[i+1]; j++){
+            mx = max(c[j],mx);
+        }
+        if(mx > max(a,b) && cnt < k){
+            pr(-1);
+            return;
+        }
+        if(mx > max(a,b)){
+            ans += x;
+            cnt-=k;
+        }
+        if(x <= k*y){
+            ans += (cnt/k)*x + (cnt%k)*y;
+        }else{
+            ans += cnt*y;
+        }
+        i++;
+    }
+    pr(ans);
 }
 
 int32_t main(){

@@ -81,56 +81,85 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
-        }
+const ll M = 1e6+100;
+ll p[M],n,q;
+ll a[M] = {0};
+
+vl st(4*M + 1);
+
+void update(ll v, ll tl, ll tr, ll pos, ll change){
+    if(tl == tr){
+        st[v] += change; //change here
+        return;
     }
+    ll tm = (tl + tr)/2;
+    if(pos <= tm) update(2*v,tl,tm,pos,change);
+    else update(2*v + 1,tm+1,tr,pos,change);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
+
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 0;
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = a[tl];
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = st[2*v] + st[2*v+1]; // change here
+}
+
+vl vals;
+ll cc(ll num){
+    ll idx = lower_bound(vals.begin(),vals.end(),num) - vals.begin();
+    return idx;
 }
 
 void solve(){
-    par[1] = 0;
-    vl ans;
-    re n; re m;
-    fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+    re n; re q;
+    fo(n){
+        re p[i];
+        vals.pb(p[i]);
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
+    vector<pair<ll,pll> > qry;
+    fo(q){
+        char ch;
+        re ch;
+        ll a,b; re a; re b;
+        ll x = (ch == '?');
+        qry.pb(mp(x,mp(a,b)));
+        if(ch == '!') vals.pb(b);
+        else vals.pb(a), vals.pb(b);
     }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    sort(all(vals));
+    vals.erase(unique(vals.begin(),vals.end()),vals.end());
+    fo(n){
+        update(1,0,M-1,cc(p[i]),1);
+    }
+    fo(q){
+        if(qry[i].ff == 1){
+            ll a = cc(qry[i].sec.ff), b = cc(qry[i].sec.sec);
+            // cout<<a<<"()"<<b<<"\n";
+            ll ans = query(1,0,M-1,a,b);
+            pr(ans);
+        }else{
+            ll pos = qry[i].sec.ff;
+            ll val = cc(qry[i].sec.sec);
+            ll curval = cc(p[pos-1]);
+            // cout<<val<<"(())\n";
+            p[pos-1] = qry[i].sec.sec;
+            update(1,0,M-1,curval,-1);
+            update(1,0,M-1,val,+1);
+        }
+    }
 }
 
 int32_t main(){

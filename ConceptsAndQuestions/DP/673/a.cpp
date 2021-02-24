@@ -82,18 +82,78 @@ ll flr(ld a){
 
 //code starts here
 
+ll a,b,k;
+
+ll num(string s){
+    ll ans = 0;
+    reverse(all(s));
+    for(ll i = 0; i<s.length(); i++){
+        ans += (1<<i) * (s[i] == '1');
+    }
+    return ans;
+}
+
+void bin(ll num){
+    string s = "";
+    ll cur =1 ;
+    while(cur <= num){
+        if(num & cur) s += '1';
+        else s += '0';
+        cur *= 2;
+    }
+    reverse(all(s));
+    pr(s);
+    return;
+}
+
 void solve(){
-    ll l,r;
-    re l; re r;
-    ll k = r-l;
-    pr(k*(k-1)/2);
+    re a; re b; re k;
+    string x = "",y = "";
+    if((a == 0 || b == 1) || k == 0){
+        if(k){
+            No;
+            return;
+        }
+        while(b) x += '1', b--, y += '1';
+        while(a) y += '0', a--, x += '0';
+        Yes;
+        pr(x); pr(y);
+        return;
+    }
+    if(a + b < k+2){
+        No;
+        return;
+    }
+    // pr("here");
+    ll ta = a, tb = b;
+    while(b) x += '1', b--, y += '1';
+    while(a) x += '0', a--, y += '0';
+    a = ta, b = tb;
+    // pr("here");
+    // fo(a+b) y += '0';
+    // y[0] = '1';
+    // b--;
+    y[b-1] = '0';
+    ll idx = a+b-1-(a-min(a,k));
+    // pr(idx);
+    y[a+b-1-(a - min(a,k))] = '1';
+    k -= min(a,k);
+    if(k){
+        y[b-k-1] = '0';
+        y[b-1] = '1';
+    }
+    Yes;
+    pr(x);
+    pr(y);
+    // bin(num(x) - num(y));
+
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

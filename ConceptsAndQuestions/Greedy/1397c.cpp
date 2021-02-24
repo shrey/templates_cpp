@@ -81,63 +81,74 @@ ll flr(ld a){
 }
 
 //code starts here
-const ll M = 2e5+100;
-ll inf = 1e15;
-vp gr[M];
-ll n,m,x,y,w;
-vl dist(M,1e15);
-vl par(M,-1);
 
-void dijkstra(ll src){
-    set<pll> s;
-    fo(M) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                par[x.ff] = node;
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
+ll n,m;
+const ll M = 1e5+100;
+vp a;
+
+ll comp(ll num){
+    ll s = 0, e = m-1;
+    ll ans = -1;
+    while(s <= e){
+        ll mid = (s+e)/2;
+        if(a[mid].ff >= num){
+            ans = mid;
+            e = mid-1;
+        }else{
+            s = mid+1;
         }
     }
+    return ans;
 }
 
 void solve(){
-    par[1] = 0;
-    vl ans;
     re n; re m;
+    a.clear();
+    a.resize(m);
     fo(m){
-        re x; re y; re w;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
+        re a[i].ff; re a[i].sec;
     }
-    dijkstra(1);
-    if(dist[n] == inf){
-        pr(-1);
-        return;
+    sort(all(a));
+    ll pre[m];
+    pre[m-1] = a[m-1].ff;
+    for(ll i = m-2; i>=0; i--){
+        pre[i] = pre[i+1] + a[i].ff;
     }
-    ll cur = n;
-    while(cur != 1) ans.pb(cur), cur = par[cur];
-    ans.pb(1);
-    reverse(all(ans));
-    for(auto x: ans) cout<<x<<" "; nl;
+    ll ans = 0;
+    for(ll i = 0; i<m; i++){
+        ll cur = a[i].ff;
+        ll j = comp(a[i].sec);
+        // ll ext = 0, op = 0;
+        ll r = n-1;
+        if(r == 0){
+            ans = max(ans,cur);
+            continue;
+        }
+        if(j != -1 && j <= i){
+            cur = 0;
+            r++;
+        }
+        if(j == -1){
+            cur += r*a[i].sec;
+            ans = max(ans,cur);
+        }
+        else if(m-j >= r){
+            cur += pre[m-r];
+            ans = max(ans,cur);
+        }else{
+            ll rem = r - (m-j);
+            cur += pre[j] + rem*a[i].sec;
+            ans = max(ans,cur);
+        }
+    }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

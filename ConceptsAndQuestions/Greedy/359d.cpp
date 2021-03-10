@@ -82,29 +82,93 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+const ll M = 3e5+100;
 
-bool prime[M];
+// ll gcd(ll a, ll b){ return (b == 0)? a : gcd(b,a%b);}
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+ll n,a[M];
+
+const ll k = 18;
+ll g[M][k+1] = {0};
+
+ll gcd(ll a, ll b){ return (b == 0)? a : gcd(b,a%b);}
+
+void precompute(){
+    for(ll i = 0; i<n; i++){
+        g[i][0] = a[i];
+    }
+    // pr("here");
+    for(ll j = 1; j<=k; j++){
+        for(ll i = 0; i+(1<<j) <= n; i++){
+            // cout<<i<<"()"<<j<<"()"<<g[i][j]<<"\n";
+            // cout<<g[i][j-1]<<" , "<<g[i+(1<<(j-1))][j-1]<<"\n";
+            g[i][j] = gcd(g[i][j-1], g[i+(1<<(j-1))][j-1]);
+        }
+    }
 }
 
+ll qry(ll l, ll r){
+    ll res = 0;
+    for(ll j = k; j>=0; j--){
+        if((1<<j) <= (r-l+1)){
+            res = gcd(res,g[l][j]);
+            l += (1<<j);
+        }
+    }
+    return res;
+}
+
+ll b1(ll s, ll e, ll val){
+    ll ans = e;
+    ll idx = e;
+    while(s <= e){
+        ll mid = (s+e)/2;
+        if(qry(mid,idx) == val){
+            ans = mid;
+            e = mid-1;
+        }
+        else{
+            s = mid+1;
+        }
+    }
+    return ans;
+}
+
+ll b2(ll s, ll e, ll val){
+    ll ans = s;
+    ll idx = s;
+    while(s <= e){
+        ll mid = (s+e)/2;
+        if(qry(idx,mid) == val){
+            ans = mid;
+            s = mid+1;
+        }else{
+            e = mid-1;
+        }
+    }
+    return ans;
+}
+
+set<ll> res[M];
+
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; fo(n) re a[i];
+    precompute();
+    ll ans = 0;
+    for(ll i = 0; i<n; i++){
+        ll l = b1(0,i,a[i]);
+        ll r = b2(i,n-1,a[i]);
+        if(r-l+1 > ans){
+            // cout<<a[i]<<"\n";
+            ans = r-l+1;
+            res[r-l+1].insert(l+1);
+        }else if(r-l+1 == ans){
+            res[r-l+1].insert(l+1);
+        }
+    }
+    cout<<res[ans].size()<<" "<<ans-1<<"\n";
+    for(auto x: res[ans]) cout<<x<<" "; nl;
+
 }
 
 int32_t main(){
@@ -129,6 +193,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

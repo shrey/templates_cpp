@@ -83,22 +83,7 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-    ll n1; re n1;
-    ll cnt = 0;
-    for(ll i = 1; i<=sqrt(n1); i++){
-        ll m = i, n = i-1;
-        ll c = m*m + n*n;
-        ll b = 2*m*n;
-        ll a = m*m - n*n;
-        // cout<<a<<"()"<<b<<"()"<<c<<"\n";
-        if(c <= n1 && a > 0 && b > 0) cnt++;
-        // m = i, n = i+1;
-        // c = m*m + n*n;
-        // b = 2*m*n;
-        // a = c*c - b*b;
-        // if(c <= n && a > 0 && b > 0) cnt++;
-    }
-    pr(cnt);
+
 }
 
 int32_t main(){

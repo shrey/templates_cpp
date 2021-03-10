@@ -82,70 +82,87 @@ ll flr(ld a){
 
 //code starts here
 
-ll a,b,k;
+ll mat[100][100] = {0};
 
-ll num(string s){
-    ll ans = 0;
-    reverse(all(s));
-    for(ll i = 0; i<s.length(); i++){
-        ans += (1<<i) * (s[i] == '1');
-    }
-    return ans;
-}
+ll dx[] = {1,0,-1,0,1,1,-1,-1};
+ll dy[] = {0,1,0,-1,1,-1,1,-1};
 
-void bin(ll num){
-    string s = "";
-    ll cur =1 ;
-    while(cur <= num){
-        if(num & cur) s += '1';
-        else s += '0';
-        cur *= 2;
-    }
-    reverse(all(s));
-    pr(s);
-    return;
+bool ok(ll x, ll y){
+    if(x > 0 && x <= 8 && y > 0 && y <= 8) return true;
+    return false;
 }
 
 void solve(){
-    re a; re b; re k;
-    string x = "",y = "";
-    if((a == 0 || b == 1) || k == 0){
-        if(k){
-            No;
-            return;
+    string k,n;
+    re k; re n;
+    ll n1 = n[0] - 'a' + 1, n2 = n[1] - '0';
+    ll k1 = k[0] - 'a' + 1, k2 = k[1] - '0';
+
+    bool flag = false;
+    mat[n1][n2] = 5, mat[k1][k2] = 5;
+    fo(8) if(n1 + dx[i] == k1 && n2 + dy[i] == k2) flag = true;
+    fo(8){
+        ll x = k1 + dx[i], y = k2 + dy[i];
+        mat[x][y] = 1;
+        if(flag && mat[n1+dx[i]][n2+dy[i]] == 0) mat[n1 + dx[i]][n2+dy[i]] = 3;
+    }
+
+    for(ll i = 1; i<=8; i++){
+        if(mat[n1][i] == 0) mat[n1][i] = 2;
+        if(mat[i][n2] == 0) mat[i][n2] = 2;
+        if(mat[n1+i][n2+i] == 0) mat[n1+i][n2+i] = 2;
+        if(n1 >= i && mat[n1-i][n2+i] == 0) mat[n1-i][n2+i] = 2;
+        if(n1 >= i && n2 >= i && mat[n1-i][n2-i] == 0) mat[n1-i][n2-i] = 2;
+        if(n2 >= i && mat[n1+i][n2-i] == 0) mat[n1+i][n2-i] = 2;
+    }
+    if(n1+2<10&&n2-1>=0 && mat[n1+2][n2-1] == 0){
+        mat[n1+2][n2-1]=2;
+    }
+
+    if(n1+2<10&&n2+1<10 && mat[n1+2][n2+1] == 0){
+        mat[n1+2][n2+1]=2;
+    }
+
+    if(n1-2>=0&&n2-1>=0 && mat[n1-2][n2-1] == 0){
+        mat[n1-2][n2-1]=2;
+    }
+
+    if(n1-2>=0&&n2+1<10 && mat[n1-2][n2+1] == 0){
+        mat[n1-2][n2+1]=2;
+    }
+
+    if(n1+1<10&&n2-2>=0 && mat[n1+1][n2-2] == 0){
+        mat[n1+1][n2-2]=2;
+    }
+
+    if(n1+1<10&&n2+2<10 && mat[n1+1][n2+2] == 0){
+        mat[n1+1][n2+2]=2;
+    }
+
+    if(n1-1>=0&&n2-2>=0 && mat[n1-1][n2-2] == 0){
+        mat[n1-1][n2-2]=2;
+    }
+
+    if(n1-1>=0&&n2+2<10 && mat[n1+1][n2+2] == 0){
+        mat[n1-1][n2+2]=2;
+    }
+    ll a = 0, b = 0, c = 0, d = 0;
+    for(ll i = 1; i<=8; i++){
+        for(ll j = 1; j<=8; j++){
+            if(mat[i][j] == 2) b++;
+            else if(mat[i][j] == 3) a++;
+            else if(mat[i][j] == 0){
+                bool f = false;
+                forn(k,8){
+                    ll x = i + dx[k], y = j + dy[k];
+                    if(ok(x,y) && mat[x][y] == 0) {f = true; break;}
+                }
+                if(f)   d++;
+                else    c++;
+            }
         }
-        while(b) x += '1', b--, y += '1';
-        while(a) y += '0', a--, x += '0';
-        Yes;
-        pr(x); pr(y);
-        return;
     }
-    if(a + b < k+2){
-        No;
-        return;
-    }
-    // pr("here");
-    ll ta = a, tb = b;
-    while(b) x += '1', b--, y += '1';
-    while(a) x += '0', a--, y += '0';
-    a = ta, b = tb;
-    // pr("here");
-    // fo(a+b) y += '0';
-    // y[0] = '1';
-    // b--;
-    y[b-1] = '0';
-    ll idx = a+b-1-(a-min(a,k));
-    // pr(idx);
-    y[a+b-1-(a - min(a,k))] = '1';
-    k -= min(a,k);
-    if(k){
-        y[b-k-1] = '0';
-        y[b-1] = '1';
-    }
-    Yes;
-    pr(x);
-    pr(y);
-    // bin(num(x) - num(y));
+    cout<<a<<" "<<b<<" "<<c<<" "<<d<<"\n";
 
 }
 
@@ -164,6 +181,7 @@ int32_t main(){
 // see if there's array overflow
 // use map for large inputs
 
+//d3 e4
 
 //problem ideas
 //check piegonhole wherever possible

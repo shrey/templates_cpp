@@ -82,29 +82,101 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+ll n,x,y;
+const ll M = 2e5+100;
+vl gr[M];
+vl path;
+vl mark(M,0);
+vb vis2(M,false);
+vl dist2(M,0);
+ll k;
 
-bool prime[M];
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+ll bfs(ll src){
+    vb vis(n+1,false);
+    vl dist(n+1,0);
+    path.clear();
+    path.resize(n+1);
+    path[src] = 0;
+    queue<ll> q;
+    q.push(src);
+    vis[src] = true;
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        // cout<<cur<<"()\n";
+        for(auto x: gr[cur]){
+            if(!vis[x] && !mark[x]){
+                vis[x] = true;
+                q.push(x);
+                dist[x] = dist[cur] + 1;
+                path[x] = cur;
+            }
+        }
+    }
+    ll d = src;
+    for(ll i = 1; i<=n; i++){
+        if(dist[i] > dist[d]) d = i;
+    }
+    k = dist[d];
+    return d;
+}
+
+
+
+
+pll bfs2(ll src){
+    vl cur;
+    cur.pb(src);
+    queue<ll> q;
+    q.push(src);
+    vis2[src] = true;
+    while(!q.empty()){
+        ll t = q.front();
+        q.pop();
+        for(auto x: gr[t]){
+            if(!vis2[x] && !mark[x]){
+                vis2[x] = true;
+                q.push(x);
+                dist2[x] = dist2[t] + 1;
+                cur.pb(x);
+            }
+        }
+    }
+    ll d = src;
+    for(auto x: cur){
+        if(dist2[x] > dist2[d]) d = x;
+    }
+    return mp(d,dist2[d]);
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n;
+    fo(n-1){
+        re x; re y;
+        gr[x].pb(y), gr[y].pb(x);
+    }
+    ll a = bfs(1);
+    ll b = bfs(a);
+    vl p;
+    // cout<<a<<"()"<<b<<"\n";
+    ll cur = b;
+    while(cur != 0){
+        p.pb(cur);
+        cur = path[cur];
+    }
+    for(auto x: p) mark[x] = 1;
+    ll c, res = -1;
+    for(auto x: p){
+        pll cur = bfs2(x);
+        if(cur.sec > res && cur.ff != a && cur.ff != b){
+            res = cur.sec;
+            c = cur.ff;
+        }
+    }
+    res += k;
+    pr(res);
+    cout<<a<<" "<<b<<" "<<c<<"\n";
 }
 
 int32_t main(){
@@ -129,6 +201,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

@@ -82,35 +82,41 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
-
-bool prime[M];
+const ll M = 2e5+100;
+ll sp[M], vis[M];
 
 void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+    for(ll i = 2; i<M; i+=2) sp[i] = 2;
+    for(ll i = 3; i<M; i+=2){
+        if(!vis[i]){
+            sp[i] = i;
+            for(ll j = i; j*i < M; j+=2){
+                sp[j*i] = i, vis[j*i] = true;
+            }
+        }
+    }
+}
+
+vl fact(ll num){
+    vl p;
+    while(num > 1){
+        p.pb(sp[num]);
+        num /= sp[num];
+    }
+    return p;
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    vl cur = fact(1);
+    cur.pb(1);
+    for(auto x: cur) cout<<x<<" "; nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
+    seive();
     // re t;
     while(t--) solve();
 }
@@ -129,6 +135,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

@@ -82,29 +82,36 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+ll n,x,y;
+const ll M = 1e7+1;
+ll dp[M];
 
-bool prime[M];
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+ll recur(ll cur){
+    // k++;
+    // if(k > 10) return 0;
+    // cout<<cur<<"()\n";
+    if(cur == 0) return 0;
+    if(cur == 1) return x;
+    if(dp[cur] != -1) return dp[cur];
+    ll res = 1e18;
+    if(cur % 2){
+        ll c = recur(cur-1) + x;
+        c = min(c,recur((cur+1)/2) + x + y);
+        res = min(res,c);
+    }
+    else{
+        ll c = recur(cur/2) + y;
+        c = min(c,recur(cur-1) + x);
+        res = min(res,c);
+    }
+    return dp[cur] = res;
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; re x; re y;
+    memset(dp,-1,sizeof(dp));
+    pr(recur(n));
 }
 
 int32_t main(){
@@ -129,6 +136,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

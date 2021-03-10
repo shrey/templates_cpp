@@ -82,29 +82,48 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+ll n,m;
 
-bool prime[M];
+vector<pair<pll,ll> > a;
+vp crd;
+vp b;
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+bool compare(pair<pll,ll> &x, pair<pll,ll>&y){
+    return x.ff.sec < y.ff.sec;
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; re m;
+    a.resize(n-1);
+    crd.resize(n);
+    fo(n){
+        re crd[i].ff, re crd[i].sec;
+        if(i == 0) continue;
+        a[i-1].ff.ff = crd[i].ff - crd[i-1].sec; a[i-1].ff.sec = crd[i].sec - crd[i-1].ff;
+        a[i-1].sec = i-1;
+    }
+    // pr("here");
+    b.resize(m);
+    multiset<pair<ll,ll> > s;
+    fo(m){
+        re b[i].ff; b[i].sec = i;
+        s.insert(b[i]);
+    }
+    sort(all(a),compare);
+    // pr("here");
+    vl res(n-1);
+    for(auto x: a){
+        // cout<<x.ff.ff<<"()"<<x.ff.sec<<"\n";
+        auto it = s.lower_bound(mp(x.ff.ff,-1));
+        if(it == s.end() || it->ff > x.ff.sec){
+            No;
+            return;
+        }
+        res[x.sec] = it->sec;
+        s.erase(it);
+    }
+    Yes;
+    fo(n-1) cout<<res[i]+1<<" "; nl;
 }
 
 int32_t main(){
@@ -129,6 +148,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

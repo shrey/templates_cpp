@@ -82,29 +82,43 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+const ll M = 2e5+100;
+set<ll> gr[M];
+set<ll> unvis;
+ll n,m,x,y;
+ll sz = 0;
 
-bool prime[M];
-
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+void dfs(ll cur){
+    unvis.erase(cur);
+    sz++;
+    vl op;
+    for(auto it: unvis){
+        if(gr[cur].find(it) == gr[cur].end()){
+            op.pb(it);
+        }
+    }
+    for(auto it: op) unvis.erase(it);
+    for(auto it: op) dfs(it);
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; re m;
+    fo(m){
+        re x; re y;
+        gr[x].insert(y);
+        gr[y].insert(x);
+    }
+    fo(n) unvis.insert(i+1);
+    vl res;
+    for(ll i = 1; i<=n; i++){
+        if(unvis.find(i) == unvis.end()) continue;
+        sz = 0;
+        dfs(i);
+        res.pb(sz);
+    }
+    pr(res.size());
+    sort(all(res));
+    for(auto x: res) cout<<x<<" "; nl;
 }
 
 int32_t main(){
@@ -129,6 +143,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

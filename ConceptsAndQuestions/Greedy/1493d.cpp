@@ -82,33 +82,96 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+const ll M = 2e5+100;
+ll sp[M], vis[M], a[M];
+multiset<ll> s[M];
+map<ll,ll> m[M];
+ll n,q;
 
-bool prime[M];
-
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+ll pw(ll n, ll k){
+    if(k == 0){
+        return 1;
+    }
+    ll a = (pow(n,k/2));
+    if(k%2){
+        return ((((a*a)%mod)*(n%mod))%mod);
+    }
+    return ((a*a)%mod);
 }
 
+void seive(){
+    for(ll i = 2; i<M; i+=2) sp[i] = 2;
+    for(ll i = 3; i<M; i+=2){
+        if(!vis[i]){
+            sp[i] = i;
+            for(ll j = i; j*i < M; j+=2){
+                sp[j*i] = i, vis[j*i] = true;
+            }
+        }
+    }
+}
+
+vl fact(ll num){
+    vl p;
+    while(num > 1){
+        p.pb(sp[num]);
+        num /= sp[num];
+    }
+    return p;
+}
+
+
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; re q;
+    fo(n) re a[i];
+    fo(n){
+        vl cur = fact(a[i]);
+        // cout<<i<<"()"; for(auto x: cur) cout<<x<<" ";nl;
+        for(auto p: cur) m[i][p]++;
+        for(auto x: m[i]) s[x.ff].insert(x.sec);
+    }
+    ll ans = 1;
+    fo(M){
+        // if(s[i].size()) cout<<i<<"()"<<s[i].size()<<"\n";
+        if(s[i].size() == n){
+            ans *= pw(i,*s[i].begin());
+            ans %= mod;
+        }
+    }
+    while(q--){
+        ll idx, x;
+        re idx; re x;
+        idx--;
+        vl cur = fact(x);
+        map<ll,ll> temp;
+        for(auto p: cur){
+            temp[p]++;
+        }
+        // cout<<q<<"()"; for(auto x: temp) cout<<x.ff<<" "; nl;
+        for(auto p: temp){
+            if(s[p.ff].size() == 0){
+                m[idx][p.ff] += p.sec;
+                s[p.ff].insert(p.sec);
+                if(s[p.ff].size() == n) ans *= pw(p.ff,p.sec), ans %= mod;
+                continue;
+            }
+            ll prev = *s[p.ff].begin();
+            ll psz = s[p.ff].size();
+            if(m[idx][p.ff]) s[p.ff].erase(s[p.ff].find(m[idx][p.ff]));
+            m[idx][p.ff] += p.sec;
+            s[p.ff].insert(m[idx][p.ff]);
+            ll nxt = *s[p.ff].begin();
+            if(psz == n && nxt > prev) ans *= pw(p.ff,nxt-prev);
+            else if(psz != n && s[p.ff].size() == n) ans *= pw(p.ff,nxt);
+            ans %= mod;
+        }
+        pr(ans);
+    }
 }
 
 int32_t main(){
     KOBE;
+    seive();
     ll t;
     t = 1;
     // re t;
@@ -129,6 +192,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

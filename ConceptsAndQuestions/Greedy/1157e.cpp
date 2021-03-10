@@ -82,29 +82,28 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
-
-bool prime[M];
-
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
-}
+const ll M = 2e5+100;
+ll a[M],b[M],n;
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n;
+    fo(n) re a[i];
+    fo(n) re b[i];
+    multiset<ll> m;
+    fo(n) m.insert(b[i]);
+    vl c(n);
+    for(ll i = 0; i<n; i++){
+        ll d = n - a[i];
+        auto it = m.lower_bound(d);
+        if(it == m.end()){
+            c[i] = (*m.begin() + a[i])%n;
+            m.erase(m.begin());
+        }else{
+            c[i] = (*it + a[i])%n;
+            m.erase(it);
+        }
+    }
+    for(auto x: c) cout<<x<<" "; nl;
 }
 
 int32_t main(){
@@ -129,6 +128,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

@@ -1,5 +1,3 @@
-
-
 //Shrey Dubey
 
 
@@ -82,29 +80,62 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+const ll M = 2e5+100;
+vector<string> gr[M];
 
-bool prime[M];
-
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
-}
+map<pll, string > str; //for the result
+map<string, ll > op;
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    ll d,in,s,v,f,a,b;
+    re d; re in; re s; re v; re f;
+    fo(s){
+        re a; re b;
+        string s;
+        re s;
+        ll w; re w;
+        gr[b].pb(s);
+        str[mp(b,a)] = s;
+        // op[s] = i;
+    }
+    fo(v){
+        ll k; re k;
+        string s;
+        fo(k){
+            re s;
+            op[s]++;
+        }
+    }
+    vector<pair<ll,vl> > res;
+    ll tot = 0;
+    fo(in){
+        for(auto str: gr[i]){
+            if(op[str]){
+                tot++;
+                break;
+            }
+        }
+    }
+    pr(tot);
+    fo(in){
+        vector<pair<ll,string> > cur;
+        for(auto str: gr[i]){
+            if(op[str]){
+                cur.pb(mp(op[str],str));
+            }
+        }
+        sort(all(cur));
+        ll tme = 1;
+        if(cur.size()){
+            tot++;
+            cout<<i<<"\n";
+            pr(cur.size());
+            for(auto p: cur){
+                cout<<p.sec<<" "<<tme<<"\n";
+                tme+=2;
+            }
+        }
+    }
 }
 
 int32_t main(){
@@ -116,11 +147,14 @@ int32_t main(){
 }
 
 
+
 //common errors
 // row - n, col - m always and loop var
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
+
+// ./main > output.txt ./main < input.txt
 
 
 //problem ideas
@@ -129,6 +163,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

@@ -82,36 +82,77 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
-
-bool prime[M];
-
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
-}
+ll n,k;
+string s;
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; re k; re s;
+    if(n%k){
+        pr(-1);
+        return;
+    }
+    ll freq[26] = {0};
+    fo(n) freq[s[i]-'a']++;
+    bool flag = true;
+    fo(26) if(freq[i]%k){
+        flag = false;
+        break;
+    }
+    if(flag){
+        pr(s);
+        return;
+    }
+    for(ll i = n-1; i>=0; i--){
+        freq[s[i]-'a']--;
+        ll cur = 0;
+        forn(j,26){
+            if(freq[j]%k) cur += (k - freq[j]%k);
+        }
+        // cout<<i<<"()"<<cur<<"\n";
+        ll len = n-i-1;
+        if(len + 1 == cur){
+            for(ll j = s[i]-'a'+1; j<26; j++){
+                if(freq[j]%k){
+                    freq[j]++;
+                    string res = s.substr(0,i);
+                    res += ('a'+j);
+                    string lft = "";
+                    for(ll p = 0; p<26; p++){
+                        if(freq[p]%k){
+                            forn(l,k-freq[p]%k) lft += 'a'+p;
+                        }
+                    }
+                    sort(all(lft));
+                    res += lft;
+                    pr(res);
+                    return;
+                }
+            }
+        }else if((len+1 > cur) && (len+1-cur)%k == 0){
+            if(s[i]-'a' == 25) continue;
+            string res = s.substr(0,i);
+            res += s[i]+1;
+            freq[s[i]-'a'+1]++;
+            string lft = "";
+            for(ll j = 0; j<26; j++){
+                if(freq[j]%k){
+                    forn(p,k-freq[j]%k) lft += 'a'+j;
+                }
+            }
+            while(lft.length() < len) lft += 'a';
+            sort(all(lft));
+            res += lft;
+            pr(res);
+            return;
+        }
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 
@@ -129,6 +170,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

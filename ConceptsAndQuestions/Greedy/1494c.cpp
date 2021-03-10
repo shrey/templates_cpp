@@ -82,36 +82,83 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+ll n,m;
+const ll M = 2e5+100;
+ll x;
+vl a1;
+vl a2;
+vl b1;
+vl b2;
 
-bool prime[M];
+ll bin(vl &a, ll num){
+    ll s = 0, e = a.size()-1;
+    ll ans = -1;
+    while(s <= e){
+        ll mid = (s+e)/2;
+        if(num >= a[mid]){
+            ans = mid;
+            s = mid+1;
+        }else{
+            e = mid-1;
+        }
+    }
+    return ans;
+}
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+
+ll comp(vl &a, vl &b){
+    if(b.empty() || a.empty()) return 0;
+    ll dp[b.size()];
+    ll m = b.size();
+    ll ans = 0;
+    dp[0] = 1;
+    map<ll,ll> f;
+    fo(a.size()) f[a[i]]++;
+    ll cnt[m+1];
+    cnt[m] = 0;
+    for(ll i = 1; i<m; i++){
+        dp[i] = 1;
+        if(b[i-1] == b[i]-1) dp[i] += dp[i-1];
+    }
+    for(ll i = m-1; i>=0; i--){
+        if(f[b[i]]) cnt[i] = 1;
+        else cnt[i] = 0;
+        if(i != m-1) cnt[i] += cnt[i+1];
+    }
+    for(ll i = 0; i<m; i++){
+        ll cur = bin(a,b[i]);
+        ans = max(ans,min(dp[i],cur+1) + cnt[i+1]);
+    }
+    return ans;
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; re m;
+    fo(n){
+        re x;
+        if(x > 0) a1.pb(x);
+        else a2.pb(-1*x);
+    }
+    fo(m){
+        re x;
+        // x *= -1;
+        if(x > 0) b1.pb(x);
+        else b2.pb(-1*x);
+    }
+    reverse(all(a2)); reverse(all(b2));
+    // for(auto x: a2) cout<<x<<" "; nl;
+    // for(auto x: b2) cout<<x<<" "; nl;
+    ll ans = 0;
+    ans += comp(a1,b1) + comp(a2,b2);
+    pr(ans);
+    a1.clear(); a2.clear(); b1.clear(); b2.clear();
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 
@@ -129,6 +176,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

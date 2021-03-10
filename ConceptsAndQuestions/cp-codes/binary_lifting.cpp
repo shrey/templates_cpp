@@ -98,7 +98,7 @@ void solve(){
     //take the input
     re n; re q;
     memset(up,-1,sizeof(up));
-    fo(n){
+    for(ll i = 2; i<=n; i++){
         // re x; re y;
         // gr[x].pb(y);
         // gr[y].pb(x);

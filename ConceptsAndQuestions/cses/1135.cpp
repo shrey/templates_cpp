@@ -58,6 +58,7 @@ typedef long double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
@@ -82,29 +83,74 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+const ll M = 2e5+100;
 
-bool prime[M];
+ll par[LG][M],level[M],tot[M];
+ll c[M];
+ll n,x,y,q;
+vl gr[M];
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+
+void dfs(ll k,ll parent,ll d){
+    par[0][k]=parent;
+    level[k]=d;
+    tot[k]=1;
+    for(auto it:gr[k])
+    {
+        if(it==parent)
+            continue;
+        dfs(it,k,d+1);
+        tot[k]+=tot[it];
+    }
 }
 
+
+void precompute(){
+  for(ll i=1;i<LG;i++){
+    for(ll j=1;j<=n;j++){
+      if(par[i-1][j])
+          par[i][j]=par[i-1][par[i-1][j]];
+    }
+  }
+}
+
+
+ll lca(ll u, ll v)
+{
+    if(level[u]<level[v])
+        swap(u,v);
+    ll diff=level[u]-level[v];
+    for(ll i=LG-1;i>=0;i--){
+        if((1ll<<i) & diff){
+            u=par[i][u];
+        }
+    }
+    if(u==v)
+        return u;
+    for(ll i=LG-1;i>=0;i--){
+        if(par[i][u] && par[i][u]!=par[i][v]){
+            u=par[i][u];
+            v=par[i][v];
+        }
+    }
+    return par[0][u];
+}
+
+
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n; re q;
+    fo(n-1){
+        re x; re y;
+        gr[x].pb(y), gr[y].pb(x);
+    }
+    dfs(1,0,0);
+    precompute();
+    while(q--){
+        re x; re y;
+        ll l = lca(x,y);
+        ll dist = level[y] + level[x] - 2*level[l];
+        pr(dist);
+    }
 }
 
 int32_t main(){
@@ -129,6 +175,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

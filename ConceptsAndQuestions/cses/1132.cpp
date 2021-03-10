@@ -82,29 +82,61 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+const ll M = 2e5+100;
+vl gr[M];
+ll n,a,b;
 
-bool prime[M];
+ll dp[M];
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+void dfs1(ll cur, ll par){
+    dp[cur] = 0;
+    for(auto x: gr[cur]){
+        if(x == par) continue;
+        dfs1(x,cur);
+        dp[cur] = max(dp[cur],dp[x]+1);
+    }
+}
+
+ll res[M];
+
+void dfs2(ll cur, ll par, ll mx){
+    // cout<<cur<<"()"<<par<<"()"<<mx<<"\n";
+    res[cur] = max(mx,dp[cur]);
+    multiset<ll, greater<ll> > m;
+    for(auto x: gr[cur]){
+        if(x == par) continue;
+        m.insert(dp[x]+1);
+    }
+    // if(cur == 1) cout<<*m.begin()<<"()()\n";
+    if(m.empty()) return;
+    auto it = m.begin();
+    ll n1 = *m.begin(),n2;
+    if(m.size() == 1){
+        n2 = mx;
+    }
+    else{
+        auto it2 = ++it; n2 = *it2;
+    }
+    for(auto x: gr[cur]){
+        if(x == par) continue;
+        if(dp[x]+1 == n1){
+            dfs2(x,cur,max(mx+1,n2+1));
+        }else{
+            dfs2(x,cur,max(mx+1,n1+1));
+        }
+    }
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n;
+    fo(n-1){
+        re a; re b;
+        gr[a].pb(b); gr[b].pb(a);
+    }
+    dfs1(1,0);
+    // fo(n) cout<<dp[i+1]<<" "; nl;
+    dfs2(1,0,0);
+    for(ll i = 1; i<=n; i++) cout<<res[i]<<" "; nl;
 }
 
 int32_t main(){
@@ -129,6 +161,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

@@ -82,29 +82,34 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+ll n,a,b;
+const ll M = 2e5+100;
+vl gr[M];
+ll dp[M][2] = {0};
 
-bool prime[M];
-
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+void dfs(ll cur, ll par){
+    for(auto x: gr[cur]){
+        if(x == par) continue;
+        dfs(x,cur);
+    }
+    ll tot = 0;
+    for(auto x: gr[cur]){
+        if(x != par) tot += dp[x][1];
+    }
+    for(auto x: gr[cur]){
+        if(x == par) continue;
+        dp[cur][1] = max(dp[cur][1],1 + dp[x][0] + tot - dp[x][1]);
+    }
+    dp[cur][0] = max(dp[cur][0],tot);
 }
 
 void solve(){
-    // ll a,b; re a; re b;
-    // pr(a+b);
-    // pr(m.count(1));
-    // seive();
-    // pair<ll,ll> p = mp(1,2);
-    // multiset<pll> m;
-    // m.insert(mp(1,2));
-    // m.insert(mp(2,3));
-    // m.insert(mp(3,4));
-    // auto it = m.lower_bound(mp(3,-1));
-    // pr(it->ff);
-    pr('z'-'a');
+    re n;
+    fo(n-1){
+        re a; re b; gr[a].pb(b), gr[b].pb(a);
+    }
+    dfs(1,0);
+    pr(max(dp[1][0],dp[1][1]));
 }
 
 int32_t main(){
@@ -129,6 +134,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

@@ -58,6 +58,7 @@ typedef long double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};

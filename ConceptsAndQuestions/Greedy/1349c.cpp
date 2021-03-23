@@ -24,13 +24,13 @@
 
 using namespace std;
 typedef long long ll;
-typedef double ld;
+typedef long double ld;
 
 #define YES cout<<"YES\n"
 #define Yes cout<<"Yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
-#define prDouble(x) cout<<fixed<<setprecision(6)<<x //to print decimal numbers
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
 #define sec second
@@ -59,6 +59,9 @@ typedef double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
+ll dx[] = {1,0,-1,0};
+ll dy[] = {0,1,0,-1};
+
 ll mod = 1e9 + 7;
 
 ll cl(ld a){
@@ -71,65 +74,96 @@ ll cl(ld a){
 }
 
 ll flr(ld a){
+    if(a < 0.0){
+        return (ll) a - 1;
+    }
     return (ll) a;
 }
 
-
-
 //code starts here
 
-const ll M = 1e5+100;
-ld s[M],d[M]; ll n,k;
-
-ld f(ll i, ld tme){
-    return (s[i] * tme + d[i]);
+ll n,m,t;
+queue<pll> q;
+const ll M = 1010;
+ll mat[M][M];
+ll op[M][M] = {0};
+ll dist[M][M];
+ll vis[M][M] = {0};
+bool ok(ll x, ll y){
+    if(x >= 0 && x < n && y >= 0 && y < m) return true;
+    return false;
 }
 
-ld comp(ld tme){
-    ld mx,mn;
-    mx = f(0,tme);
-    mn = f(0,tme);
-    fo(n){
-        mx = max(mx,f(i,tme));
-        mn = min(mn,f(i,tme));
+void bfs(){
+    while(!q.empty()){
+        auto cur = q.front();
+        q.pop();
+        forn(k,4){
+            ll x = cur.ff + dx[k], y = cur.sec + dy[k];
+            if(ok(x,y) && !vis[x][y]){
+                dist[x][y] = dist[cur.ff][cur.sec] + 1;
+                vis[x][y] = true;
+                q.push(mp(x,y));
+            }
+        }
     }
-    return (mx-mn);
-}
-
-// this is for finding the minimum in decreasing to increasing
-// swap r = m2 with l = m1 to find maximum in increasing to decreasing
-
-void ternary_search(ld l, ld r) {
-    ll m = 500;
-    ld eps = 1e-12;        //set the cnt here
-    while (r-l > eps) {
-        ld m1 = l + (r - l) / 3;
-        ld m2 = r - (r - l) / 3;
-        ld f1 = comp(m1);      //evaluates the function at m1
-        ld f2 = comp(m2);      //evaluates the function at m2
-        // cout<<m1<<" = "<<f1<<" "<<m2<<" = "<<f2<<"\n";
-        //this is for finding minimum, for finding max, just make f1 > f2
-        if (f1 < f2)
-            r = m2;
-        else
-            l = m1;
-    }
-    prDouble(min(comp(l),comp(r)));nl;
 }
 
 void solve(){
-    re n; re k;
-    fo(n){
-        re s[i]; re d[i];
+    re n; re m; re t;
+    for(ll i = 0; i<n; i++){
+        string s; re s;
+        for(ll j = 0; j<m; j++){
+            mat[i][j] = s[j]-'0';
+        }
     }
-    ternary_search(0,k);
+    for(ll i = 0; i<n; i++){
+        for(ll j = 0; j<m; j++){
+            forn(k,4){
+                ll x = i + dx[k], y = j + dy[k];
+                if(ok(x,y) && mat[x][y] == mat[i][j]) op[i][j] = 1;
+            }
+        }
+    }
+    memset(dist,-1,sizeof(dist));
+    forn(i,n){
+        forn(j,m){
+            if(op[i][j]) {
+                dist[i][j] = 0, q.push(mp(i,j));
+                vis[i][j] = true;
+            }
+            // cout<<op[i][j]<<" ";
+        }
+        // nl;
+    }
+    bfs();
+    while(t--){
+        ll x,y; re x; re y;
+        x--, y--;
+        ll p; re p;
+        // cout<<dist[x][y]<<"()\n";
+        if(dist[x][y] == -1){
+            pr(mat[x][y]);
+            // pr("here");
+            continue;
+        }
+        if(p > dist[x][y]){
+            // pr("here");
+            p -= dist[x][y];
+            if(p % 2) pr(1-mat[x][y]);
+            else pr(mat[x][y]);
+        }
+        else{
+            pr(mat[x][y]);
+        }
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
     t = 1;
+    // re t;
     while(t--) solve();
 }
 

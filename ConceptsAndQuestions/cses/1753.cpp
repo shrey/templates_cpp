@@ -24,13 +24,13 @@
 
 using namespace std;
 typedef long long ll;
-typedef double ld;
+typedef long double ld;
 
 #define YES cout<<"YES\n"
 #define Yes cout<<"Yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
-#define prDouble(x) cout<<fixed<<setprecision(6)<<x //to print decimal numbers
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
 #define sec second
@@ -59,6 +59,9 @@ typedef double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
+
 ll mod = 1e9 + 7;
 
 ll cl(ld a){
@@ -71,65 +74,46 @@ ll cl(ld a){
 }
 
 ll flr(ld a){
+    if(a < 0.0){
+        return (ll) a - 1;
+    }
     return (ll) a;
 }
 
-
-
 //code starts here
 
-const ll M = 1e5+100;
-ld s[M],d[M]; ll n,k;
-
-ld f(ll i, ld tme){
-    return (s[i] * tme + d[i]);
-}
-
-ld comp(ld tme){
-    ld mx,mn;
-    mx = f(0,tme);
-    mn = f(0,tme);
-    fo(n){
-        mx = max(mx,f(i,tme));
-        mn = min(mn,f(i,tme));
+vector<int> z_function(string &s) {   // replace vector<ll> by string to get string
+    int n = (int) s.size();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
     }
-    return (mx-mn);
+    return z;
 }
 
-// this is for finding the minimum in decreasing to increasing
-// swap r = m2 with l = m1 to find maximum in increasing to decreasing
-
-void ternary_search(ld l, ld r) {
-    ll m = 500;
-    ld eps = 1e-12;        //set the cnt here
-    while (r-l > eps) {
-        ld m1 = l + (r - l) / 3;
-        ld m2 = r - (r - l) / 3;
-        ld f1 = comp(m1);      //evaluates the function at m1
-        ld f2 = comp(m2);      //evaluates the function at m2
-        // cout<<m1<<" = "<<f1<<" "<<m2<<" = "<<f2<<"\n";
-        //this is for finding minimum, for finding max, just make f1 > f2
-        if (f1 < f2)
-            r = m2;
-        else
-            l = m1;
-    }
-    prDouble(min(comp(l),comp(r)));nl;
-}
 
 void solve(){
-    re n; re k;
-    fo(n){
-        re s[i]; re d[i];
+    string s,t;
+    re s; re t;
+    string op = t + s;
+    vl z = z_function(op);
+    ll cnt = 0;
+    for(ll i = t.length(); i<z.size(); i++){
+        if(z[i] >= t.length()) cnt++;
     }
-    ternary_search(0,k);
+    pr(cnt);
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
     t = 1;
+    // re t;
     while(t--) solve();
 }
 

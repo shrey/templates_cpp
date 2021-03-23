@@ -24,13 +24,13 @@
 
 using namespace std;
 typedef long long ll;
-typedef double ld;
+typedef long double ld;
 
 #define YES cout<<"YES\n"
 #define Yes cout<<"Yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
-#define prDouble(x) cout<<fixed<<setprecision(6)<<x //to print decimal numbers
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
 #define sec second
@@ -58,6 +58,10 @@ typedef double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
+
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
@@ -71,65 +75,69 @@ ll cl(ld a){
 }
 
 ll flr(ld a){
+    if(a < 0.0){
+        return (ll) a - 1;
+    }
     return (ll) a;
 }
 
-
-
 //code starts here
 
-const ll M = 1e5+100;
-ld s[M],d[M]; ll n,k;
+const ll M = 55;
+ll n;
+vl a;
 
-ld f(ll i, ld tme){
-    return (s[i] * tme + d[i]);
-}
-
-ld comp(ld tme){
-    ld mx,mn;
-    mx = f(0,tme);
-    mn = f(0,tme);
-    fo(n){
-        mx = max(mx,f(i,tme));
-        mn = min(mn,f(i,tme));
+bool check(){
+    for(ll i = 0; i<n; i++){
+        if(a[i] != i+1) return false;
     }
-    return (mx-mn);
-}
-
-// this is for finding the minimum in decreasing to increasing
-// swap r = m2 with l = m1 to find maximum in increasing to decreasing
-
-void ternary_search(ld l, ld r) {
-    ll m = 500;
-    ld eps = 1e-12;        //set the cnt here
-    while (r-l > eps) {
-        ld m1 = l + (r - l) / 3;
-        ld m2 = r - (r - l) / 3;
-        ld f1 = comp(m1);      //evaluates the function at m1
-        ld f2 = comp(m2);      //evaluates the function at m2
-        // cout<<m1<<" = "<<f1<<" "<<m2<<" = "<<f2<<"\n";
-        //this is for finding minimum, for finding max, just make f1 > f2
-        if (f1 < f2)
-            r = m2;
-        else
-            l = m1;
-    }
-    prDouble(min(comp(l),comp(r)));nl;
+    return true;
 }
 
 void solve(){
-    re n; re k;
-    fo(n){
-        re s[i]; re d[i];
+    re n;
+    a.resize(n);
+    fo(n) re a[i];
+    vector<vl> res;
+    ll q = 1;
+    while(!check()){
+        // for(auto x: a) cout<<x<<" "; nl;
+        vl vis(n+1,0);
+        vis[0] = 1;
+        for(ll i = 0; i<n; i++){
+            vis[a[i]] = 1;
+            if(!vis[a[i]-1]){
+                ll j = i+1;
+                while(j < n && a[j] != a[i]-1) j++;
+                ll t = i+1;
+                while(t < n && a[t] > a[t-1]) t++;
+                vl cans;
+                if(i) cans.pb(i);
+                cans.pb(t-i);
+                cans.pb(j-t+1);
+                if(n-j > 1) cans.pb(n-j-1);
+                vl b;
+                for(ll k = j+1; k <n; k++) b.pb(a[k]);
+                for(ll k = t; k<=j; k++) b.pb(a[k]);
+                for(ll k = i; k<t; k++) b.pb(a[k]);
+                for(ll k = 0; k<i; k++) b.pb(a[k]);
+                a = b;
+                res.pb(cans);
+                break;
+            }
+        }
     }
-    ternary_search(0,k);
+    pr(res.size());
+    for(auto vec: res){
+        cout<<vec.size()<<" "; for(auto x: vec) cout<<x<<" "; nl;
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
     t = 1;
+    // re t;
     while(t--) solve();
 }
 

@@ -1,4 +1,3 @@
-ld comp(ll num){
-//     ld tot = num;
-
-// }
+1
+9
+0 0 0 1 1 1 4 5 6

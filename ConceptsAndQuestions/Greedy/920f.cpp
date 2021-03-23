@@ -83,54 +83,112 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll n,a[M];
+const ll M = 1e6+100;
+const ll M2 = 3e5+100;
+ll n,m;
 
-void solve(){
-    re n; fo(n) re a[i];
-    set<ll> s1; set<ll> s2;
-    set<ll> s0;
-    if(n == 1){
-        pr(0);
+ll st2[4*M2+1] = {0};
+ll cnt[M] = {0};
+ll st[4*M2+1] = {0};
+ll a[M2];
+
+void update(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl == tr){
+        st[v] = cnt[st[v]]; //change here
         return;
     }
-    for(ll i = 1; i<n; i++){
-        if(a[i] > a[i-1]) s1.insert(a[i]-a[i-1]);
-        else if(a[i-1] > a[i]) s2.insert(a[i-1] - a[i]);
-        else s0.insert(a[i]);
-    }
-    if(s1.size() > 1 || s2.size() > 1){
-        pr(-1);
+    ll tm = (tl + tr)/2;
+    if(l <= tm && st2[v] > 2) update(2*v,tl,tm,l,r);
+    if(r >= tm+1 && st2[v] > 2) update(2*v + 1,tm+1,tr,l,r);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
+
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 0;
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = a[tl];
         return;
     }
-    if(s0.size() && (s1.size() || s2.size())){
-        pr(-1);
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = st[2*v] + st[2*v+1]; // change here
+}
+
+void update2(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl == tr){
+        st2[v] = cnt[st2[v]]; //change here
         return;
     }
-    if(s0.size()){
-        pr(0);
+    ll tm = (tl + tr)/2;
+    if(l <= tm && st2[v] > 2) update2(2*v,tl,tm,l,r);
+    if(r >= tm+1 && st2[v] > 2) update2(2*v + 1,tm+1,tr,l,r);
+    st2[v] = max(st2[2*v] , st2[2*v+1]); //change here
+}
+
+ll query2(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 0;
+    if(tl >= l && tr <= r) return st2[v];
+    ll tm = (tl + tr)/2;
+    return max(query2(2*v,tl,tm,l,r), query2(2*v+1,tm+1,tr,l,r)); // change here
+}
+
+void build2(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st2[v] = a[tl];
         return;
     }
-    if((s1.size() && !s2.size()) || (s2.size() && !s1.size())){
-        pr(0);
-        return;
-    }
-    ll c = *s1.begin();
-    ll m = *s2.begin() + c;
-    fo(n){
-        if(m <= a[i]){
-            pr(-1);
-            return;
+    ll tm = (tl + tr)/2;
+    build2(2*v,tl,tm);
+    build2(2*v+1,tm+1,tr);
+    st2[v] = max(st2[2*v],st2[2*v+1]); // change here
+}
+
+ll sp[M], vis[M];
+
+void comp(){
+    for(ll i = 1; i<=1e6; i++){
+        for(ll j = i; j<=1e6; j+=i){
+            cnt[j]++;
         }
     }
-    cout<<m<<" "<<c<<"\n";
+}
+
+void solve(){
+    re n; re m;
+    fo(n) re a[i];
+    comp();
+    build(1,0,n-1);
+    build2(1,0,n-1);
+    while(m--){
+        ll t; re t;
+        ll x,y;
+        re x; re y;
+        x--, y--;
+        if(t == 1){
+            ll mx = query2(1,0,n-1,x,y);
+            if(mx > 2){
+                update(1,0,n-1,x,y);
+                update2(1,0,n-1,x,y);
+            }
+        }else{
+            ll ans = query(1,0,n-1,x,y);
+            pr(ans);
+        }
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

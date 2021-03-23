@@ -1,5 +1,4 @@
 
-
 //Shrey Dubey
 
 
@@ -58,6 +57,7 @@ typedef long double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
@@ -82,15 +82,34 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
 
+
+void solve(){
+    string s; re s;
+    ll n = s.length();
+    ll ans = 0;
+    for(ll i = 2; i<=n-1; i+=2){
+        ans += (9 * pow(10,i/2-1));
+    }
+    bool flag = false;
+    if(n % 2 == 0){
+        ans += (s[0]-'1') * pow(10,(n/2-1));
+        if(s[0] > '1') flag = true;
+        // pr(ans);
+        for(ll i = 1; i<n/2; i++){
+            if(s[i] > '0') flag = true;
+            ans += (s[i]-'0') * pow(10,n/2 - i - 1);
+        }
+    }
+    if(flag) ans++;
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

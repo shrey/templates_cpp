@@ -82,18 +82,90 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e3+1;
+const ll M = 2e5+100;
+ll x,y,n,q;
+vl gr[M];
+vl pre;
+ll val[M];
+ll a[M];
+ll sz[M] = {0};
+ll idx[M] = {0};
+vl st(4*M + 1);
 
-bool prime[M];
+void update(ll v, ll tl, ll tr, ll pos, ll change){
+    if(tl == tr){
+        st[v] = change; //change here
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    if(pos <= tm) update(2*v,tl,tm,pos,change);
+    else update(2*v + 1,tm+1,tr,pos,change);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
 
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 0;
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = a[tl];
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = st[2*v] + st[2*v+1]; // change here
+}
+
+void dfs(ll cur, ll par){
+    sz[cur] = 1;
+    pre.pb(cur);
+    for(auto x: gr[cur]){
+        if(x!=par){
+            dfs(x,cur);
+            sz[cur] += sz[x];
+        }
+    }
 }
 
 void solve(){
-    pr((ll)pow(5,18));
+    re n; re q;
+    for(ll i = 1; i<=n; i++){
+        re val[i];
+    }
+    fo(n-1){
+        re x; re y;
+        gr[x].pb(y), gr[y].pb(x);
+    }
+    dfs(1,0);
+    for(ll i = 0; i<pre.size(); i++){
+        idx[pre[i]] = i;
+    }
+    for(ll i = 0; i<n; i++){
+        a[i] = val[pre[i]];
+    }nl;
+    // fo(n) cout<<pre[i]<<" "; nl;
+    // fo(n) cout<<a[i]<<" "; nl;
+    // fo(n) cout<<sz[i]<<" "; nl;
+    build(1,0,n-1);
+    while(q--){
+        ll t; re t;
+        if(t == 1){
+            ll pos,x;
+            re pos; re x;
+            update(1,0,n-1,idx[pos],x);
+        }else{
+            ll nd; re nd;
+            ll pos = idx[nd];
+            ll p2 = pos + sz[nd] - 1;
+            ll ans = query(1,0,n-1,pos,p2);
+            pr(ans);
+        }
+    }
 }
 
 int32_t main(){
@@ -118,6 +190,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

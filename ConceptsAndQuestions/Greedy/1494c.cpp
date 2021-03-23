@@ -106,28 +106,23 @@ ll bin(vl &a, ll num){
 }
 
 
+
 ll comp(vl &a, vl &b){
     if(b.empty() || a.empty()) return 0;
-    ll dp[b.size()];
-    ll m = b.size();
+    ll lft = 0;
+    ll n = a.size(), m = b.size();
+    ll r = 0;
     ll ans = 0;
-    dp[0] = 1;
-    map<ll,ll> f;
-    fo(a.size()) f[a[i]]++;
-    ll cnt[m+1];
-    cnt[m] = 0;
-    for(ll i = 1; i<m; i++){
-        dp[i] = 1;
-        if(b[i-1] == b[i]-1) dp[i] += dp[i-1];
+    for(ll i = 0; i<n; i++){
+        while(r < m && b[r] < a[i]) r++;
+        if(r < m && a[i] == b[r]) lft++;
     }
-    for(ll i = m-1; i>=0; i--){
-        if(f[b[i]]) cnt[i] = 1;
-        else cnt[i] = 0;
-        if(i != m-1) cnt[i] += cnt[i+1];
-    }
+    ll j = 0, l = 0;
     for(ll i = 0; i<m; i++){
-        ll cur = bin(a,b[i]);
-        ans = max(ans,min(dp[i],cur+1) + cnt[i+1]);
+        while(j < n && a[j] < b[i]) j++;
+        if(j < n && a[j] == b[i]) lft--, j++;
+        while(l < b.size() && b[i]-b[l]+1 > j) l++;
+        ans = max(ans,lft + (i - l + 1));
     }
     return ans;
 }
@@ -149,7 +144,7 @@ void solve(){
     // for(auto x: a2) cout<<x<<" "; nl;
     // for(auto x: b2) cout<<x<<" "; nl;
     ll ans = 0;
-    ans += comp(a1,b1) + comp(a2,b2);
+    ans +=  comp(a1,b1) + comp(a2,b2);
     pr(ans);
     a1.clear(); a2.clear(); b1.clear(); b2.clear();
 }
@@ -176,3 +171,10 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
+
+/*
+1
+4 4
+1 2 4 8
+7 8 9 12
+*/

@@ -24,13 +24,13 @@
 
 using namespace std;
 typedef long long ll;
-typedef double ld;
+typedef long double ld;
 
 #define YES cout<<"YES\n"
 #define Yes cout<<"Yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
-#define prDouble(x) cout<<fixed<<setprecision(6)<<x //to print decimal numbers
+#define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
 #define pb push_back
 #define ff first
 #define sec second
@@ -58,6 +58,10 @@ typedef double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
+
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
@@ -71,65 +75,59 @@ ll cl(ld a){
 }
 
 ll flr(ld a){
+    if(a < 0.0){
+        return (ll) a - 1;
+    }
     return (ll) a;
 }
 
-
-
 //code starts here
 
-const ll M = 1e5+100;
-ld s[M],d[M]; ll n,k;
-
-ld f(ll i, ld tme){
-    return (s[i] * tme + d[i]);
-}
-
-ld comp(ld tme){
-    ld mx,mn;
-    mx = f(0,tme);
-    mn = f(0,tme);
-    fo(n){
-        mx = max(mx,f(i,tme));
-        mn = min(mn,f(i,tme));
+ll k1,k2,k3;
+const ll M = 2e5+100;
+vl pos(M);
+ll n;
+ll dp[M][3];
+ll recur(ll i, ll j){
+    if(i == n+1) return 0;
+    if(dp[i][j] != -1) return dp[i][j];
+    // cout<<i<<"()"<<j<<"\n";
+    ll ans = 1e15;
+    if(pos[i] != j){
+        ans = min(ans,1 + recur(i+1,j));
+        if(j < 2) ans = min(ans,(pos[i] != j+1 )+ recur(i+1,j+1));
+        if(j < 1) ans = min(ans,(pos[i] != j+2) + recur(i+1,j+2));
+    }else{
+        ans = min(ans,recur(i+1,j));
     }
-    return (mx-mn);
-}
-
-// this is for finding the minimum in decreasing to increasing
-// swap r = m2 with l = m1 to find maximum in increasing to decreasing
-
-void ternary_search(ld l, ld r) {
-    ll m = 500;
-    ld eps = 1e-12;        //set the cnt here
-    while (r-l > eps) {
-        ld m1 = l + (r - l) / 3;
-        ld m2 = r - (r - l) / 3;
-        ld f1 = comp(m1);      //evaluates the function at m1
-        ld f2 = comp(m2);      //evaluates the function at m2
-        // cout<<m1<<" = "<<f1<<" "<<m2<<" = "<<f2<<"\n";
-        //this is for finding minimum, for finding max, just make f1 > f2
-        if (f1 < f2)
-            r = m2;
-        else
-            l = m1;
-    }
-    prDouble(min(comp(l),comp(r)));nl;
+    return dp[i][j] = ans;
 }
 
 void solve(){
-    re n; re k;
-    fo(n){
-        re s[i]; re d[i];
+    re k1; re k2; re k3;
+    n = k1 + k2 + k3;
+    memset(dp,-1,sizeof(dp));
+    fo(k1){
+        ll x; re x;
+        pos[x] = 0;
     }
-    ternary_search(0,k);
+    fo(k2){
+        ll x; re x;
+        pos[x] = 1;
+    }
+    fo(k3){
+        ll x; re x;
+        pos[x] = 2;
+    }
+    // pr("here");
+    pr(recur(1,0));
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    // re t;
     t = 1;
+    // re t;
     while(t--) solve();
 }
 

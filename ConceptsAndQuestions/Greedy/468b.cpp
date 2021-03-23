@@ -58,6 +58,7 @@ typedef long double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
@@ -81,19 +82,76 @@ ll flr(ld a){
 }
 
 //code starts here
-
-const ll M = 1e3+1;
-
-bool prime[M];
-
-void seive(){
-    string s = "shrey";
-    pr(s.substr(0,3));
-    // pr(cnt);
-}
+const ll M = 1e5+100;
+ll n,a,b,p[M];
+map<ll,ll> f;
+map<ll,set<ll> > gr;
+map<ll,ll> sz;
 
 void solve(){
-    pr((ll)pow(5,18));
+    re n; re a; re b;
+    fo(n) re p[i];
+    fo(n) f[p[i]]++;
+    multiset<pair<ll,ll > > m;
+    fo(n){
+        if(f[a-p[i]]) gr[p[i]].insert(a-p[i]);
+        if(f[b-p[i]]) gr[p[i]].insert(b-p[i]);
+        if(gr[p[i]].size() == 0){
+            NO;
+            return;
+        }
+        sz[p[i]] = gr[p[i]].size();
+        m.insert(mp(sz[p[i]],p[i]));
+    }
+    map<ll,ll> res;
+    while(!m.empty()){
+        auto cur = *m.begin();
+        m.erase(m.begin());
+        if(gr[cur.sec].empty()){
+            NO;
+            return;
+        }
+        if(gr[cur.sec].size() == 1){
+            ll op = *gr[cur.sec].begin();
+            if(op == a-cur.sec) res[cur.sec] = 0, res[op] = 0;
+            else res[cur.sec] = 1, res[op] = 1;
+            m.erase(m.find(mp(sz[op],op)));
+            auto it = m.find(mp(a-op,sz[a-op]));
+            if(it != m.end()){
+                m.erase(it);
+                sz[a-op]--;
+                gr[a-op].erase(op);
+                m.insert(mp(sz[a-op],a-op));
+            }
+            auto it2 = m.find(mp(b-op,sz[b-op]));
+            if(it2 != m.end()){
+                m.erase(it2);
+                sz[b-op]--;
+                gr[b-op].erase(op);
+                m.insert(mp(sz[b-op],b-op));
+            }
+        }else{
+            ll op = a - cur.sec;
+            res[cur.sec] = 0, res[op] = 0;
+            m.erase(m.find(mp(sz[op],op)));
+            auto it2 = m.find(mp(b-op,sz[b-op]));
+            if(it2 != m.end()){
+                m.erase(it2);
+                sz[b-op]--;
+                gr[b-op].erase(op);
+                m.insert(mp(sz[b-op],b-op));
+            }
+            auto it = m.find(mp(a-op,sz[a-op]));
+            if(it != m.end()){
+                m.erase(it);
+                sz[a-op]--;
+                gr[a-op].erase(op);
+                m.insert(mp(sz[a-op],a-op));
+            }
+        }
+    }
+    YES;
+    fo(n) cout<<res[p[i]]<<" "; nl;
 }
 
 int32_t main(){
@@ -118,6 +176,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-// ./playground < input.txt for input file
-// ./playground > output.txt for generating output file

@@ -83,15 +83,96 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll n,m,k;
 
+void solve(){
+    re n; re m; re k;
+    ll tot = 0;
+    ll cur = 0;
+    if(k > 4*n*m - 2*n - 2*m){
+        NO;
+        return;
+    }
+    vector<pair<ll,string> > res;
+    if(m == 1){
+        if(cur + (n-1) <= k){
+            res.pb(mp(n-1,"D"));
+            cur += n-1;
+        }
+        if(cur < k){
+            res.pb(mp(k-cur,"U"));
+        }
+        cur = k;
+    }
+    ll i = 0;
+    while(cur < k && cur + 4*(m-1) <= k && i < n-1){
+        // pr("ehre");
+        i++;
+        string s1 = "RDU";
+        res.pb(mp(m-1,s1));
+        res.pb(mp(m-1,"L"));
+        cur += 4*(m-1);
+        if(cur == k) break;
+        cur++;
+        res.pb(mp(1,"D"));
+    }
+    if(i == n-1 && cur < k){
+        if(cur + (m-1) <= k){
+            res.pb(mp(m-1,"R"));
+            cur += m-1;
+        }else{
+            res.pb(mp(k-cur,"R"));
+            cur = k;
+        }
+        if(cur + (m-1) <= k){
+            res.pb(mp(m-1,"L"));
+            cur += m-1;
+        }else if(cur < k){
+            res.pb(mp(k-cur,"L"));
+            cur = k;
+        }
+        if(cur < k){
+            res.pb(mp(k-cur,"U"));
+            cur = k;
+        }
+    }
+    else if(i != n-1 && cur < k){
+        if((3*(m-1)) + cur <= k){
+            cur += 3*(m-1);
+            res.pb(mp(m-1,"RDU"));
+        }else{
+            ll cnt = (k-cur)/3;
+            if(cnt) res.pb(mp(cnt,"RDU"));
+            cur += 3*cnt;
+            if(k-cur == 1){
+                res.pb(mp(1,"R"));
+            }else if(k-cur == 2){
+                res.pb(mp(1,"RD"));
+            }
+            cur = k;
+        }
+        if(cur < k){
+            res.pb(mp(k-cur,"L"));
+            cur = k;
+        }
+    }
+    YES;
+    vector<pair<ll,string> > ans;
+    for(auto x: res){
+        if(x.ff != 0) ans.pb(x);
+    }
+    res = ans;
+    pr(res.size());
+    for(auto x: res){
+        cout<<x.ff<<" "<<x.sec<<"\n";
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -101,8 +182,7 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
-// always check for n = 1 condition
-// check loop starting and end points :(
+
 
 //problem ideas
 //check piegonhole wherever possible

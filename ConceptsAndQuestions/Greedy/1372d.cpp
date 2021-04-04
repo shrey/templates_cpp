@@ -84,14 +84,39 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-
+    ll n; re n;
+    ll a[n]; fo(n) re a[i];
+    ll pre[n], suff[n];
+    for(ll i = 0; i<n; i++){
+        if(i <= 1) pre[i] = a[i];
+        else pre[i] = a[i] + pre[i-2];
+    }
+    for(ll i = n-1; i>=0; i--){
+        if(i >= n-2) suff[i] = a[i];
+        else suff[i] = a[i] + suff[i+2];
+    }
+    ll res = 0;
+    if(n == 1){
+        res = max(res,a[0]);
+        pr(res);
+        return;
+    }
+    for(ll i = 0; i<n-1; i++){
+        ll ans = 0;
+        ans += a[i] + a[i+1];
+        if(i > 1) ans += pre[i-2];
+        if(i+1 < n-2) ans += suff[i+3];
+        res = max(res,ans);
+    }
+    res = max(res, a[0] + suff[2]);
+    pr(res);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -103,6 +128,7 @@ int32_t main(){
 // use map for large inputs
 // always check for n = 1 condition
 // check loop starting and end points :(
+
 
 //problem ideas
 //check piegonhole wherever possible

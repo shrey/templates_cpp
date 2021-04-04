@@ -90,6 +90,7 @@ void seive(){
     string s = "shrey";
     pr(s.substr(0,3));
     // pr(cnt);
+    pr(atoi('1'));
 }
 
 void solve(){

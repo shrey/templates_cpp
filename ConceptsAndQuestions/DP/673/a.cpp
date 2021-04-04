@@ -83,47 +83,74 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 1e5+100;
-ll n,a[M];
-
-void solve(){
-    re n; fo(n) re a[i];
-    set<ll> s1; set<ll> s2;
-    set<ll> s0;
-    if(n == 1){
-        pr(0);
-        return;
-    }
-    for(ll i = 1; i<n; i++){
-        if(a[i] > a[i-1]) s1.insert(a[i]-a[i-1]);
-        else if(a[i-1] > a[i]) s2.insert(a[i-1] - a[i]);
-        else s0.insert(a[i]);
-    }
-    if(s1.size() > 1 || s2.size() > 1){
-        pr(-1);
-        return;
-    }
-    if(s0.size() && (s1.size() || s2.size())){
-        pr(-1);
-        return;
-    }
-    if(s0.size()){
-        pr(0);
-        return;
-    }
-    if((s1.size() && !s2.size()) || (s2.size() && !s1.size())){
-        pr(0);
-        return;
-    }
-    ll c = *s1.begin();
-    ll m = *s2.begin() + c;
-    fo(n){
-        if(m <= a[i]){
-            pr(-1);
-            return;
+bool check(string &s){
+    ll o = 0;
+    for(ll i = 0; i<s.length(); i++){
+        if(s[i] == '('){
+            o++;
+        }
+        else{
+            if(o) o--;
+            else return false;
         }
     }
-    cout<<m<<" "<<c<<"\n";
+    if(o) return false;
+    return true;
+}
+
+void solve(){
+    ll n; re n;
+    string s; re s;
+    string a = ""; string b = "";
+    ll oa = 0, ca = 0, ob = 0, cb = 0;
+    ll z = 0, o = 0;
+    fo(n){
+        if(s[i] == '0'){
+            z++;
+        }else{
+            o++;
+        }
+    }
+    if(z % 2){
+        NO;
+        return;
+    }
+    if(s[0] == '0' || s[n-1] == '0'){
+        NO;
+        return;
+    }
+    fo(n){
+        a += '(';
+        b += '(';
+    }
+    ll op = 0;
+    fo(n){
+        if(s[i] == '0'){
+            if(op){
+                a[i] = ')';
+                b[i] = '(';
+            }else{
+                a[i] = '(';
+                b[i] = ')';
+            }
+            op ^= 1;
+        }
+    }
+    ll cnt = 0;
+    fo(n){
+        if(s[i] == '1'){
+            if(cnt >= o/2){
+                a[i] = ')'; b[i] = ')';
+            }
+            cnt++;
+        }
+    }
+    YES;
+    pr(a);
+    pr(b);
+    // string s; re s;
+    // if(check(s)) YES;
+    // else NO;
 }
 
 int32_t main(){
@@ -140,7 +167,8 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
-
+// always check for n = 1 condition
+// check loop starting and end points :(
 
 //problem ideas
 //check piegonhole wherever possible

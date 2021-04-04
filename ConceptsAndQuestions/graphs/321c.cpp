@@ -44,12 +44,12 @@ typedef long double ld;
 #define lmax LLONG_MAX
 #define imin INT_MIN
 #define lmin LLONG_MIN
-#define vi vector<int>
+#define vi vector<ll>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
-#define int long long
+#define ll long long
 #define ql queue<ll>
 #define qp queue<pair<ll,ll> >
 #define endl "\n"
@@ -83,15 +83,66 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll n;
+const ll M = 1e5+100;
+set<ll> gr[M];
+ll nodes;
+char ans[M];
+ll subtree[M];
 
+void dfs(ll k, ll parent)
+{
+	nodes++;
+	subtree[k]=1;
+	for(auto it:gr[k])
+	{
+		if(it==parent)
+			continue;
+		dfs(it,k);
+		subtree[k]+=subtree[it];
+	}
+}
+
+ll centroid(ll k, ll parent)
+{
+	for(auto it:gr[k])
+	{
+		if(it==parent)
+			continue;
+		if(subtree[it]>(nodes>>1))
+			return centroid(it,k);
+	}
+	return k;
+}
+
+void decompose(ll cur, char ch){
+    nodes = 0; // imp
+    dfs(cur,cur); //call this
+    ll node = centroid(cur,cur);
+    ans[node] = ch;
+    for(auto it: gr[node]){
+        gr[it].erase(node);
+        decompose(it,ch+1);
+    }
+}
+
+
+void solve(){
+    re n;
+    fo(n-1){
+        ll a,b; re a; re b;
+        gr[a].insert(b);
+        gr[b].insert(a);
+    }
+    decompose(1,'A');
+    for(ll i = 1; i<=n; i++) cout<<ans[i]<<" "; nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

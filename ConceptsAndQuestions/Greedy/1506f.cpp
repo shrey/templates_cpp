@@ -84,7 +84,30 @@ ll flr(ld a){
 //code starts here
 
 void solve(){
-
+    ll n; re n;
+    vp a(n);
+    a.pb(mp(1,1));
+    fo(n) re a[i].ff; fo(n) re a[i].sec;
+    sort(all(a));
+    ll ans = 0;
+    for(ll i = 0; i<a.size()-1; i++){
+        if((a[i].ff + a[i].sec) % 2){
+            ll op = a[i+1].ff - a[i].ff - (a[i+1].sec - a[i].sec);
+            ans += (op+1)/2;
+        }else{
+            if(a[i+1].ff == a[i].ff + 1){
+                if(a[i+1].sec > a[i].sec) ans++;
+            }else{
+                if(a[i+1].ff - a[i+1].sec == a[i].ff-a[i].sec){
+                    ans += a[i+1].ff - a[i].ff;
+                    continue;
+                }
+                ll op = a[i+1].ff - (a[i].ff+1) - (a[i+1].sec - a[i].sec);
+                ans += (op+1)/2;
+            }
+        }
+    }
+    pr(ans);
 }
 
 int32_t main(){

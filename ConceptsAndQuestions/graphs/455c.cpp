@@ -83,15 +83,108 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll n,m,q,a,b;
+const ll M = 3e5+100;
+vl gr[M];
+vb visited(M,false);
+vl op;
+vl p(M,0); vl r(M,1); vl dia(M,0);
 
+ll getp(ll v){
+    if(v == p[v]) return v;
+    return p[v] = getp(p[v]);
+}
+
+void unite(ll u, ll v){
+    u = getp(u), v = getp(v);
+    if(u == v) return;
+    if(r[u] < r[v]) swap(u,v);
+    dia[u] = max(dia[u],max(dia[v],((dia[u]+1)/2 + (dia[v]+1)/2 + 1)));
+    r[u] += r[v];
+    p[v] = u;
+}
+
+void dfs(ll cur){
+    visited[cur] = true;
+    op.pb(cur);
+    for(auto x: gr[cur]){
+        if(!visited[x]) dfs(x);
+    }
+}
+
+pll bfs(ll src){
+    umap<ll,ll> vis;
+    umap<ll,ll> dist;
+    vis[src] = true;
+    queue<ll> q;
+    q.push(src);
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        for(auto x: gr[cur]){
+            if(!vis[x]){
+                vis[x] = true;
+                dist[x] = dist[cur] + 1;
+                q.push(x);
+            }
+        }
+    }
+    ll d = 0, pos = src;
+    for(auto x: op){
+        if(d < dist[x]){
+            d = dist[x];
+            pos = x;
+        }
+    }
+    return mp(d,pos);
+}
+
+void diameter(ll src){
+    op.clear();
+    dfs(src);
+    auto cur = bfs(src);
+    // cout<<cur.sec<<"()\n";
+    ll d = bfs(cur.sec).ff;
+    r[src] = op.size();
+    for(auto x: op) p[x] = src;
+    // for(auto x: op) cout<<x<<"()()"; nl;
+    dia[src] = d;
+    // cout<<d<<"()\n";
+}
+
+void solve(){
+    re n; re m; re q;
+    for(ll i = 1; i<=n; i++){
+        r[i] = 1; p[i] = i;
+    }
+    fo(m){
+        re a; re b;
+        gr[a].pb(b); gr[b].pb(a);
+    }
+    // diameter(1);
+    for(ll i = 1; i<=n; i++){
+        if(!visited[i]){
+            diameter(i);
+            // cout<<i<<"()"<<dia[p[i]]<<" "; nl;
+        }
+    }
+    while(q--){
+        ll t; re t;
+        if(t == 1){
+            ll x; re x; ll par = getp(x);
+            pr(dia[par]);
+        }else{
+            ll x,y; re x; re y;
+            unite(x,y);
+        }
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

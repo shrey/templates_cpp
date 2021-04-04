@@ -83,8 +83,38 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll gcd(ll a, ll b){
+    if(b == 0) return a;
+    return gcd(b,a%b);
+}
 
+void solve(){
+    ll n; re n;
+    ll a[n]; fo(n) re a[i];
+    set<ll> s;
+    fo(n) s.insert(i);
+    queue<pll> q;
+    vl res;
+    for(ll i = 0; i<n; i++){
+        if(gcd(a[i],a[(i+1)%n]) == 1){
+            q.push(mp(i,(i+1)%n));
+            i++;
+        }
+    }
+
+    while(!q.empty()){
+        auto cur = q.front();
+        // cout<<cur.ff<<"()"<<cur.sec<<"\n";
+        q.pop();
+        if(s.find(cur.ff) == s.end() || s.find(cur.sec) == s.end()) continue;
+        s.erase(cur.sec);
+        res.pb(cur.sec+1);
+        if(s.empty()) break;
+        auto it = s.upper_bound(cur.sec);
+        if(it == s.end()) it = s.begin();
+        if(gcd(a[*it],a[cur.ff]) == 1) q.push(mp(cur.ff,*it));
+    }
+    cout<<res.size()<<" "; for(auto x: res) cout<<x<<" "; nl;
 }
 
 int32_t main(){

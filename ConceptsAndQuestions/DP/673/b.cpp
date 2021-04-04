@@ -1,4 +1,5 @@
 
+
 //Shrey Dubey
 
 
@@ -82,34 +83,43 @@ ll flr(ld a){
 
 //code starts here
 
+const ll M = 2e5+100;
+ll n,m;
+ll a[M];
+vector<vl> dp;
 
+ll recur(ll cur, ll cnt){
+    if(cur == n/m){
+        if(cnt == 0) return 0;
+        else return 1e15;
+    }
+    if(dp[cur][cnt] != -1) return dp[cur][cnt];
+    ll ans = 1e15;
+    ll st = (n%m-cnt) + cur*m;
+    for(ll ex = 0; ex <= cnt; ex++){
+        ll en = st + m - 1 + ex;
+        ans = min(ans,max(a[en]-a[st],recur(cur+1,cnt-ex)));
+    }
+    return dp[cur][cnt] = ans;
+}
 
 void solve(){
-    string s; re s;
-    ll n = s.length();
-    ll ans = 0;
-    for(ll i = 2; i<=n-1; i+=2){
-        ans += (9 * pow(10,i/2-1));
+    re n; re m;
+    fo(n) re a[i];
+    sort(a,a+n);
+    dp.resize(n/m+1);
+    fo(n/m+1) dp[i].resize(n%m+1);
+    forn(i,n/m+1){
+        forn(j,n%m+1) dp[i][j] = -1;
     }
-    bool flag = false;
-    if(n % 2 == 0){
-        ans += (s[0]-'1') * pow(10,(n/2-1));
-        if(s[0] > '1') flag = true;
-        // pr(ans);
-        for(ll i = 1; i<n/2; i++){
-            if(s[i] > '0') flag = true;
-            ans += (s[i]-'0') * pow(10,n/2 - i - 1);
-        }
-    }
-    if(flag) ans++;
-    pr(ans);
+    pr(recur(0,n%m));
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 
@@ -119,7 +129,8 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
-
+// always check for n = 1 condition
+// check loop starting and end points :(
 
 //problem ideas
 //check piegonhole wherever possible

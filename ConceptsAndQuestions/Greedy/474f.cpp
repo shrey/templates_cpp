@@ -83,15 +83,88 @@ ll flr(ld a){
 
 //code starts here
 
-void solve(){
+ll gcd(ll a, ll b){
+    if(b == 0) return a;
+    return gcd(b,a%b);
+}
 
+const ll M = 1e5+100;
+ll n, a[M];
+
+vl st(4*M + 1);
+vl st2(4*M + 1);
+
+
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 1e15;
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return min(query(2*v,tl,tm,l,r),query(2*v+1,tm+1,tr,l,r)); // change here
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = a[tl];
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = min(st[2*v] , st[2*v+1]); // change here
+}
+
+ll query2(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 0;
+    if(tl >= l && tr <= r) return st2[v];
+    ll tm = (tl + tr)/2;
+    return gcd(query2(2*v,tl,tm,l,r),query2(2*v+1,tm+1,tr,l,r)); // change here
+}
+
+void build2(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st2[v] = a[tl];
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    build2(2*v,tl,tm);
+    build2(2*v+1,tm+1,tr);
+    st2[v] = gcd(st2[2*v] , st2[2*v+1]); // change here
+}
+
+
+
+void solve(){
+    re n; fo(n) re a[i];
+    ll t; re t;
+    build(1,0,n-1);
+    build2(1,0,n-1);
+    map<ll,vl> f;
+    fo(n) f[a[i]].pb(i);
+    while(t--){
+        ll l,r; re l; re r;
+        l--; r--;
+        ll g = query2(1,0,n-1,l,r);
+        ll m = query(1,0,n-1,l,r);
+        // cout<<g<<"()"<<m<<"\n";
+        if(g == m){
+            auto it1 = upper_bound(f[m].begin(),f[m].end(),r);
+            auto it2 = lower_bound(all(f[m]),l);
+            ll op = it1-it2;
+            // if(f[m][it2-f[m].begin()] >= l) op++;
+            // cout<<op<<"()()\n";
+            ll ans = r-l+1-op;
+            pr(ans);
+        }else{
+            pr(r-l+1);
+        }
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -110,3 +183,10 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
+
+/*
+5
+1 3 2 4 2
+4
+3 5
+*/

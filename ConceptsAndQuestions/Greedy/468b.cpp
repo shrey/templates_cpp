@@ -91,67 +91,29 @@ map<ll,ll> sz;
 void solve(){
     re n; re a; re b;
     fo(n) re p[i];
-    fo(n) f[p[i]]++;
-    multiset<pair<ll,ll > > m;
-    fo(n){
-        if(f[a-p[i]]) gr[p[i]].insert(a-p[i]);
-        if(f[b-p[i]]) gr[p[i]].insert(b-p[i]);
-        if(gr[p[i]].size() == 0){
-            NO;
-            return;
+    fo(n) f[p[i]] = 1;
+    vl cur;
+    for(ll i = 0; i<n; i++){
+        if(f.find(a-p[i]) == f.end()){
+            cur.pb(p[i]);
         }
-        sz[p[i]] = gr[p[i]].size();
-        m.insert(mp(sz[p[i]],p[i]));
     }
-    map<ll,ll> res;
-    while(!m.empty()){
-        auto cur = *m.begin();
-        m.erase(m.begin());
-        if(gr[cur.sec].empty()){
-            NO;
-            return;
+    for(ll i = 0; i<cur.size(); i++){
+        if(f.find(b-cur[i]) == f.end()){
+            // cout<<cur[i]<<"()\n";
+            NO; return;
         }
-        if(gr[cur.sec].size() == 1){
-            ll op = *gr[cur.sec].begin();
-            if(op == a-cur.sec) res[cur.sec] = 0, res[op] = 0;
-            else res[cur.sec] = 1, res[op] = 1;
-            m.erase(m.find(mp(sz[op],op)));
-            auto it = m.find(mp(a-op,sz[a-op]));
-            if(it != m.end()){
-                m.erase(it);
-                sz[a-op]--;
-                gr[a-op].erase(op);
-                m.insert(mp(sz[a-op],a-op));
-            }
-            auto it2 = m.find(mp(b-op,sz[b-op]));
-            if(it2 != m.end()){
-                m.erase(it2);
-                sz[b-op]--;
-                gr[b-op].erase(op);
-                m.insert(mp(sz[b-op],b-op));
-            }
-        }else{
-            ll op = a - cur.sec;
-            res[cur.sec] = 0, res[op] = 0;
-            m.erase(m.find(mp(sz[op],op)));
-            auto it2 = m.find(mp(b-op,sz[b-op]));
-            if(it2 != m.end()){
-                m.erase(it2);
-                sz[b-op]--;
-                gr[b-op].erase(op);
-                m.insert(mp(sz[b-op],b-op));
-            }
-            auto it = m.find(mp(a-op,sz[a-op]));
-            if(it != m.end()){
-                m.erase(it);
-                sz[a-op]--;
-                gr[a-op].erase(op);
-                m.insert(mp(sz[a-op],a-op));
-            }
+        f[cur[i]] = 2;
+        if(f[b-cur[i]] == 2) continue;
+        f[b-cur[i]] = 2;
+        if(f[a-(b-cur[i])] == 1){
+            cur.pb(a-(b-cur[i]));
+            f[a-(b-cur[i])] = 2;
         }
+
     }
     YES;
-    fo(n) cout<<res[p[i]]<<" "; nl;
+    fo(n) cout<<f[p[i]]-1<<" "; nl;
 }
 
 int32_t main(){

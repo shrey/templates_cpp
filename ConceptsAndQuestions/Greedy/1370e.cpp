@@ -82,16 +82,50 @@ ll flr(ld a){
 }
 
 //code starts here
+ll n;
+
+bool check(string &s, ll num){
+
+}
 
 void solve(){
-
+    re n;
+    string s,t; re s; re t;
+    set<ll> s1; set<ll> s2;
+    fo(n){
+        if(s[i] != t[i]){
+            if(s[i] == '1') s1.insert(i);
+            else s2.insert(i);
+        }
+    }
+    if(s1.size() != s2.size()){
+        pr(-1);
+        return;
+    }
+    ll res = 0;
+    while(!s1.empty()){
+        if(*s1.begin() > *s2.begin()) swap(s1,s2);
+        ll x = *s1.begin();
+        while(true){
+            auto it = s2.upper_bound(x);
+            if(it == s2.end()) break;
+            ll val = *it;
+            s1.erase(x);
+            s2.erase(it);
+            auto it2 = s1.upper_bound(val);
+            if(it2 == s1.end()) break;
+            x = *it2;
+        }
+        res++;
+    }
+    pr(res);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

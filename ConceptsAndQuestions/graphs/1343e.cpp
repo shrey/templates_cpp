@@ -47,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -65,11 +64,6 @@ typedef long double ld;
 // ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
-
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -90,44 +84,62 @@ ll flr(ld a){
 //code starts here
 
 const ll M = 2e5+100;
+vl gr[M];
+ll n,m,a,b,c;
 
-ll n,p,a[M];
-
-
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
+vl bfs(ll src){
+    vl dist(n+1,-1);
+    dist[src] = 0;
+    queue<ll> q;
+    q.push(src);
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        for(auto x: gr[cur]){
+            if(dist[x] == -1){
+                dist[x] = dist[cur] + 1;
+                q.push(x);
+            }
         }
     }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
-    }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
-    }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
+    return dist;
 }
 
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    re n; re m; re a; re b; re c;
+    ll e[m];
+    fo(m) re e[i];
+    fo(m){
+        ll x,y; re x; re y;
+        gr[x].pb(y); gr[y].pb(x);
+    }
+    sort(e,e+m);
+    ll pre[m];
+    pre[0] = e[0];
+    for(ll i = 1; i<m; i++) pre[i] = pre[i-1] + e[i];
+    vl dist[3];
+    dist[0] = bfs(a);
+    dist[1] = bfs(b);
+    dist[2] = bfs(c);
+    // fo(3){
+    //     forn(j,n) cout<<dist[i][j+1]<<" "; nl;
+    // }
+    // fo(m) cout<<e[i]<<" "; nl;
+    // fo(m) cout<<pre[i]<<" "; nl;
+    ll ans = 1e15;
+    for(ll i = 1; i<=n; i++){
+        ll op = dist[0][i] + dist[1][i] + dist[2][i];
+        if(op > m) continue;
+        ll cur = 0;
+        if(op > 0) cur += pre[op-1];
+        if(dist[1][i] > 0) cur += pre[dist[1][i]-1];
+        // cout<<i<<"()"<<dist[1][i]<<"\n";
+        ans = min(ans,cur);
+    }
+    pr(ans);
+    for(ll i = 1; i<=n; i++){
+        gr[i].clear();
+    }
 }
 
 int32_t main(){
@@ -153,9 +165,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

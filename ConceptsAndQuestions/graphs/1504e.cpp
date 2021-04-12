@@ -47,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -65,11 +64,6 @@ typedef long double ld;
 // ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
-
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -89,52 +83,32 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
-
-ll n,p,a[M];
-
-
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
-        }
-    }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
-    }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
-    }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
-}
+ll n;
+vp a;
 
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    re n;
+    a.resize(n);
+    ll ans = 0;
+    fo(n) {
+        re a[i].ff; re a[i].sec;
+        ans += a[i].sec;
+    }
+    sort(all(a));
+    ll mx = a[0].ff + a[0].sec;
+    for(ll i = 1; i<n; i++){
+        // cout<<a[i].ff<<"()"<<mx<<"\n";
+        ans += max(0ll,a[i].ff - mx);
+        mx = max(mx,a[i].ff + a[i].sec);
+    }
+    pr(ans);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -153,9 +127,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

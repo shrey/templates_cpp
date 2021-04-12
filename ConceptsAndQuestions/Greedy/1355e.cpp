@@ -47,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -65,11 +64,6 @@ typedef long double ld;
 // ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
-
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -89,52 +83,76 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
+const ll M = 1e5+100;
+ll n,a,rt,m,h[M];
 
-ll n,p,a[M];
-
-
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
+ll comp(ll num){
+    ll res = 0;
+    ll ex = 0, ls = 0;
+    // cout<<num<<"(())\n";
+    fo(n){
+        if(h[i] > num){
+            ex += (h[i]-num);
+        }else{
+            ls += (num - h[i]);
         }
     }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
+    if(a + rt < m){
+        res += min(ex,ls) * (a+rt);
+    }else{
+        res += min(ex,ls) * m;
     }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
+    if(ls < ex){
+        ex -= ls;
+        ls = 0;
+    }else{
+        ls -= ex;
+        ex = 0;
     }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
+    if(ex){
+        res += rt*ex;
+    }else if(ls){
+        res += a*ls;
     }
     return res;
 }
 
+
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    re n; re a; re rt; re m;
+    fo(n) re h[i];
+    sort(h,h+n);
+    ll m = 500;
+    ld l,r;
+    l = h[0];
+    r = h[n-1];      //set the cnt here
+    while (m--) {
+        // cout<<l<<"()"<<r<<"\n";
+        ld m1 = l + (r - l) / 3;
+        ld m2 = r - (r - l) / 3;
+        ld f1 = comp(m1);      //evaluates the function at m1
+        ld f2 = comp(m2);      //evaluates the function at m2
+        // cout<<m1<<" = "<<f1<<" "<<m2<<" = "<<f2<<"\n";
+        //this is for finding minimum, for finding max, just make f1 > f2
+        if (f1 < f2)
+            r = m2;
+        else
+            l = m1;
+    }
+    // cout<<comp(l)<<"()"<<comp(r)<<"\n";
+    // cout<<l<<"()"<<r<<"\n";
+    pr(min(comp(l),comp(r)));
+    // pr(comp(8));
+    // cout<<l<<"()\n";
+    // prDouble(l);nl;
+    // pr(comp((ll)l));
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -153,9 +171,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

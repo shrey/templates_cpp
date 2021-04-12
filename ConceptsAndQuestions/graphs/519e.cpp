@@ -47,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -65,11 +64,6 @@ typedef long double ld;
 // ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
-
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -89,52 +83,106 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
+const ll M = 1e5+100;
+ll n,m;
 
-ll n,p,a[M];
+ll par[LG][M],level[M],tot[M];
+vl gr[M];
+ll s[M] = {0};
 
 
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
+void dfs(ll k,ll parent,ll d){
+    par[0][k]=parent;
+    level[k]=d;
+    tot[k]=1;
+    for(auto it:gr[k])
+    {
+        if(it==parent)
+            continue;
+        dfs(it,k,d+1);
+        tot[k]+=tot[it];
+    }
+}
+
+
+void precompute(){
+  for(ll i=1;i<LG;i++){
+    for(ll j=1;j<=n;j++){
+      if(par[i-1][j])
+          par[i][j]=par[i-1][par[i-1][j]];
+    }
+  }
+}
+
+
+ll lca(ll u, ll v)
+{
+    if(level[u]<level[v])
+        swap(u,v);
+    ll diff=level[u]-level[v];
+    for(ll i=LG-1;i>=0;i--){
+        if((1ll<<i) & diff){
+            u=par[i][u];
         }
     }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
+    if(u==v)
+        return u;
+    for(ll i=LG-1;i>=0;i--){
+        if(par[i][u] && par[i][u]!=par[i][v]){
+            u=par[i][u];
+            v=par[i][v];
+        }
     }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
+    return par[0][u];
+}
+
+ll up(ll cur, ll k){
+    for(ll i = LG-1; i>=0; i--){
+        if((1<<i) & k){
+            cur = par[i][cur];
+        }
     }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
+    return cur;
 }
 
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    re n;
+    fo(n-1){
+        ll x,y;
+        re x; re y;
+        gr[x].pb(y); gr[y].pb(x);
+    }
+    dfs(1,0,0);
+    precompute();
+    re m;
+    while(m--){
+        ll x,y;
+        re x; re y;
+        if(level[x] < level[y]) swap(x,y);
+        ll l = lca(x,y);
+        // cout<<x<<"()"<<y<<" = "<<tot[x]<<"\n";
+        ll d = level[x] + level[y] - 2*level[l];
+        if(d % 2){
+            pr(0);
+            continue;
+        }
+        ll k = up(x,d/2);
+        ll op = up(x,d/2-1);
+        ll ans = tot[k] - tot[op];
+        if(k == l){
+            op = up(y,d/2-1);
+            ans -= tot[op];
+            ans += (n  - (tot[l]));
+        }
+        pr(ans);
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -153,9 +201,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

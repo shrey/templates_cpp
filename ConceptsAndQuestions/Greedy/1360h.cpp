@@ -47,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -65,11 +64,6 @@ typedef long double ld;
 // ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
-
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -89,45 +83,41 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
+ll comp(string s){
+    ll ans = 0;
+    reverse(all(s));
+    ll k = 1;
+    for(ll i = 0; i<s.length(); i++){
+        ans += (s[i]-'0')*k;
+        k*=2;
+    }
+    return ans;
+}
 
-ll n,p,a[M];
-
-
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
-        }
+void d(ll num, ll m){
+    ll k = 1;
+    string res = "";
+    for(ll i = 0; i<m; i++){
+        if(num & k) res += '1';
+        else res += '0';
+        k *= 2;
     }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
-    }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
-    }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
+    reverse(all(res));
+    pr(res);
 }
 
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    ll n,m;
+    re n; re m;
+    vector<string> op(n);
+    fo(n) re op[i];
+    sort(all(op));
+    ll num = pow(2,m) - n;
+    num = (num-1)/2;
+    for(ll i = 0; i<n; i++){
+        if(comp(op[i]) <= num) num++;
+    }
+    d(num,m);
 }
 
 int32_t main(){
@@ -153,9 +143,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

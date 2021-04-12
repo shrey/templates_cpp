@@ -47,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -65,11 +64,6 @@ typedef long double ld;
 // ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
-
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -89,52 +83,39 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
-
-ll n,p,a[M];
-
-
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
-        }
+vector<int> z_function(string &s) {   // replace vector<ll> by string to get string
+    int n = (int) s.size();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
     }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
-    }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
-    }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
+    return z;
 }
 
+
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    string s; re s;
+    vl z = z_function(s);
+    ll n = s.length();
+    vl res;
+    for(ll i = 1; i<s.length(); i++){
+        // cout<<i<<"()"<<z[i]<<" ";
+        if(z[i] == n-i) res.pb(z[i]);
+    }
+    sort(all(res));
+    for(auto x: res) cout<<x<<" "; nl;
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -153,9 +134,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

@@ -27,7 +27,7 @@ typedef long long ll;
 typedef long double ld;
 
 #define YES cout<<"YES\n"
-#define Yes cout<<"Yes\n"
+#define Yes cout<<"yes\n"
 #define NO cout<<"NO\n"
 #define No cout<<"No\n"
 #define prDouble(x) cout<<fixed<<setprecision(10)<<x //to print decimal numbers
@@ -66,11 +66,6 @@ typedef long double ld;
 
 ll mod = 1e9 + 7;
 
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
-
 ll cl(ld a){
     if(a>(ll) a){
         return (ll)a+1;
@@ -89,45 +84,45 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
-
-ll n,p,a[M];
-
-
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
+void solve(){
+    ll n; re n;
+    vl a(n);
+    vl b(n);
+    fo(n) re a[i]; fo(n) re b[i];
+    vl a1 = a;
+    vl b1 = b;
+    sort(all(a1)); sort(all(b1));
+    fo(n){
+        if(a1[i] != b1[i]){
+            No;
+            return;
         }
     }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
+    if(n%2){
+        if(a[n/2] != b[n/2]){
+            No;
+            return;
+        }
     }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
+    vp la; vp lb;
+    for(ll i = 0; i<n/2; i++){
+        ll x = min(a[i],a[n-i-1]);
+        ll y = max(a[i],a[n-i-1]);
+        la.pb(mp(x,y));
+        x = min(b[i],b[n-i-1]);
+        y = max(b[i],b[n-i-1]);
+        lb.pb(mp(x,y));
     }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
+    sort(all(la)); sort(all(lb));
+    for(ll i = 0; i<n/2; i++){
+        if(la[i].ff == lb[i].ff && la[i].sec == lb[i].sec){
+            continue;
+        }else{
+            No;
+            return;
+        }
     }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
-}
-
-void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    Yes;
 }
 
 int32_t main(){
@@ -153,9 +148,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

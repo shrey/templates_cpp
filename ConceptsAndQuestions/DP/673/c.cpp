@@ -47,6 +47,7 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
+#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -60,8 +61,8 @@ typedef long double ld;
 #define all(x) x.begin(),x.end()
 #define LG 20
 
-ll dx[] = {1,0,-1,0};
-ll dy[] = {0,1,0,-1};
+// ll dx[] = {1,0,-1,0};
+// ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
@@ -83,126 +84,8 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 510;
-
-ll ans = 1e15;
-ll n;
-ll a[M*M];
-ll c[M];
-ll r[M];
-ll b[M*M];
-ll tot;
-
-ll comp(ll bit){
-    multiset<pair<ll,pll> > m;
-    ll r[n], c[n];
-    for(ll i = 0; i<n*n; i+=n){
-        ll cnt = 0;
-        for(ll j = i; j<i+n; j++){
-            if((bit & (1<<j)) == 0) cnt++;
-        }
-        r[i/n] = cnt;
-        if(cnt == 0) continue;
-        // if(i/n == 0) cout<<cnt<<"(())\n";
-        m.insert(mp(cnt,mp(1,i/n)));
-    }
-    for(ll i = 0; i<n; i++){
-        ll cnt = 0;
-        for(ll j = i; j<n*n; j+=n){
-            if((bit & (1<<j)) == 0) cnt++;
-        }
-        c[i] = cnt;
-        if(cnt == 0) continue;
-        m.insert(mp(cnt,mp(2,i)));
-    }
-    if(m.empty()){
-        return bit;
-    }
-    auto cur = *m.begin();
-    // pr(cur.ff);
-    while(!m.empty() && cur.ff == 1){
-        m.erase(m.begin());
-        if(m.empty()) break;
-        ll pos;
-        ll s = cur.sec.sec;
-        // cout<<cur.sec.ff<<"()"<<cur.sec.sec<<"\n";
-        if(cur.sec.ff == 1){
-            s *= n;
-            for(ll j = s; j<s+n; j++){
-                if((bit & (1<<j)) == 0){
-                    bit |= (1<<j);
-                    r[s/n]--;
-                    m.erase(m.find(mp(c[j%n],mp(2,j%n))));
-                    c[j%n]--;
-                    if(c[j%n]) m.insert(mp(c[j%n],mp(2,j%n)));
-                    break;
-                }
-            }
-        }else{
-            for(ll j = s; j<n*n; j+=n){
-                if((bit & (1<<j)) == 0){
-                    bit |= (1<<j);
-                    c[s]--;
-                    // cout<<j/n<<"()()\n";
-                    m.erase(m.find(mp(r[j/n],mp(1,j/n))));
-                    r[j/n]--;
-                    if(r[j/n]) m.insert(mp(r[j/n],mp(1,j/n)));
-                    break;
-                }
-            }
-        }
-        // pr("here");
-        if(!m.empty()) cur = *m.begin();
-    }
-    return bit;
-}
-void recur(ll i, ll bit, ll cur){
-    if(i == n*n){
-        if(bit == tot){
-            // cout<<bit<<"()"<<cur<<"\n";
-            ans = min(ans,cur);
-        }
-        return;
-    }
-    bit = comp(bit);
-    if(bit & (1<<i)){
-        recur(i+1,bit,cur);
-        return;
-    }
-    recur(i+1,bit,cur);
-    bit |= (1<<i);
-    cur += b[i];
-    // cout<<i<<"()()"<<cur<<"\n";
-    bit = comp(bit);
-    recur(i+1,bit,cur);
-}
-
 void solve(){
-    re n;
-    ll cur = 0;
-    forn(i,n){
-        forn(j,n){
-            re a[cur];
-            cur++;
-        }
-    }
-    ll bit = 0;
-    fo(n*n){
-        if(a[i] != -1) bit |= (1<<i);
-    }
-    cur = 0;
-    forn(i,n){
-        forn(j,n){
-            re b[cur];
-            cur++;
-        }
-    }
-    tot = (1<<(n*n))-1;
-    bit = comp(bit);
-    fo(n) re r[i]; fo(n) re c[i];
-    ans = 1e15;
-    recur(0,bit,0);
-    pr(ans);
+
 }
 
 int32_t main(){
@@ -210,9 +93,7 @@ int32_t main(){
     ll t;
     t = 1;
     re t;
-    fo(t){
-        cout<<"Case #"<<i+1<<": "; solve();
-    }
+    while(t--) solve();
 }
 
 
@@ -221,7 +102,8 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
-
+// always check for n = 1 condition
+// check loop starting and end points :(
 
 //problem ideas
 //check piegonhole wherever possible

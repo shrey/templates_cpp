@@ -66,11 +66,6 @@ typedef long double ld;
 
 ll mod = 1e9 + 7;
 
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
-
 ll cl(ld a){
     if(a>(ll) a){
         return (ll)a+1;
@@ -89,45 +84,66 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
-
-ll n,p,a[M];
-
-
-ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
-        }
-    }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
-    }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
-    }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
-}
+ll n,k;
+ll l1,r1,l2,r2;
 
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    re n; re k;
+    re l1; re r1; re l2; re r2;
+    ll ans = 0;
+    ll mv = 0;
+    ll tot = 0;
+    ll cur = 0;
+    if(l2 > r1 || l1 > r2){
+        if(l1 > r2){
+            swap(l1,l2); swap(r1,r2);
+        }
+        mv = l2-r1;
+        r1 = l2;
+    }
+    else{
+        ll op = min(r2-l2,min(r1-l1,min(r1-l2,r2-l1)));
+        tot += n*op;
+        cur = op;
+    }
+    // cout<<tot<<"()"<<cur<<"\n";
+    // cout<<l1<<"()"<<r1<<"\n";
+    // cout<<l2<<"()"<<r2<<"\n";
+    // cout<<mv<<"()\n";
+    ans += mv;
+    if(tot < k){
+        ll d = min(k-tot,(max(r2,r1)-min(l1,l2))-cur);
+        ll inc = (max(r2,r1)-min(l1,l2))-cur;
+        ans += d;
+        tot += d;
+        // cout<<ans<<"()"<<tot<<"\n";
+        bool f = false;
+        if(n == 1) f = true;
+        if(tot < k){
+            for(ll i = 2; i<=n; i++){
+
+                if(tot + inc <= k && 2*inc > mv+inc){
+                    // cout<<i<<"()"<<inc<<"()"<<tot<<"\n";
+                    tot += inc;
+                    ans += mv+inc;
+                    if(i == n) f = true;
+                }else{
+                    break;
+                }
+            }
+            // cout<<tot<<"()"<<ans<<"\n";
+            if(tot < k){
+                if(f || (2*(k-tot) <= mv + (k-tot)) || inc < (k-tot)){
+                    ans += 2*(k-tot);
+                    tot = k;
+                }else{
+                    ans += mv+(k-tot);
+                    tot = k;
+                }
+            }
+        }
+    }
+    pr(ans);
 }
 
 int32_t main(){
@@ -153,9 +169,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

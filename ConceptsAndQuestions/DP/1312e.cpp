@@ -47,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -65,11 +64,6 @@ typedef long double ld;
 // ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
-
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -89,52 +83,45 @@ ll flr(ld a){
 
 //code starts here
 
-const ll M = 2e5+100;
-
-ll n,p,a[M];
-
+const ll M = 510;
+ll a[M],n;
+ll dp[M][M],dp2[M];
 
 ll recur(ll l, ll r){
-    if(l >= r) return 0;
-    ll mn = a[l];
-    ll idx = l;
-    for(ll i = l; i<=r; i++){
-        if(mn > a[i]){
-            idx = i;
-            mn = a[i];
+    if(l > r) return 0;
+    if(l == r) return a[l];
+    if(dp[l][r] != 0) return dp[l][r];
+    dp[l][r] = -1;
+    for(ll i = l; i<r; i++){
+        ll le = recur(l,i);
+        ll rt = recur(i+1,r);
+        if(le > 0 && le == rt){
+            return dp[l][r] = le+1;
         }
     }
-    ll le = idx, rt = idx;
-    while(rt <= r && a[rt] >= mn && a[rt]%mn == 0){
-        rt++;
-    }
-    rt--;
-    while(le >= l && a[le] >= mn && a[le]%mn == 0){
-        le--;
-    }
-    le++;
-    cout<<l<<"()"<<r<<", "<<le<<" - "<<rt<<" = "<<mn<<"\n";
-    ll res = (rt-le)*min(p,mn);
-    if(rt < r){
-        res += p + recur(rt+1,r);
-    }
-    if(le > l){
-        res += p + recur(l,le-1);
-    }
-    return res;
+    return dp[l][r];
 }
 
 void solve(){
-    re n; re p;
-    fo(n) re a[i];
-    pr(recur(0,n-1));
+    re n; fo(n) re a[i+1];
+    fo(n+1) dp2[i] = 1e15;
+    memset(dp,0,sizeof(dp));
+    dp2[0] = 0;
+    for(ll i = 0; i<n; i++){
+        for(ll j = i+1; j<=n; j++){
+            if(recur(i+1,j) > 0){
+                dp2[j] = min(dp2[j],dp2[i]+1);
+            }
+        }
+    }
+    pr(dp2[n]);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 
@@ -153,9 +140,3 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
-
-/*
-1
-8 4
-7 6 3 9 18 12 4 2
-*/

@@ -35,6 +35,12 @@ int main() {
         if (count == f)
             count = 0;
     }
-    printf("\n The number of Page Faults using FIFO are %d", pf);
+    printf("\n The number of Page Faults using FIFO are %d\n", pf);
 
 }
+
+/*
+20
+7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1
+3
+*/

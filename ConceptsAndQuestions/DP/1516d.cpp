@@ -59,7 +59,7 @@ typedef long double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
-#define LG 20
+#define LG 22
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
@@ -87,14 +87,52 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-ll lcm(ll a, ll b){
-    return (a*b/gcd(a,b));
-}
-
 //code starts here
 
+ll n,q;
+const ll M = 1e5+100;
+ll nxt[M] = {0}, a[M];
+ll dp[LG][M] = {0};
+vl fact[M];
 void solve(){
-    pr(pow(2,40));
+    re n; re q;
+    fo(n) re a[i+1];
+    for(ll i = 2; i<M; i++){
+        if(!fact[i].empty()) continue;
+        for(ll j = i; j<M; j+=i){
+            nxt[i] = n+1;
+            fact[j].pb(i);
+        }
+    }
+    dp[0][n+1] = n+1;
+    for(ll i = n; i>=1; i--){
+        dp[0][i] = dp[0][i+1];
+        for(auto f: fact[a[i]]){
+            // if(i == 6 && f == 7) pr("here");
+            dp[0][i] = min(dp[0][i],nxt[f]);
+            nxt[f] = i;
+        }
+        // cout<<i<<"()"<<dp[0][i]<<"\n";
+    }
+
+    for(ll j = 1; j<20; j++){
+        for(ll i = 1; i<=n+1; i++){
+            ll k = dp[j-1][i];
+            dp[j][i] = dp[j-1][k];
+        }
+    }
+    while(q--){
+        ll l,r; re l; re r;
+        ll ans = 0;
+        for(ll i = 19; i>=0; i--){
+            if(dp[i][l] <= r){
+                // cout<<l<<"()\n";
+                ans += (1<<i);
+                l = dp[i][l];
+            }
+        }
+        pr(ans+1);
+    }
 }
 
 int32_t main(){

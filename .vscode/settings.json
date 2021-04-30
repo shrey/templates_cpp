@@ -32,6 +32,7 @@
         "functional": "cpp",
         "ratio": "cpp",
         "bitset": "cpp",
-        "__string": "cpp"
+        "__string": "cpp",
+        "chrono": "cpp"
     }
 }

@@ -87,14 +87,79 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-ll lcm(ll a, ll b){
-    return (a*b/gcd(a,b));
-}
-
 //code starts here
 
+ll n,k;
+string s;
+vl res;
+vl cnt;
+
+bool comp(){
+    ll i = 0;
+    bool flag = false;
+    ll tot = 0;
+    while(i < n){
+        if(i < n-1 && s[i] == 'R' && s[i+1] == 'L'){
+            res.pb(i);
+            flag = true;
+            s[i] = 'L'; s[i+1] = 'R';
+            i++;
+            tot++;
+        }
+        i++;
+    }
+    cnt.pb(tot);
+    return flag;
+}
+
+
 void solve(){
-    pr(pow(2,40));
+    re n; re k; re s;
+    fo(k){
+        bool t = comp();
+        if(!t) break;
+    }
+    if(comp()){
+        pr(-1);
+        return;
+    }
+    if(res.size() < k){
+        pr(-1);
+        return;
+    }
+    ll i = 0;
+    ll j = 0;
+    vector<vl> ans;
+    while(res.size() - (i + cnt[j]) > k-1){
+        vl cur;
+        ll p = 0;
+        while(p < cnt[j]){
+            cur.pb(res[i]);
+            i++;
+            p++;
+        }
+        j++;
+        ans.pb(cur);
+        k--;
+    }
+    vl cur;
+    while(res.size() - i > k-1){
+        cur.pb(res[i]);
+        i++;
+    }
+    if(cur.size()){
+        k--;
+        ans.pb(cur);
+    }
+    // cout<<k<<"()\n";
+    while(i < res.size() && k > 0){
+        vl cur; cur.pb(res[i]);
+        ans.pb(cur);
+        i++; k--;
+    }
+    for(auto vec: ans){
+        cout<<vec.size()<<" "; for(auto x: vec) cout<<x+1<<" "; nl;
+    }
 }
 
 int32_t main(){

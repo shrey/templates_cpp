@@ -64,7 +64,7 @@ typedef long double ld;
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
 
-ll mod = 1e9 + 7;
+ll mod = 998244353;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -82,19 +82,63 @@ ll flr(ld a){
     return (ll) a;
 }
 
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    else return gcd(b,a%b);
-}
-
-ll lcm(ll a, ll b){
-    return (a*b/gcd(a,b));
-}
-
 //code starts here
 
+ll n,m;
+
+const ll M = 3e5+100;
+ll pw[M] = {0};
+ll dp[M] = {0};
+
 void solve(){
-    pr(pow(2,40));
+    re n; re m;
+    char mat[n][m];
+    ll tot = 0;
+    forn(i,n){
+        forn(j,m){
+            re mat[i][j];
+            tot += mat[i][j] == 'o';
+        }
+    }
+    pw[0] = 1;
+    for(ll i = 1; i<M; i++){
+        pw[i] = pw[i-1]*2;
+        pw[i] %= mod;
+    }
+    for(ll i = 2; i<M; i++){
+        dp[i] = (dp[i-1] + (2*dp[i-2])%mod + pw[i-2])%mod;
+    }
+    ll ans = 0;
+    for(ll i = 0; i<n; i++){
+        ll cnt = 0;
+        for(ll j = 0; j<m; j++){
+            if(mat[i][j] == 'o') cnt++;
+            else{
+                ans += (dp[cnt]*pw[tot-cnt])%mod;
+                ans %= mod;
+                cnt = 0;
+            }
+        }
+        ans += (dp[cnt]*pw[tot-cnt])%mod;
+        ans %= mod;
+        cnt = 0;
+    }
+    for(ll j = 0; j<m; j++){
+        ll cnt = 0;
+        for(ll i = 0; i<n; i++){
+            if(mat[i][j] == 'o') cnt++;
+            else{
+                ans += (dp[cnt]*pw[tot-cnt])%mod;
+                ans %= mod;
+                cnt = 0;
+            }
+        }
+        ans += (dp[cnt]*pw[tot-cnt])%mod;
+        ans %= mod;
+        cnt = 0;
+    }
+    ans = (ans+mod)%mod;
+    pr(ans);
 }
 
 int32_t main(){

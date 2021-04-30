@@ -134,7 +134,9 @@ int32_t main(){
     t = 1;
     fo(M) p[i] = i;
     // re t;
-    while(t--) solve();
+    fo(t){
+        cout<<"Case #"<<i+1<<": "; solve();
+    }
 }
 
 

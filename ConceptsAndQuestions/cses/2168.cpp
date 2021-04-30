@@ -1,5 +1,4 @@
 
-
 //Shrey Dubey
 
 
@@ -87,14 +86,66 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-ll lcm(ll a, ll b){
-    return (a*b/gcd(a,b));
-}
-
 //code starts here
 
+map<pll,vl> op;
+
+bool compare(pair<pll,ll> &a, pair<pll,ll> &b){
+    if(a.ff.ff == b.ff.ff){
+        return a.ff.sec > b.ff.sec;
+    }
+    return a.ff.ff < b.ff.ff;
+}
+
+bool compare2(pair<pll,ll> &a, pair<pll,ll> &b){
+    if(a.ff.ff == b.ff.ff){
+        return a.ff.sec < b.ff.sec;
+    }
+    return a.ff.ff > b.ff.ff;
+}
+
 void solve(){
-    pr(pow(2,40));
+    ll n; re n;
+    vector<pair<pll,ll> > a(n);
+    fo(n){
+        re a[i].ff.ff, re a[i].ff.sec;
+        a[i].sec = i;
+    }
+    set<ll> s;
+    vl res1(n); vl res2(n);
+    // res1 -> if it's in some range
+    // res2 -> if it contains some range
+    fo(n){
+        op[a[i].ff].pb(a[i].sec);
+    }
+    for(auto x: op){
+        if(x.sec.size() > 1){
+            for(auto idx: x.sec){
+                res1[idx] = 1, res2[idx] = 1;
+            }
+        }
+    }
+    sort(all(a),compare);
+    for(ll i = 0; i<n; i++){
+        ll cur = a[i].ff.sec;
+        ll idx = a[i].sec;
+        if(res1[idx]) continue;
+        if(!s.empty() && s.lower_bound(cur) != s.end()) res1[idx] = 1;
+        s.insert(cur);
+    }
+    s.clear();
+    sort(all(a),compare2);
+    // for(auto x: a) cout<<x.ff.ff<<" () "<<x.ff.sec<<"\n";
+    for(ll i = 0; i<n; i++){
+        ll cur = a[i].ff.sec;
+        ll idx = a[i].sec;
+        if(res2[idx]) continue;
+        if(!s.empty() && *s.begin() <= cur) res2[idx] = 1;
+        s.insert(cur);
+    }
+    for(auto x: res2) cout<<x<<" "; nl;
+    for(auto x: res1) cout<<x<<" "; nl;
+
 }
 
 int32_t main(){

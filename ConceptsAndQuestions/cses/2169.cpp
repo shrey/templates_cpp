@@ -87,21 +87,44 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-ll lcm(ll a, ll b){
-    return (a*b/gcd(a,b));
-}
-
 //code starts here
 
+ll n;
+const ll M = 2e5+100;
+map<ll,ll> crd;
+vector<pair<pll,ll> > a;
+
+bool compare(pair<pll,ll> &a, pair<pll,ll> &b){
+    if(a.ff.ff == b.ff.ff){
+        return a.ff.sec > b.ff.sec;
+    }
+    return a.ff.ff < b.ff.ff;
+}
+
+bool compare2(pair<pll,ll> &a, pair<pll,ll> &b){
+    if(a.ff.ff == b.ff.ff){
+        return a.ff.sec < b.ff.sec;
+    }
+    return a.ff.ff > b.ff.ff;
+}
+
+
+
+
 void solve(){
-    pr(pow(2,40));
+    re n;
+    fo(n){
+        re a[i].ff.ff; re a[i].ff.sec;
+        a[i].sec = i;
+    }
+
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
+    re t;
     while(t--) solve();
 }
 

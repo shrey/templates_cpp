@@ -87,22 +87,85 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-ll lcm(ll a, ll b){
-    return (a*b/gcd(a,b));
-}
-
 //code starts here
 
-void solve(){
-    pr(pow(2,40));
+vector<vl> op(1009);
+ll idx[1010];
+
+ll qry(vl &cur){
+    cout<<"? "<<cur.size()<<" "; for(auto x: cur) cout<<x<<" "; nl;
+    cout.flush();
+    ll x; re x;
+    cout.flush();
+    return x;
+}
+
+ll solve(){
+    ll n,k;
+    re n; re k;
+    fo(k+1) op[i].clear();
+    fo(k){
+        ll x; re x;
+        op[i].resize(x);
+        forn(j,x){
+            re op[i][j];
+            idx[op[i][j]] = i;
+        }
+    }
+    vl cur;
+    fo(n) cur.pb(i+1);
+    ll mx = qry(cur);
+    if(mx == -1) return 0;
+    // pr("here");
+    cur.clear();
+    vl res(k+10);
+    ll s = 0, e = n-1;
+    while(s < e){
+        // cout<<s<<"()"<<e<<"\n";
+        ll mid = (s+e)/2;
+        vl cur;
+        for(ll i = s; i<=mid; i++) cur.pb(i+1);
+        ll m = qry(cur);
+        if(m == -1) return 0;
+        if(m == mx){
+            e = mid;
+        }else{
+            // cout<<m<<"()()\n";
+            s = mid+1;
+        }
+    }
+    s++;
+    for(ll i = 0; i<k; i++){
+        if(i != idx[s]) res[i] = mx;
+    }
+    cur.clear();
+    set<ll> st;
+    fo(n) st.insert(i+1);
+    for(auto x: op[idx[s]]) st.erase(x);
+    for(auto x: st) cur.pb(x);
+    res[idx[s]] = qry(cur);
+    if(res[idx[s]] == -1) return 0;
+    cout<<"! "; fo(k) cout<<res[i]<<" "; nl;
+    cout.flush();
+    string verd;
+    re verd;
+    cout.flush();
+    if(verd == "Incorrect"){
+        return 0;
+    }
+    cout.flush();
+    return 1;
 }
 
 int32_t main(){
-    KOBE;
+    // KOBE;
     ll t;
     t = 1;
-    // re t;
-    while(t--) solve();
+    re t;
+    while(t--){
+        ll k = solve();
+        if(!k) return 0;
+    }
 }
 
 

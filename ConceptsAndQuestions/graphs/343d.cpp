@@ -89,68 +89,104 @@ ll gcd(ll a, ll b){
 
 //code starts here
 
-const ll M = 2010;
-ll n,m;
-ll a[M];
-ll mark[M][M] = {0};
-vp gr[M];
+const ll M = 5e5+100;
+ll n, dp[M] = {0};
+vl gr[M];
+ll idx[M];
+vl path;
 
-ll dijkstra(ll src){
-    set<pll> s;
-    vl dist(n+1);
-    fo(n+1) dist[i] = 1e15;
-    s.insert(mp(0,src));
-    dist[src] = 0;
-    while(!s.empty()){
-        pll cur = *s.begin();
-        s.erase(s.begin());
-        ll node = cur.sec;
-        ll d = cur.ff;
-        for(auto x: gr[node]){
-            if(x.sec + d < dist[x.ff]){
-                auto f = s.find(mp(dist[x.ff],x.ff));
-                if(f!=s.end()){
-                    s.erase(f);
-                }
-                dist[x.ff] = x.sec + d;
-                s.insert(mp(dist[x.ff],x.ff));
-            }
+void dfs(ll cur, ll par){
+    path.pb(cur);
+    dp[cur] = 1;
+    for(auto x: gr[cur]){
+        if(x != par){
+            dfs(x,cur);
+            dp[cur] += dp[x];
         }
     }
-    ll res = 0;
-    for(ll i = 1; i<=n; i++) res += dist[i];
-    return res;
+}
+
+
+vl st(4*M + 1,0);
+vl lazy(4*M + 1,0);
+ll a[M];
+
+void update_range(ll v, ll tl, ll tr, ll l, ll r){
+    if(lazy[v] != 0){
+        st[v] = (tr-tl+1);
+        if(tl != tr){
+            lazy[2*v] = 1;
+            lazy[2*v+1] = 1;
+        }
+        lazy[v] = 0;
+    }
+    if(tl > r || tr < l) return;
+    if((tl >= l && tr <= r) || tl == tr){
+        st[v] = (tr-tl+1); //change here in rmq to st[v] += change as only change is added to the max or min number
+        if(tr != tl){
+            lazy[2*v] = 1;
+            lazy[2*v+1] = 1;
+        }
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    update_range(2*v,tl,tm,l,r);
+    update_range(2*v+1,tm+1,tr,l,r);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
+
+void update(ll v, ll tl, ll tr, ll pos){
+    if(tl == tr){
+        st[v] = 0; //change here
+        lazy[v] = 0;
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    if(pos <= tm) update(2*v,tl,tm,pos);
+    else update(2*v + 1,tm+1,tr,pos);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
+
+ll query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return 0;
+    if(lazy[v]){
+        st[v] = (tr-tl+1);
+        if(tl != tr){
+            lazy[2*v] = 1;
+            lazy[2*v+1] = 1;
+        }
+        lazy[v] = 0;
+    }
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
 }
 
 
 void solve(){
     re n;
-    for(ll i = 1; i<=n; i++){
-        re a[i];
+    fo(n-1){
+        ll x,y; re x; re y;
+        gr[x].pb(y); gr[y].pb(x);
     }
-    forn(i,n+1){
-        forn(j,n+1) mark[i][j] = -1;
-    }
-    re m;
-    fo(m){
-        ll x,y,w; re x; re y; re w;
-        mark[x][y] = w;
-    }
-    for(ll i = 1; i<=n; i++){
-        for(ll j = 1; j<=n; j++){
-            if(i != j){
-                if(mark[i][j] == -1) gr[i].pb(mp(j,a[i]));
-                else gr[i].pb(mp(j,mark[i][j]));
-            }
+    dfs(1,0);
+    // cout<<path.size()<<"()"<<n<<"\n";
+    fo(path.size()) idx[path[i]] = i;
+    // for(auto x: path) cout<<idx[x]<<" "; nl;
+    ll m; re m;
+    while(m--){
+        ll t,x; re t; re x;
+        if(t == 1){
+            update_range(1,0,n-1,idx[x],idx[x]+dp[x]-1);
+        }else if(t == 2){
+            ll k = query(1,0,n-1,idx[x],idx[x]);
+            if(k) update(1,0,n-1,idx[x]);
+        }else{
+            ll k = query(1,0,n-1,idx[x],idx[x]+dp[x]-1);
+            // cout<<x<<"()"<<k<<"\n";
+            if(k == dp[x]) pr(1);
+            else pr(0);
         }
-    }
-    ll ans = 0;
-    for(ll i = 1; i<=n; i++){
-        ans += dijkstra(i);
-    }
-    pr(ans);
-    for(ll i = 0; i<=n; i++){
-        gr[i].clear();
     }
 }
 
@@ -158,7 +194,7 @@ int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

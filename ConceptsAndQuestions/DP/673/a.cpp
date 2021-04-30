@@ -82,146 +82,75 @@ ll flr(ld a){
     return (ll) a;
 }
 
-//code starts here
-
-ll n,p;
-const ll M = 2e5+100;
-vl st;
-vl st1;
-ll a[M];
-
 ll gcd(ll a, ll b){
     if(b == 0) return a;
-    return gcd(b,a%b);
+    else return gcd(b,a%b);
 }
 
-// void update(ll v, ll tl, ll tr, ll pos, ll change){
-//     if(tl == tr){
-//         st[v] += change; //change here
-//         return;
-//     }
-//     ll tm = (tl + tr)/2;
-//     if(pos <= tm) update(2*v,tl,tm,pos,change);
-//     else update(2*v + 1,tm+1,tr,pos,change);
-//     st[v] = st[2*v] + st[2*v+1]; //change here
-// }
+//code starts here
 
-ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 1e15;
-    if(tl >= l && tr <= r) return st[v];
-    ll tm = (tl + tr)/2;
-    return min(query(2*v,tl,tm,l,r) , query(2*v+1,tm+1,tr,l,r)); // change here
-}
+const ll M = 50;
+const ll mx = 1e5+100;
+ll mat[M][M];
+ll dp[M][mx];
+ll n,m,b;
+ll ans = 0;
 
-void build(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st[v] = a[tl];
-        return;
+ll recur(vl &vec, bool r, ll i, ll mx, ll sm){
+    if(sm == b){
+        return 1;
     }
-    ll tm = (tl + tr)/2;
-    build(2*v,tl,tm);
-    build(2*v+1,tm+1,tr);
-    st[v] = min(st[2*v] , st[2*v+1]); // change here
-}
-
-ll query2(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
-    if(tl >= l && tr <= r) return st1[v];
-    ll tm = (tl + tr)/2;
-    return gcd(query2(2*v,tl,tm,l,r) , query2(2*v+1,tm+1,tr,l,r)); // change here
-}
-
-void build2(ll v, ll tl, ll tr){
-    if(tl == tr){
-        st1[v] = a[tl];
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    build2(2*v,tl,tm);
-    build2(2*v+1,tm+1,tr);
-    st1[v] = gcd(st1[2*v] , st1[2*v+1]); // change here
-}
-
-pll bs(ll idx){
-    ll e = n-1, s = idx;
+    if(i == mx || sm > b) return 0;
+    if(dp[i][sm] != -1) return dp[i][sm];
     ll ans = 0;
-    while(s <= e){
-        // if(a[idx] == 3) cout<<s<<"()"<<e<<"\n";
-        ll mid = (s+e)/2;
-        ll g = query2(1,0,n-1,idx,mid);
-        ll mn = query(1,0,n-1,idx,mid);
-        if(g == mn && mn == a[idx]){
-            ans = mid-idx;
-            // if(idx == 2) cout<<ans<<"()()\n";
-            s = mid+1;
-        }else{
-            e = mid-1;
-        }
+    if(r){
+        ans += recur(vec,r,i+1,mx,sm);
+        ans %= mod;
+        ll ns = sm;
+        for(auto x: vec) ns += mat[x][i];
+        ans += recur(vec,r,i+1,mx,ns);
+        ans %= mod;
+    }else{
+        ans += recur(vec,r,i+1,mx,sm);
+        ans %= mod;
+        ll ns = sm;
+        for(auto x: vec) ns += mat[i][x];
+        ans += recur(vec,r,i+1,mx,ns);
+        ans %= mod;
     }
-    s = 0, e = idx;
-    ll a2 = 0;
-    while(s <= e){
-        // if(a[idx] == 3) cout<<s<<"()"<<e<<"\n";
-        ll mid = (s+e)/2;
-        ll g = query2(1,0,n-1,mid,idx);
-        ll mn = query(1,0,n-1,mid,idx);
-        if(g == mn && mn == a[idx]){
-            a2 = idx-mid;
-            // if(idx == 1) cout<<mid<<"()()\n";
-            e = mid-1;
-        }else{
-            s = mid+1;
-        }
-    }
-    // if(a[idx] == 3) cout<<ans<<"()()"<<a2<<"\n";
-    return mp(ans,a2);
+    return dp[i][sm] = ans;
 }
 
 void solve(){
-    re n; re p;
-    st.clear();
-    st1.clear();
-    st.resize(4*n+1);
-    st1.resize(4*n+1);
-    fo(n+1) st[i] = 1e15;
-    fo(n) re a[i];
-    build(1,0,n-1);
-    build2(1,0,n-1);
-    // pr(query2(1,0,n-1,0,1));
-    vp op;
-    // pr("here");
-    ll i = 0;
-    while(i<n){
-            // cout<<i<<"()\n";
-        if(a[i] < p){
-            pll cur = bs(i);
-            ll cnt = cur.ff + cur.sec;
-            if(cnt) op.pb(mp(a[i],cnt));
-            i += cur.ff+1;
-        }else{
-            i++;
+    re n; re m; re b;
+    ans = 0;
+    forn(i,n){
+        forn(j,m) re mat[i][j];
+    }
+    if(n < m){
+        ll op = pow(2,n);
+        for(ll cb = 0; cb < op; cb++){
+            memset(dp,-1,sizeof(dp));
+            vl r;
+            for(ll i = 0; i<n; i++){
+                if((1<<i)&cb) r.pb(i);
+            }
+            ans += recur(r,true,0,m,0);
+            ans %= mod;
+        }
+    }else{
+        ll op = pow(2,m);
+        for(ll cb = 0; cb < op; cb++){
+            memset(dp,-1,sizeof(dp));
+            vl c;
+            for(ll i = 0; i<m; i++){
+                if((1<<i)&cb) c.pb(i);
+            }
+            // cout<<cb<<"()"<<c.size()<<"\n";
+            ans += recur(c,false,0,n,0);
+            ans %= mod;
         }
     }
-    sort(all(op));
-    ll ans = 0;
-    ll cnt = 0;
-    // for(auto x: op) cout<<x.ff<<"()"<<x.sec<<"\n";
-    if(op.size() && op[0].sec == n-1){
-        pr(op[0].ff*(n-1));
-        // pr("here");
-        return;
-    }
-    for(ll i = 0; i<op.size(); i++){
-        // cout<<op[i].ff<<"()"<<op[i].sec<<"\n";
-        if(cnt >= (n-1)) break;
-        cnt++;
-        ans += p;
-        ll k = min((n-1-cnt),op[i].sec);
-        ans += op[i].ff * k;
-        cnt += k;
-    }
-    // cout<<ans<<"()()\n";
-    if(cnt < n-1) ans += (n-1-cnt)*p;
     pr(ans);
 }
 

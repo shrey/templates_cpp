@@ -79,39 +79,40 @@ ll gr[M][M];
 const ll inf = 1e13;
 
 
+void deb(){
+    for(ll i = 1; i<=n; i++){
+        cout<<i<<" = ";
+        for(ll j = 1; j<=n; j++){
+            if(gr[i][j] != 1e13) cout<<gr[i][j]<<"\t";
+            else cout<<"INF\t";
+        }nl;
+    }
+}
+
 void solve(){
     forn(i,M)
         forn(j,M)
             gr[i][j] = inf;
 
-    re n; re m; re q;
-
-    // pr("here");
+    re n; re m;
     fo(m){
         re x; re y; re w;
         gr[x][y] = min(gr[x][y],w);
-        gr[y][x] = min(gr[y][x],w);
     }
     fo(M){
         gr[i][i] = 0;
     }
+    cout<<"BEGINNING\n";
+    deb();
     for(ll k = 1; k<=n; k++){
         for(ll i = 1; i<=n; i++){
             for(ll j = 1; j<=n; j++){
-                gr[i][j] = min(gr[i][j],gr[i][k] + gr[k][j]);
+                if(gr[i][k] != 1e13 && gr[k][j] != 1e13) gr[i][j] = min(gr[i][j],gr[i][k] + gr[k][j]);
             }
         }
+        cout<<"Taking "<<k<<" as intermediate\n";
+        deb();
     }
-    // pr("here");
-    vl ans;
-    while(q--){
-        re x; re y;
-        if(gr[x][y] == inf){
-            ans.pb(-1);
-        }
-        else ans.pb(gr[x][y]);
-    }
-    fo(ans.size()) pr(ans[i]);
 }
 
 int main(){
@@ -122,7 +123,18 @@ int main(){
     while(t--) solve();
 }
 
-
+/*
+5 9
+1 2 13
+1 4 -3
+2 5 11
+3 1 8
+3 5 5
+4 1 5
+4 3 15
+5 2 11
+5 4 -10
+*/
 //common errors
 // row - n, col - m always and loop var
 // see the freq of numbers carefully

@@ -52,35 +52,42 @@ ll cl(double a){
     }
 }
 
-ll extended_euclid(ll a, ll b, ll& x, ll& y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
-    }
-    ll x1, y1;
-    ll d = extended_euclid(b, a % b, x1, y1);
-    x = y1;
-    y = x1 - y1 * (a / b);
-    return d;
+ll gcd(ll a, ll b){
+    if(b == 0) return a;
+    else return gcd(b,a%b);
 }
 
-ll modulo_inverse(ll a, ll m){
-    ll x,y;
-    ll g = extended_euclid(a,m,x,y);
-    if(g!=1){
-        return -1;
+ll modex(ll a,ll b,ll m){
+    a=a%m;
+    if(b==0){
+        return 1;
     }
-    x = (x%m+m)%m;
-    return x;
+    ll temp=modex(a,b/2,m);
+    temp=(temp*temp)%m;
+    if(b%2){
+        temp=(temp*a)%m;
+    }
+    return temp;
 }
+
+
+ll mult(ll a,ll b){
+    ll m = 1e9+7;
+    a=a%m;
+    b=b%m;
+    ll c = gcd(a,b);
+    a=a/c;
+    b=b/c;
+    c=modex(b,m-2,m);
+    return (a*c)%m;
+}
+
 
 
 
 
 int main(){
     KOBE;
-    cout<<modulo_inverse(3,11)<<"\n";
 }
 
 

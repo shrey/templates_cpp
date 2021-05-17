@@ -20,7 +20,6 @@
 #include<cstring>
 #include<numeric>
 #include<array>
-#include<deque>
 
 
 using namespace std;
@@ -48,7 +47,6 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
-#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -60,10 +58,6 @@ typedef long double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
-#define LG 20
-
-// ll dx[] = {1,0,-1,0};
-// ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
@@ -77,30 +71,67 @@ ll cl(ld a){
 }
 
 ll flr(ld a){
-    if(a < 0.0){
-        return (ll) a - 1;
-    }
     return (ll) a;
 }
 
-ll gcd(ll a, ll b){
-    if(b == 0) return a;
-    else return gcd(b,a%b);
-}
+
 
 //code starts here
 
-const ll M = 1e5+100;
-ll n,m,a[M],pt[M];
-vl gr[M];
-vp p[M];
-multiset< pll > st1;
-vl fin[M];
-ll sz[M] = {0};
-vl path;
-ll res[M] = {0};
+const ll M = 2e5+100;
 
-vl st(4*M + 1,0);
+vl st(4*M + 1);
+vl la(4*M + 1,0);
+vl ls(4*M+1,0);
+
+ll a[M];
+
+void push(ll v, ll r, ll l, ll t){
+    if(t == 2){
+        st[v] = (r-l)*ls[v];
+        ls[2*v] = ls[v];
+        ls[2*v+1] = ls[v];
+        ls[v] = 0;
+    }else{
+        st[v] += (r-l)*la[v];
+        la[2*v] += la[v];
+        la[2*v+1] += la[v];
+        la[v] = 0;
+    }
+}
+
+void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change, ll t){
+    if(t == 1){
+        if(ls[v]){
+            push(v,tl,tr,2);
+            
+        }
+        st[v]
+    }else{
+
+    }
+    if(lazy[v] != 0){
+        st[v] += (tr-tl+1) * lazy[v];
+        if(tl != tr){
+            lazy[2*v] += lazy[v];
+            lazy[2*v+1] += lazy[v];
+        }
+        lazy[v] = 0;
+    }
+    if(tl > r || tr < l) return;
+    if((tl >= l && tr <= r) || tl == tr){
+        st[v] += (tr-tl+1)*change; //change here in rmq to st[v] += change as only change is added to the max or min number
+        if(tr != tl){
+            lazy[2*v] += change;
+            lazy[2*v+1] += change;
+        }
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    update_range(2*v,tl,tm,l,r,change);
+    update_range(2*v+1,tm+1,tr,l,r,change);
+    st[v] = st[2*v] + st[2*v+1]; //change here
+}
 
 void update(ll v, ll tl, ll tr, ll pos, ll change){
     if(tl == tr){
@@ -114,76 +145,47 @@ void update(ll v, ll tl, ll tr, ll pos, ll change){
 }
 
 ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0; //change here
+    if(tl > r || tr < l) return 0;
+    if(lazy[v]){
+        st[v] += (tr-tl+1)*lazy[v];
+        if(tl != tr){
+            lazy[2*v] += lazy[v];
+            lazy[2*v+1] += lazy[v];
+        }
+        lazy[v] = 0;
+    }
     if(tl >= l && tr <= r) return st[v];
     ll tm = (tl + tr)/2;
     return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
 }
 
-
-void dfs(ll cur, ll par){
-    sz[cur] = 1;
-    st1.insert(mp(a[cur],cur));
-    for(auto x: p[cur]){
-        auto it = st1.upper_bound(mp(x.sec,1e15));
-        if(it == st1.begin()){
-            continue;
-        }
-        --it;
-        fin[(*it).sec].pb(x.ff);
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v] = a[tl];
+        return;
     }
-    for(auto x: gr[cur]){
-        if(x != par){
-            dfs(x,cur);
-        }
-    }
-    st1.erase(st1.find(mp(a[cur],cur)));
-}
-
-void dfs2(ll cur, ll par){
-    for(auto x: fin[cur]){
-        update(1,0,M-1,x,1);
-    }
-    res[cur] += query(1,0,M-1,0,a[cur]);
-    for(auto x: gr[cur]){
-        if(x != par){
-            dfs2(x,cur);
-        }
-    }
-    for(auto x: fin[cur]){
-        update(1,0,M-1,x,-1);
-    }
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = st[2*v] + st[2*v+1]; // change here for min, max, sum query
 }
 
 
 void solve(){
-    re n; re m;
-    ll r;
-    FOR(1,n){
-        re a[i];
-        re pt[i];
-        if(pt[i] == i){
-            r = i;
-            continue;
-        }
-        gr[pt[i]].pb(i);
-        gr[i].pb(pt[i]);
-    }
-    fo(m){
-        ll o,l,r;
-        re o; re l; re r;
-        p[o].pb(mp(l,r));
-    }
-    dfs(r,0);
-    dfs2(r,0);
-    for(ll i = 1; i<=n; i++) cout<<res[i]<<" "; nl;
+    ll n = 8;
+    fo(n) a[i] = i+1;
+    build(1,0,n-1);
+    update_range(1,0,n-1,4,6,5);
+    pr(query(1,0,n-1,5,7));
+    // pr(update)
+
 }
 
 int32_t main(){
     KOBE;
     ll t;
-    t = 1;
     // re t;
+    t = 1;
     while(t--) solve();
 }
 
@@ -193,8 +195,7 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
-// always check for n = 1 condition
-// check loop starting and end points :(
+
 
 //problem ideas
 //check piegonhole wherever possible

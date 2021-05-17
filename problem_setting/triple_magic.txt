@@ -1,0 +1,21 @@
+Given a string of digits, calculate how many *distinct* numbers formed by the subsequence of the string are there
+which are divisible by 3
+
+Input
+
+S - String of digits
+
+Ouput
+
+Your answer in Integer format
+
+Constraints
+
+|S| <= 20
+(length of string s)
+
+Sample Case
+
+2445
+
+Output - 2

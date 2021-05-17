@@ -20,6 +20,7 @@
 #include<cstring>
 #include<numeric>
 #include<array>
+#include<deque>
 
 
 using namespace std;

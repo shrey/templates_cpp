@@ -143,6 +143,7 @@ void solve(){
 }
 
 int32_t main(){
+    
     KOBE;
     ll t;
     t = 1;

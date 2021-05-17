@@ -20,6 +20,7 @@
 #include<cstring>
 #include<numeric>
 #include<array>
+#include<deque>
 
 
 using namespace std;
@@ -87,14 +88,13 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-ll lcm(ll a, ll b){
-    return (a*b/gcd(a,b));
-}
-
 //code starts here
 
 void solve(){
-    pr(pow(2,40));
+	multiset<ll> m;
+	m.insert(2);
+	auto it = m.upper_bound(1);
+	if(it == m.end()) YES;
 }
 
 int32_t main(){

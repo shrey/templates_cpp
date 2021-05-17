@@ -95,7 +95,7 @@ void update(ll v, ll tl, ll tr, ll pos, ll change){
 }
 
 ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
+    if(tl > r || tr < l) return 0; //change here
     if(tl >= l && tr <= r) return st[v];
     ll tm = (tl + tr)/2;
     return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here

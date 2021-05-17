@@ -113,9 +113,9 @@ void solve(){
     // pr("here");
     vl res(n-1);
     for(auto x: a){
-        // cout<<x.ff.ff<<"()"<<x.ff.sec<<"\n";
+        cout<<x.ff.ff<<"()"<<x.ff.sec<<"\n";
         auto it = s.lower_bound(mp(x.ff.ff,-1));
-        if(it == s.end() || it->ff > x.ff.sec){
+        if(it == s.end()){
             No;
             return;
         }

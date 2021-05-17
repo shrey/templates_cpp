@@ -1,40 +1,50 @@
-#include<stdio.h>
 
-int main() {
-    int i, j, k, f, pf = 0, count = 0, rs[25], m[10], n;
+#include <stdio.h>
 
-    printf("\n Enter the length of reference string -- ");
-    scanf("%d", & n);
-
-    printf("\n Enter the reference string -- ");
-    for (i = 0; i < n; i++)
-        scanf("%d", & rs[i]);
-
-    printf("\n Enter no. of frames -- ");
-    scanf("%d", & f);
-
-    for (i = 0; i < f; i++)
-        m[i] = -1;
-
-    printf("\n The Page Replacement Process is -- \n");
-
-    for (i = 0; i < n; i++) {
-        for (k = 0; k < f; k++) {
-            if (m[k] == rs[i])
-                break;
-        }
-        if (k == f) {
-            m[count++] = rs[i];
-            pf++;
-        }
-        for (j = 0; j < f; j++)
-            printf("\t%d", m[j]);
-        if (k == f)
-            printf("\tPF No. %d", pf);
-        printf("\n");
-        if (count == f)
-            count = 0;
-    }
-    printf("\n The number of Page Faults using FIFO are %d", pf);
-
+int main()
+{
+      int m_s[10][2], p_s[10][3];
+      int i, j, t_p = 0, t_m = 0;
+      printf("\nEnter the Total Number of Processes:\t");
+      scanf("%d", &t_p);
+      printf("\nEnter the Size of Each Process\n");
+      for(int i = 0; i < t_p; i++)
+      {
+            printf("Enter Size of Process %d:\t", i + 1);
+            scanf("%d", &p_s[i][0]);
+            p_s[i][1] = 0;
+            p_s[i][2] = i;
+      }
+      printf("\nEnter Total Memory Blocks:\t");
+      scanf("%d", &t_m);
+      printf("\nEnter the Size of Each Block:\n");
+      for(i = 0; i < t_m; i++)
+      {
+            printf("Enter Size of Block %d:\t", i + 1);
+            scanf("%d", &m_s[i][0]);
+            m_s[i][1] = 0;
+      }
+      for(i = 0; i < t_p; i++)
+      {
+            while(j < t_m)
+            {
+                  if(m_s[j][1] == 0 && p_s[i][0] <= m_s[j][0])
+                  {
+                        p_s[i][1] = 1;
+                        m_s[j][1] = 1;
+                        printf("\nProcess (%d) Allocated to Memory Block:\t%d", i + 1, j + 1);
+                        break;
+                  }
+                  j++;
+            }
+      }
+      for(i = 0; i < t_p; i++)
+      {
+            if(p_s[i][1] == 0)
+            {
+                  printf("\nProcess (%d) Unallocated\n", i + 1);
+            }
+      }
+      printf("\n");
+      return 0;
 }

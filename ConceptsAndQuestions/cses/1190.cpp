@@ -84,8 +84,12 @@ ll flr(ld a){
 const ll M = 2e5+100;
 
 ll n,m,a[M];
-void solve(){
+ll pre[M];
 
+void solve(){
+    re n; re m;
+    fo(n) re a[i];
+    
 }
 
 int32_t main(){

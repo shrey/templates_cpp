@@ -20,7 +20,6 @@
 #include<cstring>
 #include<numeric>
 #include<array>
-#include<deque>
 
 
 using namespace std;
@@ -61,7 +60,6 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 #define LG 20
-#define I long long
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
@@ -89,108 +87,47 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-I modex(I a,I b,I m){
-  a=a%m;
-  if(b==0){
-    return 1;
-  }
-  I temp=modex(a,b/2,m);
-  temp=(temp*temp)%m;
-  if(b%2){
-    temp=(temp*a)%m;
-  }
-  return temp;
-}
-I md(I a,I b){
-    ll m = 1e9+7;
-  a=a%m;
-  b=b%m;
-  ll c = gcd(a,b);
-  a=a/c;
-  b=b/c;
-  c=modex(b,m-2,m);
-  return (a*c)%m;
-}
-
 //code starts here
 
-const ll M = 25;
-char mat[M][M];
-ll n,m,x,y;
+const ll M = 2e5+100;
+vl gr[M];
+ll n;
+ll sz[M] = {0};
+ll sc[M] ={0};
+ll ans = 0;
 
-ll extended_euclid(ll a, ll b, ll& x, ll& y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
+void dfs1(ll cur, ll par){
+    sz[cur] = 1;
+    for(auto x: gr[cur]){
+        if(x != par){
+            dfs1(x,cur);
+            sz[cur] += sz[x];
+            sc[cur] += (sz[x]+sc[x]);
+        }
     }
-    ll x1, y1;
-    ll d = extended_euclid(b, a % b, x1, y1);
-    x = y1;
-    y = x1 - y1 * (a / b);
-    return d;
 }
 
-ll modulo_inverse(ll a, ll m){
-    ll x,y;
-    ll g = extended_euclid(a,m,x,y);
-    if(g!=1){
-        return -1;
+void dfs2(ll cur,ll par,ll ext){
+    ll nw = sc[cur] + ext + n;
+    // cout<<cur<<"()"<<ext<<"\n";
+    ans = max(ans,nw);
+    for(auto x: gr[cur]){
+        if(x != par){
+            dfs2(x,cur,ext+sc[cur]-(sc[x]+sz[x])+n-sz[x]);
+        }
     }
-    x = (x%m+m)%m;
-    return x;
 }
-
-ll  mult(ll a, ll b){
-    ll c = gcd(a,b);
-    a /= c;
-    b /= c;
-    c = modulo_inverse(b,mod);
-    ll ans = (a*c)%mod;
-    return ans;
-}
-
+a
 
 void solve(){
-    re n; re m;
-    forn(i,n){
-        forn(j,m) re mat[i][j];
+    re n;
+    fo(n-1){
+        ll x,y; re x; re y;
+        gr[x].pb(y); gr[y].pb(x);
     }
-    re x; re y;
-    pll dp[n+1][m+1];
-    forn(i,n){
-        forn(j,m){
-            if(mat[i][j] == 'x'){
-                dp[i][j].ff = 0; dp[i][j].sec = 1;
-            }
-            if(mat[i][j] == '2'){
-                dp[i][j].ff = 0, dp[i][j].sec = 0;
-            }
-        }
-    }
-    for(ll i = n-1; i>=0; i--){
-        for(ll j = m-1; j>=0; j--){
-            if(mat[i][j] == '2' || mat[i][j] == 'x') continue;
-            dp[i][j].ff = md((dp[i+1][j].ff*(y-1))%mod,y) + md(dp[i][j+1].ff,y) + 1;
-            dp[i][j].ff %= mod;
-            dp[i][j].sec = md((dp[i+1][j].sec*(y-1))%mod,y) + md(dp[i][j+1].sec,y);
-            dp[i][j].sec %= mod;
-        }
-    }
-    ll ans = 0;
-    ll tot = 0;
-    forn(i,n){
-        forn(j,m){
-            if(mat[i][j] == '1'){
-                ans += (md(dp[i][j].ff,1-dp[i][j].sec));
-                ans = (ans+mod)%mod;
-                tot++;
-            }
-        }
-    }
-    ans = md(ans,tot);
-    ans += mod;
-    ans %= mod;
+    dfs1(1,0);
+    dfs2(1,0,0);
+    // for(ll i = 1; i<=n; i++) cout<<sc[i]<<"()"; nl;
     pr(ans);
 }
 
@@ -198,7 +135,7 @@ int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

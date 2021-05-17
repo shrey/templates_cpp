@@ -61,7 +61,6 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 #define LG 20
-#define I long long
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
@@ -89,108 +88,68 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-I modex(I a,I b,I m){
-  a=a%m;
-  if(b==0){
-    return 1;
-  }
-  I temp=modex(a,b/2,m);
-  temp=(temp*temp)%m;
-  if(b%2){
-    temp=(temp*a)%m;
-  }
-  return temp;
-}
-I md(I a,I b){
-    ll m = 1e9+7;
-  a=a%m;
-  b=b%m;
-  ll c = gcd(a,b);
-  a=a/c;
-  b=b/c;
-  c=modex(b,m-2,m);
-  return (a*c)%m;
-}
-
 //code starts here
 
-const ll M = 25;
-char mat[M][M];
-ll n,m,x,y;
+const ll M = 3010;
+ll dist[M][M] = {0},n,m;
+vl gr[M];
 
-ll extended_euclid(ll a, ll b, ll& x, ll& y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
+void bfs(ll src){
+    vl vis(n+1,false);
+    queue<ll> q;
+    q.push(src);
+    vis[src] = true;
+    dist[src][src] = 0;
+    while(!q.empty()){
+        ll cur = q.front();
+        q.pop();
+        for(auto x: gr[cur]){
+            if(!vis[x]){
+                dist[src][x] = dist[src][cur] + 1;
+                vis[x] = true;
+                q.push(x);
+            }
+        }
     }
-    ll x1, y1;
-    ll d = extended_euclid(b, a % b, x1, y1);
-    x = y1;
-    y = x1 - y1 * (a / b);
-    return d;
 }
-
-ll modulo_inverse(ll a, ll m){
-    ll x,y;
-    ll g = extended_euclid(a,m,x,y);
-    if(g!=1){
-        return -1;
-    }
-    x = (x%m+m)%m;
-    return x;
-}
-
-ll  mult(ll a, ll b){
-    ll c = gcd(a,b);
-    a /= c;
-    b /= c;
-    c = modulo_inverse(b,mod);
-    ll ans = (a*c)%mod;
-    return ans;
-}
-
 
 void solve(){
     re n; re m;
-    forn(i,n){
-        forn(j,m) re mat[i][j];
+    fo(m){
+        ll x,y; re x; re y;
+        gr[x].pb(y); gr[y].pb(x);
     }
-    re x; re y;
-    pll dp[n+1][m+1];
-    forn(i,n){
-        forn(j,m){
-            if(mat[i][j] == 'x'){
-                dp[i][j].ff = 0; dp[i][j].sec = 1;
-            }
-            if(mat[i][j] == '2'){
-                dp[i][j].ff = 0, dp[i][j].sec = 0;
-            }
-        }
+    forn(i,n+1){
+        forn(j,n+1) dist[i][j] = 1e15;
     }
-    for(ll i = n-1; i>=0; i--){
-        for(ll j = m-1; j>=0; j--){
-            if(mat[i][j] == '2' || mat[i][j] == 'x') continue;
-            dp[i][j].ff = md((dp[i+1][j].ff*(y-1))%mod,y) + md(dp[i][j+1].ff,y) + 1;
-            dp[i][j].ff %= mod;
-            dp[i][j].sec = md((dp[i+1][j].sec*(y-1))%mod,y) + md(dp[i][j+1].sec,y);
-            dp[i][j].sec %= mod;
-        }
+    for(ll i = 1; i<=n; i++){
+        bfs(i);
     }
-    ll ans = 0;
+
+    ll s[2],t[2],l[2];
+    fo(2){
+        re s[i]; re t[i]; re l[i];
+    }
     ll tot = 0;
-    forn(i,n){
-        forn(j,m){
-            if(mat[i][j] == '1'){
-                ans += (md(dp[i][j].ff,1-dp[i][j].sec));
-                ans = (ans+mod)%mod;
-                tot++;
-            }
+    fo(2){
+        if(dist[s[i]][t[i]] > l[i]){
+            pr(-1);
+            return;
         }
     }
-    ans = md(ans,tot);
-    ans += mod;
-    ans %= mod;
+    ll ans = m - dist[s[0]][t[0]] - dist[s[1]][t[1]];
+    for(ll i = 1; i<=n; i++){
+        for(ll j = 1; j<=n; j++){
+            ll a = min(dist[s[0]][i] + dist[t[0]][j],dist[t[0]][i] + dist[s[0]][j]);
+            ll b = min(dist[s[1]][i] + dist[t[1]][j],dist[t[1]][i] + dist[s[1]][j]);
+            ll cur = a + b + dist[i][j];
+            if(a + dist[i][j] > l[0] || b + dist[i][j] > l[1]) continue;
+            // if(m-cur == 3){
+            //     cout<<a<<"()"<<b<<"()"<<dist[i][j]<<"\n";
+            // }
+            ans = max(ans,m-cur);
+        }
+    }
     pr(ans);
 }
 
@@ -198,7 +157,7 @@ int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

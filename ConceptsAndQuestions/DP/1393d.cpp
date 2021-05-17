@@ -20,7 +20,6 @@
 #include<cstring>
 #include<numeric>
 #include<array>
-#include<deque>
 
 
 using namespace std;
@@ -61,10 +60,9 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 #define LG 20
-#define I long long
 
-// ll dx[] = {1,0,-1,0};
-// ll dy[] = {0,1,0,-1};
+ll dx[] = {1,0,-1,0};
+ll dy[] = {0,1,0,-1};
 
 ll mod = 1e9 + 7;
 
@@ -89,108 +87,51 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-I modex(I a,I b,I m){
-  a=a%m;
-  if(b==0){
-    return 1;
-  }
-  I temp=modex(a,b/2,m);
-  temp=(temp*temp)%m;
-  if(b%2){
-    temp=(temp*a)%m;
-  }
-  return temp;
-}
-I md(I a,I b){
-    ll m = 1e9+7;
-  a=a%m;
-  b=b%m;
-  ll c = gcd(a,b);
-  a=a/c;
-  b=b/c;
-  c=modex(b,m-2,m);
-  return (a*c)%m;
-}
-
 //code starts here
-
-const ll M = 25;
+const ll M = 2010;
+ll n,m,ans = 0,dp[M][M] = {0};
 char mat[M][M];
-ll n,m,x,y;
 
-ll extended_euclid(ll a, ll b, ll& x, ll& y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
-    }
-    ll x1, y1;
-    ll d = extended_euclid(b, a % b, x1, y1);
-    x = y1;
-    y = x1 - y1 * (a / b);
-    return d;
-}
-
-ll modulo_inverse(ll a, ll m){
-    ll x,y;
-    ll g = extended_euclid(a,m,x,y);
-    if(g!=1){
-        return -1;
-    }
-    x = (x%m+m)%m;
-    return x;
-}
-
-ll  mult(ll a, ll b){
-    ll c = gcd(a,b);
-    a /= c;
-    b /= c;
-    c = modulo_inverse(b,mod);
-    ll ans = (a*c)%mod;
-    return ans;
+bool ok(ll i, ll j){
+    if(i<n && i>=0 && j<m && j>=0) return true;
+    return false;
 }
 
 
 void solve(){
     re n; re m;
     forn(i,n){
-        forn(j,m) re mat[i][j];
-    }
-    re x; re y;
-    pll dp[n+1][m+1];
-    forn(i,n){
         forn(j,m){
-            if(mat[i][j] == 'x'){
-                dp[i][j].ff = 0; dp[i][j].sec = 1;
-            }
-            if(mat[i][j] == '2'){
-                dp[i][j].ff = 0, dp[i][j].sec = 0;
-            }
+            re mat[i][j];
         }
     }
-    for(ll i = n-1; i>=0; i--){
-        for(ll j = m-1; j>=0; j--){
-            if(mat[i][j] == '2' || mat[i][j] == 'x') continue;
-            dp[i][j].ff = md((dp[i+1][j].ff*(y-1))%mod,y) + md(dp[i][j+1].ff,y) + 1;
-            dp[i][j].ff %= mod;
-            dp[i][j].sec = md((dp[i+1][j].sec*(y-1))%mod,y) + md(dp[i][j+1].sec,y);
-            dp[i][j].sec %= mod;
-        }
-    }
+    queue<pll> q;
     ll ans = 0;
-    ll tot = 0;
     forn(i,n){
         forn(j,m){
-            if(mat[i][j] == '1'){
-                ans += (md(dp[i][j].ff,1-dp[i][j].sec));
-                ans = (ans+mod)%mod;
-                tot++;
+            forn(k,4){
+                ll x = i+dx[k], y = j+dy[k];
+                if(!ok(x,y) || mat[x][y] != mat[i][j]){
+                    dp[i][j] = 1;
+                    q.push(mp(i,j));
+                    ans++;
+                    break;
+                }
             }
         }
     }
-    ans = md(ans,tot);
-    ans += mod;
-    ans %= mod;
+    while(!q.empty()){
+        auto cur = q.front();
+        q.pop();
+        forn(k,4){
+            ll x = cur.ff + dx[k], y = cur.sec + dy[k];
+            if(ok(x,y) && dp[x][y] == 0){
+                dp[x][y] = dp[cur.ff][cur.sec] + 1;
+                ans += dp[x][y];
+                q.push(mp(x,y));
+            }
+        }
+    }
     pr(ans);
 }
 
@@ -198,7 +139,7 @@ int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

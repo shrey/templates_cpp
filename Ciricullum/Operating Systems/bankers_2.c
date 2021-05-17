@@ -77,3 +77,7 @@ int main() {
 13 14 15 16
 18 19 20 21
 */
+
+/*
+fifo, optimal change, lru, lfu mfu
+*/

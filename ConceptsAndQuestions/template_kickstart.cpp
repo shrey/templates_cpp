@@ -20,6 +20,7 @@
 #include<cstring>
 #include<numeric>
 #include<array>
+#include<deque>
 
 
 using namespace std;
@@ -47,6 +48,7 @@ typedef long double ld;
 #define vi vector<int>
 #define vl vector<ll>
 #define vp vector<pair<ll,ll> >
+#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -81,6 +83,19 @@ ll flr(ld a){
     return (ll) a;
 }
 
+ll gcd(ll a, ll b){
+    if(b == 0) return a;
+    else return gcd(b,a%b);
+}
+
+ll pow(ll n, ll k){
+    if(k == 0) return 1;
+    ll t = pow(n,k/2);
+    ll ans = (t*t)%mod;
+    if(k % 2) return (ans*n)%mod;
+    else return ans;
+}
+
 //code starts here
 
 void solve(){
@@ -97,13 +112,14 @@ int32_t main(){
     }
 }
 
-
 //common errors
 // row - n, col - m always and loop var
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
-
+// always check for n = 1 condition
+// check loop starting and end points :(
+//when dividing with mod, use mod inverse
 
 //problem ideas
 //check piegonhole wherever possible

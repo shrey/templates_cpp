@@ -83,13 +83,16 @@ ll ncr(ll n,ll r )
             modInverse(fac[n-r]) % p) % p;
 }
 
+void compute(){
+    fac[0] = 1;
+    for (ll i=1 ; i<1000010; i++)
+        fac[i] = fac[i-1]*i%p;
+}
+
 
 int32_t main(){
     KOBE;
     ll n,r;
-    fac[0] = 1;
-    for (ll i=1 ; i<1000010; i++)
-        fac[i] = fac[i-1]*i%p;
     cin>>n>>r;
     cout<<ncr(n,r)<<"\n";
 }

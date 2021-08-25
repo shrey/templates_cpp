@@ -1,4 +1,5 @@
 #include<iostream>
+#include<stack>
 
 using namespace std;
 
@@ -113,6 +114,33 @@ void display(node *s){
         cout<<p->val<<" -> ";
         p = p->next;
     }cout<<"\n";
+}
+
+void reverse(node *s){
+    node *prev = NULL;
+    node *cur = s;
+    while(cur != NULL){
+        node *temp = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = temp;
+    }
+}
+
+void cycle_detection(node *s){
+    node *slow = s, *fast = s;
+    while(slow != NULL && fast != NULL){
+        if(slow == fast){
+            cout<<"Cyclic Linked list\n";
+            return;
+        }
+        fast = fast->next;
+        slow = slow->next;
+        if(fast){
+            fast = fast->next;
+        }
+    }
+    cout<<"Not cyclic\n";
 }
 
 int main(){

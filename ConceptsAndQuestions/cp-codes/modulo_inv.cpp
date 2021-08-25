@@ -57,7 +57,7 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-ll modex(ll a,ll b,ll m){
+ll modex(ll a,ll b,ll m){ //used to calculate a^-1
     a=a%m;
     if(b==0){
         return 1;
@@ -70,8 +70,11 @@ ll modex(ll a,ll b,ll m){
     return temp;
 }
 
+ll modinv(ll a, ll m){
+    return modex(a,m-2,m);
+}
 
-ll mult(ll a,ll b){
+ll mult(ll a,ll b){ // used to return a*(b^-1)mod m
     ll m = 1e9+7;
     a=a%m;
     b=b%m;
@@ -81,9 +84,6 @@ ll mult(ll a,ll b){
     c=modex(b,m-2,m);
     return (a*c)%m;
 }
-
-
-
 
 
 int main(){

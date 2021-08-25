@@ -20,6 +20,20 @@
 #include<cstring>
 #include<numeric>
 #include<array>
+#include<deque>
+#include <cstdlib>
+#include <cstdio>
+#include<stdlib.h>
+#include <cerrno>
+#include <ctime>
+#include <unordered_set>
+#include <cstring>
+#include <cmath>
+#include <random>
+#include <functional>
+#include <cassert>
+#include <bitset>
+#include <chrono>
 
 
 using namespace std;
@@ -34,6 +48,7 @@ typedef long double ld;
 #define pb push_back
 #define ff first
 #define sec second
+#define bct(x) __builtin_popcountll(x)
 #define umap unordered_map
 #define mp make_pair
 #define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
@@ -46,8 +61,8 @@ typedef long double ld;
 #define lmin LLONG_MIN
 #define vi vector<int>
 #define vl vector<ll>
-#define vs vector<string>
 #define vp vector<pair<ll,ll> >
+#define vs vector<string>
 #define vb vector<bool>
 #define pr(t) cout<<t<<"\n"
 #define int long long
@@ -59,11 +74,14 @@ typedef long double ld;
 #define pll pair<ll,ll>
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
+#define LG 20
+#define INF 1e18
+#define p 1000000007
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
 
-ll mod = 1e9 + 7;
+const ll mod = 1e9 + 7;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -81,63 +99,64 @@ ll flr(ld a){
     return (ll) a;
 }
 
-//code starts here
-
-vector<int> z_function(string &s) {   // replace vector<ll> by string to get string
-    int n = (int) s.size();
-    vector<int> z(n);
-    for (int i = 1, l = 0, r = 0; i < n; ++i) {
-        if (i <= r)
-            z[i] = min (r - i + 1, z[i - l]);
-        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
-            ++z[i];
-        if (i + z[i] - 1 > r)
-            l = i, r = i + z[i] - 1;
-    }
-    return z;
+ll gcd(ll a, ll b){
+    if(b == 0) return a;
+    else return gcd(b,a%b);
 }
 
+ll pw(ll n, ll k){
+    if(k == 0) return 1;
+    ll t = pw(n,k/2);
+    ll ans = (t*t)%mod;
+    if(k % 2) return (ans*n)%mod;
+    else return ans;
+}
+
+//code starts here
+
+const ll M = 2e5+100;
+ll dp[M][2];
 
 void solve(){
+    memset(dp,0,sizeof(dp));
     ll n; re n;
-    vs a(n);
-    fo(n) re a[i];
-    string ans = "";
-    ans += a[0];
-    for(ll i = 1; i<n; i++){
-        string s1 = "";
-        if(a[i].length() >= ans.length()){
-            s1 = a[i] + ans;
-        }else{
-            s1 = a[i] + ans.substr(ans.length()-a[i].length(),a[i].length());
+    ll a[n+1];
+    fo(n) re a[i+1];
+    ll flag = 1;
+    dp[0][0] = 1;
+    for(ll i = 1; i<=n; i++){
+        ll nf = flag^1;
+        for(ll j = 0; j<2e5+1; j++){
+            dp[j][flag] |= dp[j][nf];
+            if(j >= a[i]) dp[j][flag] |= dp[j-a[i]][nf];
         }
-        // cout<<i<<" , "<<s1<<"\n";
-        vl z = z_function(s1);
-        // if(i == 3){
-        //     for(auto x: z) cout<<x<<" "; nl;
-        // }
-        bool flag = false;
-        for(ll j = a[i].length(); j<z.size(); j++){
-            if(z[j] == z.size()-j){
-                // pr("here");
-                if(z[j] < a[i].length()){
-                    ans += a[i].substr(z[j],a[i].length()-z[j]);
-                }
-                flag = true;
-                break;
+        flag ^= 1;
+    }
+    ll sm = 0;
+    fo(n) sm += a[i+1];
+    ll diff = 1e15;
+    pll res;
+    fo(2e5+1){
+        if(dp[i][(flag^1)]){
+            ll cur = abs((sm-i) - i);
+            if(cur < diff){
+                diff = cur;
+                res = mp(i,sm-i);
+                if(res.ff > res.sec) swap(res.ff,res.sec);
             }
         }
-        if(!flag) ans += a[i];
     }
-    pr(ans);
+    cout<<res.ff<<" "<<res.sec<<"\n";
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    // re t;
-    while(t--) solve();
+    re t;
+    fo(t){
+        cout<<"Case "<<i+1<<": "; solve();
+    }
 }
 
 
@@ -146,7 +165,9 @@ int32_t main(){
 // see the freq of numbers carefully
 // see if there's array overflow
 // use map for large inputs
-
+// always check for n = 1 condition
+// check loop starting and end points :(
+//when dividing with mod, use mod inverse
 
 //problem ideas
 //check piegonhole wherever possible

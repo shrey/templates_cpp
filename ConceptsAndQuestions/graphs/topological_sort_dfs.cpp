@@ -32,7 +32,8 @@ int modulo = 1e9 + 7;
 class Graph{
     umap <int,list<int> > adjlist;
     umap<int,bool> visited;
-    list<int> sorted_nums;
+    vector<int> sorted_nums;
+    list<int> op;
     int n;
     public:
         Graph(int N){
@@ -45,9 +46,14 @@ class Graph{
             for(int i = 1; i<=n; i++){
                 dfs(i);
             }
+            reverse(sorted_nums.begin(),sorted_nums.end());
             for(auto it: sorted_nums){
                 cout<<it<<" ";
             }
+            cout<<"\n";
+            for(auto it: op){
+                cout<<it<<" ";
+            }cout<<"\n";
         }
         void dfs(int src){
             if(visited[src]){
@@ -57,7 +63,8 @@ class Graph{
             for(auto it: adjlist[src]){
                 dfs(it);
             }
-            sorted_nums.push_front(src);
+            sorted_nums.push_back(src);
+            op.push_front(src);
         }
 };
 

@@ -95,7 +95,7 @@ const int N = 1e5+5;
 
 int n, tim=0;
 int a[N], level[N], tin[N], tout[N], rtin[N], nxt[N], subtree[N], parent[LG][N];
-vector<int> g[N];
+vector<int> gr[N];
 
 //Heavy Light Decomposition
 
@@ -103,7 +103,7 @@ void dfs(int u, int par, int lvl)
 {
 	parent[0][u] = par;
 	level[u] = lvl;
-	for(auto &it:g[u])
+	for(auto &it:gr[u])
 	{
 		if(it==par)
 			continue;
@@ -114,14 +114,14 @@ void dfs(int u, int par, int lvl)
 void dfs1(int u, int par)
 {
 	subtree[u] = 1;
-	for(auto &it:g[u])
+	for(auto &it:gr[u])
 	{
 		if(it==par)
 			continue;
 		dfs1(it, u);
 		subtree[u] += subtree[it];
-		if(subtree[it] > subtree[g[u][0]])
-			swap(it, g[u][0]);
+		if(subtree[it] > subtree[gr[u][0]])
+			swap(it, gr[u][0]);
 	}
 }
 
@@ -129,11 +129,11 @@ void dfs_hld(int u, int par)
 {
 	tin[u] = ++tim;
 	rtin[tim] = u;
-	for(auto &v:g[u])
+	for(auto &v:gr[u])
 	{
 		if(v==par)
 			continue;
-		nxt[v] = (v==g[u][0] ? nxt[u]:v);
+		nxt[v] = (v==gr[u][0] ? nxt[u]:v);
 		dfs_hld(v, u);
 	}
 	tout[u] = tim;

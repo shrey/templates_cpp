@@ -83,20 +83,88 @@ ll flr(ld a){
 //code starts here
 const ll M = 2e5+100;
 
+struct node{
+    ll pre,suff,tot, sm;
+};
+
 ll n,m,a[M];
-ll pre[M];
+
+vector<node> st(4*M + 1);
+
+node f(node a, node b){
+    node res;
+    res.pre = res.suff = res.tot = 0;
+    res.pre = (res.pre,max(a.pre,a.sm + b.pre));
+    res.suff = max(res.suff,max(a.suff + b.sm, b.suff));
+    res.tot = max(a.tot,b.tot);
+    res.tot = max(res.tot,a.suff + b.pre);
+    res.tot = max(res.tot,max(res.pre,res.suff));
+    res.tot = max(res.tot,max(res.pre,res.suff));
+    res.sm = a.sm + b.sm;
+    return res;
+}
+
+node emp;
+
+
+void update(ll v, ll tl, ll tr, ll pos, ll change){
+    if(tl == tr){
+        a[tl] = change;
+        st[v].pre = max(0ll,a[tl]);
+        st[v].suff = max(0ll,a[tl]);
+        st[v].tot = max(0ll,a[tl]);
+        st[v].sm = a[tl];
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    if(pos <= tm) update(2*v,tl,tm,pos,change);
+    else update(2*v + 1,tm+1,tr,pos,change);
+    st[v] = f(st[2*v],st[2*v+1]); //change here
+}
+
+node query(ll v, ll tl, ll tr, ll l, ll r){
+    if(tl > r || tr < l) return emp; //change here
+    if(tl >= l && tr <= r) return st[v];
+    ll tm = (tl + tr)/2;
+    return f(query(1,tl,tm,l,r),query(1,tm+1,tr,l,r)); // change here
+}
+
+void build(ll v, ll tl, ll tr){
+    if(tl == tr){
+        st[v].pre = max(0ll,a[tl]);
+        st[v].suff = max(0ll,a[tl]);
+        st[v].tot = max(0ll,a[tl]);
+        st[v].sm = a[tl];
+        return;
+    }
+    ll tm = (tl + tr)/2;
+    build(2*v,tl,tm);
+    build(2*v+1,tm+1,tr);
+    st[v] = f(st[2*v],st[2*v+1]); // change here
+}
 
 void solve(){
     re n; re m;
     fo(n) re a[i];
-    
+    emp.pre = emp.suff = emp.tot = 0;
+    build(1,0,n-1);
+    // node cur = query(1,0,n-1,0,n-1);
+    // cout<<cur.tot<<"\n";
+    while(m--){
+        ll pos,val;
+        re pos; re val;
+        pos--;
+        update(1,0,n-1,pos,val);
+        node cur = query(1,0,n-1,0,n-1);
+        cout<<cur.tot<<"\n";
+    }
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // re t;
     while(t--) solve();
 }
 

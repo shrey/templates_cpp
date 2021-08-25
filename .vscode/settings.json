@@ -33,6 +33,8 @@
         "ratio": "cpp",
         "bitset": "cpp",
         "__string": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "cstdlib": "cpp",
+        "istream": "cpp"
     }
 }

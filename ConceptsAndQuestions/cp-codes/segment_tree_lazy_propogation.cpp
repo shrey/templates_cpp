@@ -82,24 +82,31 @@ const ll M = 2e5+100;
 
 vl st(4*M + 1);
 vl lazy(4*M + 1,0);
-ll a[M];
+ll a[M],n,q;
 
-void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
+void push(ll v,ll l, ll r, ll val){
     if(lazy[v] != 0){
-        st[v] += (tr-tl+1) * lazy[v]; //change here
-        if(tl != tr){
-            lazy[2*v] += lazy[v]; // at times we have to do alternate i.e 1-lazy[v]
+        st[v] += (r-l+1)*lazy[v];
+        if(l != r){
+            lazy[2*v] += lazy[v];
             lazy[2*v+1] += lazy[v];
         }
         lazy[v] = 0;
     }
+    if(val){
+        st[v] += val*(r-l+1);
+        if(r != l){
+            lazy[2*v] += val;
+            lazy[2*v+1] += val;
+        }
+    }
+}
+
+void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
+    push(v,tl,tr,0);
     if(tl > r || tr < l) return;
     if((tl >= l && tr <= r) || tl == tr){
-        st[v] += (tr-tl+1)*change; //change here in rmq to st[v] += change as only change is added to the max or min number
-        if(tr != tl){
-            lazy[2*v] += change;
-            lazy[2*v+1] += change;
-        }
+        push(v,tl,tr,change);
         return;
     }
     ll tm = (tl + tr)/2;
@@ -108,27 +115,9 @@ void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change){
     st[v] = st[2*v] + st[2*v+1]; //change here
 }
 
-void update(ll v, ll tl, ll tr, ll pos, ll change){
-    if(tl == tr){
-        st[v] += change;
-        return;
-    }
-    ll tm = (tl + tr)/2;
-    if(pos <= tm) update(2*v,tl,tm,pos,change);
-    else update(2*v + 1,tm+1,tr,pos,change);
-    st[v] = st[2*v] + st[2*v+1]; //change here
-}
-
 ll query(ll v, ll tl, ll tr, ll l, ll r){
     if(tl > r || tr < l) return 0; //change here
-    if(lazy[v]){
-        st[v] += (tr-tl+1)*lazy[v]; //change here
-        if(tl != tr){
-            lazy[2*v] += lazy[v];
-            lazy[2*v+1] += lazy[v];
-        }
-        lazy[v] = 0;
-    }
+    push(v,tl,tr,0);
     if(tl >= l && tr <= r) return st[v];
     ll tm = (tl + tr)/2;
     return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
@@ -147,12 +136,23 @@ void build(ll v, ll tl, ll tr){
 
 
 void solve(){
-    ll n = 8;
-    fo(n) a[i] = i+1;
+    re n; re q;
+    fo(n) re a[i];
     build(1,0,n-1);
-    update_range(1,0,n-1,4,6,5);
-    pr(query(1,0,n-1,5,7));
-    // pr(update)
+    while(q--){
+        ll t; re t;
+        if(t == 1){
+            ll a,b; re a; re b; a--; b--;
+            ll ch; re ch;
+            update_range(1,0,n-1,a,b,ch);
+            // pr("here");
+        }else{
+            ll k; re k;
+            k--;
+            ll ans = query(1,0,n-1,k,k);
+            cout<<ans<<"\n";
+        }
+    }
 
 }
 

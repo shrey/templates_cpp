@@ -121,7 +121,6 @@ void decompose(ll cur, char ch){
     ll node = centroid(cur,cur);
 
     // insert code here and traverse graph from here
-
     for(auto it: gr[node]){
         gr[it].erase(node);
         decompose(it,ch+1);

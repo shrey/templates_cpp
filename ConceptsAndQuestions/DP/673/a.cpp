@@ -21,6 +21,19 @@
 #include<numeric>
 #include<array>
 #include<deque>
+#include <cstdlib>
+#include <cstdio>
+#include<stdlib.h>
+#include <cerrno>
+#include <ctime>
+#include <unordered_set>
+#include <cstring>
+#include <cmath>
+#include <random>
+#include <functional>
+#include <cassert>
+#include <bitset>
+#include <chrono>
 
 
 using namespace std;
@@ -35,6 +48,7 @@ typedef long double ld;
 #define pb push_back
 #define ff first
 #define sec second
+#define bct(x) __builtin_popcountll(x)
 #define umap unordered_map
 #define mp make_pair
 #define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
@@ -61,12 +75,13 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 #define LG 20
-#define I long long
+#define INF 1e18
+#define p 1000000007
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
 
-ll mod = 1e9 + 7;
+const ll mod = 1e9 + 7;
 
 ll cl(ld a){
     if(a>(ll) a){
@@ -89,116 +104,58 @@ ll gcd(ll a, ll b){
     else return gcd(b,a%b);
 }
 
-I modex(I a,I b,I m){
-  a=a%m;
-  if(b==0){
-    return 1;
-  }
-  I temp=modex(a,b/2,m);
-  temp=(temp*temp)%m;
-  if(b%2){
-    temp=(temp*a)%m;
-  }
-  return temp;
-}
-I md(I a,I b){
-    ll m = 1e9+7;
-  a=a%m;
-  b=b%m;
-  ll c = gcd(a,b);
-  a=a/c;
-  b=b/c;
-  c=modex(b,m-2,m);
-  return (a*c)%m;
+ll pw(ll n, ll k){
+    if(k == 0) return 1;
+    ll t = pw(n,k/2);
+    ll ans = (t*t)%mod;
+    if(k % 2) return (ans*n)%mod;
+    else return ans;
 }
 
 //code starts here
 
-const ll M = 25;
-char mat[M][M];
-ll n,m,x,y;
+ll n,m;
 
-ll extended_euclid(ll a, ll b, ll& x, ll& y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
+vl fact(ll num){
+    vl res;
+    for(ll i = 2; i*i <= num; i++){
+        if(num%i == 0){
+            res.pb(i);
+            if(i*i != num) res.pb(num/i);
+        }
     }
-    ll x1, y1;
-    ll d = extended_euclid(b, a % b, x1, y1);
-    x = y1;
-    y = x1 - y1 * (a / b);
-    return d;
+    return res;
 }
 
-ll modulo_inverse(ll a, ll m){
-    ll x,y;
-    ll g = extended_euclid(a,m,x,y);
-    if(g!=1){
-        return -1;
-    }
-    x = (x%m+m)%m;
-    return x;
-}
-
-ll  mult(ll a, ll b){
-    ll c = gcd(a,b);
-    a /= c;
-    b /= c;
-    c = modulo_inverse(b,mod);
-    ll ans = (a*c)%mod;
-    return ans;
-}
-
+const ll M = 4e6+100;
+ll dp[M];
+ll op[M];
+vl a[M];
 
 void solve(){
-    re n; re m;
-    forn(i,n){
-        forn(j,m) re mat[i][j];
-    }
-    re x; re y;
-    pll dp[n+1][m+1];
-    forn(i,n){
-        forn(j,m){
-            if(mat[i][j] == 'x'){
-                dp[i][j].ff = 0; dp[i][j].sec = 1;
-            }
-            if(mat[i][j] == '2'){
-                dp[i][j].ff = 0, dp[i][j].sec = 0;
-            }
+    re n;
+    re m;
+    dp[1] = 1;
+    ll sm = 1;
+    for(ll i = 2; i<=n; i++){
+        op[i] += op[i-1]+dp[1];
+        op[i] %= m;
+        dp[i] += (sm+op[i]);
+        dp[i] %= m;
+        for(ll j = 2*i; j<=n; j+=i){
+            op[j] += (dp[i]-dp[i-1]+m)%m;
         }
+        sm = (sm+dp[i])%m;
     }
-    for(ll i = n-1; i>=0; i--){
-        for(ll j = m-1; j>=0; j--){
-            if(mat[i][j] == '2' || mat[i][j] == 'x') continue;
-            dp[i][j].ff = md((dp[i+1][j].ff*(y-1))%mod,y) + md(dp[i][j+1].ff,y) + 1;
-            dp[i][j].ff %= mod;
-            dp[i][j].sec = md((dp[i+1][j].sec*(y-1))%mod,y) + md(dp[i][j+1].sec,y);
-            dp[i][j].sec %= mod;
-        }
-    }
-    ll ans = 0;
-    ll tot = 0;
-    forn(i,n){
-        forn(j,m){
-            if(mat[i][j] == '1'){
-                ans += (md(dp[i][j].ff,1-dp[i][j].sec));
-                ans = (ans+mod)%mod;
-                tot++;
-            }
-        }
-    }
-    ans = md(ans,tot);
-    ans += mod;
-    ans %= mod;
-    pr(ans);
+    pr(dp[n]);
 }
 
 int32_t main(){
     KOBE;
     ll t;
     t = 1;
-    re t;
+    // seive();
+    // re t;
     while(t--) solve();
 }
 
@@ -210,6 +167,7 @@ int32_t main(){
 // use map for large inputs
 // always check for n = 1 condition
 // check loop starting and end points :(
+//when dividing with mod, use mod inverse
 
 //problem ideas
 //check piegonhole wherever possible
@@ -217,3 +175,15 @@ int32_t main(){
 // see suffix and prefix
 //don't be obsessed with binary search
 // try to find repeating pattern in matrices
+
+
+/*
+5 998244353
+
+3 998244353
+
+42 998244353
+
+787788 100000007
+
+*/

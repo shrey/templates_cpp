@@ -96,9 +96,34 @@ vector<int> z_function(string &s) {   // replace vector<ll> by string to get str
     return z;
 }
 
+vector<int> z_fn(string &s){
+    vl pre(s.length());
+    ll j = 0;
+    pre[0] = 0;
+    ll n = s.length();
+    for(ll i = 1; i<n; i++){
+        if(s[i] == s[j]){
+            pre[i] = pre[i-1]+1;
+            j++;
+        }else{
+            pre[j] = 0;
+            j = 0;
+            if(s[i] == s[j]){
+                pre[i] = 1;
+                j++;
+            }
+        }
+    }
+    return pre;
+}
 
 int32_t main(){
     KOBE;
+    string s = "abcdabcd";
+    auto v = z_fn(s);
+    vl f = z_function(s);
+    for(auto x: v) cout<<x<<" "; nl;
+    for(auto x: f) cout<<x<<" "; nl;
 }
 
 

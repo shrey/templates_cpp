@@ -20,6 +20,20 @@
 #include<cstring>
 #include<numeric>
 #include<array>
+#include<deque>
+#include <cstdlib>
+#include <cstdio>
+#include<stdlib.h>
+#include <cerrno>
+#include <ctime>
+#include <unordered_set>
+#include <cstring>
+#include <cmath>
+#include <random>
+#include <functional>
+#include <cassert>
+#include <bitset>
+#include <chrono>
 
 
 using namespace std;
@@ -34,6 +48,7 @@ typedef long double ld;
 #define pb push_back
 #define ff first
 #define sec second
+#define bct(x) __builtin_popcountll(x)
 #define umap unordered_map
 #define mp make_pair
 #define KOBE ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
@@ -60,6 +75,7 @@ typedef long double ld;
 #define FOR(a,b) for(ll i = a; i<=b; i++)
 #define all(x) x.begin(),x.end()
 #define LG 20
+#define INF 1e18
 
 // ll dx[] = {1,0,-1,0};
 // ll dy[] = {0,1,0,-1};
@@ -80,6 +96,19 @@ ll flr(ld a){
         return (ll) a - 1;
     }
     return (ll) a;
+}
+
+ll gcd(ll a, ll b){
+    if(b == 0) return a;
+    else return gcd(b,a%b);
+}
+
+ll pw(ll n, ll k){
+    if(k == 0) return 1;
+    ll t = pw(n,k/2);
+    ll ans = (t*t)%mod;
+    if(k % 2) return (ans*n)%mod;
+    else return ans;
 }
 
 //code starts here
@@ -104,6 +133,7 @@ int32_t main(){
 // use map for large inputs
 // always check for n = 1 condition
 // check loop starting and end points :(
+//when dividing with mod, use mod inverse
 
 //problem ideas
 //check piegonhole wherever possible

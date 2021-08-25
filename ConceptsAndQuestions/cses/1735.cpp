@@ -81,61 +81,50 @@ ll flr(ld a){
 const ll M = 2e5+100;
 
 vl st(4*M + 1);
-vl la(4*M + 1,0);
-vl ls(4*M+1,0);
+vl lazy(4*M + 1,0);
+vl lst(4*M+1,0);
+ll a[M],n,q;
 
-ll a[M];
-
-void push(ll v, ll r, ll l, ll t){
-    if(t == 2){
-        st[v] = (r-l)*ls[v];
-        ls[2*v] = ls[v];
-        ls[2*v+1] = ls[v];
-        ls[v] = 0;
+void push(ll v,ll l, ll r, ll val, ll type){
+    if(lst[v]){
+        st[v] = (r-l+1)*lst[v];
+        lst[2*v] = lst[2*v+1] = lst[v];
+    }
+    if(lazy[v]){
+        st[v] += (r-l+1)*lazy[v];
+        lazy[2*v] += lazy[v];
+        lazy[2*v+1] += lazy[v];
+    }
+    if(val == 0) return;
+    if(type == 2){
+        st[v] = (r-l+1)*val;
+        lst[2*v] = lst[2*v+1] = val;
     }else{
-        st[v] += (r-l)*la[v];
-        la[2*v] += la[v];
-        la[2*v+1] += la[v];
-        la[v] = 0;
+        st[v] += (r-l+1)*val;
+        lazy[2*v] += val;
+        lazy[2*v+1] += val;
     }
 }
 
-void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change, ll t){
-    if(t == 1){
-        if(ls[v]){
-            push(v,tl,tr,2);
-            
-        }
-        st[v]
-    }else{
-
-    }
-    if(lazy[v] != 0){
-        st[v] += (tr-tl+1) * lazy[v];
-        if(tl != tr){
-            lazy[2*v] += lazy[v];
-            lazy[2*v+1] += lazy[v];
-        }
-        lazy[v] = 0;
-    }
+void update_range(ll v, ll tl, ll tr, ll l, ll r, ll change, ll type){
+    push(v,tl,tr,0,type);
     if(tl > r || tr < l) return;
     if((tl >= l && tr <= r) || tl == tr){
-        st[v] += (tr-tl+1)*change; //change here in rmq to st[v] += change as only change is added to the max or min number
-        if(tr != tl){
-            lazy[2*v] += change;
-            lazy[2*v+1] += change;
+        if(type == 2){
+            lazy[v] = 0;
         }
+        push(v,tl,tr,change,type);
         return;
     }
     ll tm = (tl + tr)/2;
-    update_range(2*v,tl,tm,l,r,change);
-    update_range(2*v+1,tm+1,tr,l,r,change);
+    update_range(2*v,tl,tm,l,r,change,type);
+    update_range(2*v+1,tm+1,tr,l,r,change,type);
     st[v] = st[2*v] + st[2*v+1]; //change here
 }
 
 void update(ll v, ll tl, ll tr, ll pos, ll change){
     if(tl == tr){
-        st[v] += change; //change here
+        st[v] += change;
         return;
     }
     ll tm = (tl + tr)/2;
@@ -145,15 +134,8 @@ void update(ll v, ll tl, ll tr, ll pos, ll change){
 }
 
 ll query(ll v, ll tl, ll tr, ll l, ll r){
-    if(tl > r || tr < l) return 0;
-    if(lazy[v]){
-        st[v] += (tr-tl+1)*lazy[v];
-        if(tl != tr){
-            lazy[2*v] += lazy[v];
-            lazy[2*v+1] += lazy[v];
-        }
-        lazy[v] = 0;
-    }
+    if(tl > r || tr < l) return 0; //change here
+    push(v,tl,tr,0,1);
     if(tl >= l && tr <= r) return st[v];
     ll tm = (tl + tr)/2;
     return query(2*v,tl,tm,l,r) + query(2*v+1,tm+1,tr,l,r); // change here
@@ -172,12 +154,25 @@ void build(ll v, ll tl, ll tr){
 
 
 void solve(){
-    ll n = 8;
-    fo(n) a[i] = i+1;
+    re n; re q;
+    fo(n) re a[i];
     build(1,0,n-1);
-    update_range(1,0,n-1,4,6,5);
-    pr(query(1,0,n-1,5,7));
-    // pr(update)
+    while(q--){
+        ll t; re t;
+        if(t == 1){
+            ll a,b,x; re a; re b; re x;
+            a--; b--;
+            update_range(1,0,n-1,a,b,x,1);
+        }else if(t == 2){
+            ll a,b,x; re a; re b; re x;
+            a--; b--;
+            update_range(1,0,n-1,a,b,x,2);
+        }else{
+            ll a,b; re a; re b; a--; b--;
+            ll ans = query(1,0,n-1,a,b);
+            cout<<ans<<"\n";
+        }
+    }
 
 }
 
